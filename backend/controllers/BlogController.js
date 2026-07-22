@@ -26,13 +26,19 @@ exports.getBlogBySlug = async (req, res) => {
   }
 };
 
-const cleanDescription = (str) => {
+const sanitizeDescription = (str) => {
   if (typeof str !== 'string') return str;
   return str
+    .replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '')
     .replace(/&nbsp;/gi, ' ')
     .replace(/\u00a0/g, ' ')
     .replace(/&#8203;/g, '')
     .replace(/\u200b/g, '');
+};
+
+const sanitizeText = (str) => {
+  if (typeof str !== 'string') return str;
+  return str.replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '').trim();
 };
 
 // Create a new blog
@@ -41,8 +47,9 @@ exports.createBlog = async (req, res) => {
     const data = { ...req.body };
     delete data.id;
     if (data.description) {
-      data.description = cleanDescription(data.description);
+      data.description = sanitizeDescription(data.description);
     }
+
     const blog = await Blog.create(data);
     res.status(201).json(blog);
   } catch (error) {
@@ -62,8 +69,9 @@ exports.updateBlog = async (req, res) => {
     const data = { ...req.body };
     delete data.id;
     if (data.description) {
-      data.description = cleanDescription(data.description);
+      data.description = sanitizeDescription(data.description);
     }
+
     await blog.update(data);
     res.status(200).json(blog);
   } catch (error) {

@@ -4,10 +4,23 @@ import Swal from 'sweetalert2';
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
 // ── Website origin (NOT admin origin) ──
-// Set REACT_APP_SITE_URL in .env for production (e.g. https://empireesttates.com)
-const SITE_DOMAIN = process.env.REACT_APP_SITE_URL || 'http://localhost:3000';
+const SITE_DOMAIN = (
+  process.env.REACT_APP_CLIENT_URL ||
+  process.env.REACT_APP_SITE_URL ||
+  'https://empireesttates.freshmindz.in'
+).replace(/\/$/, '');
 
-// Page options — clean paths matching Markup.js routes (no /react prefix)
+// Format any URL or path to use live SITE_DOMAIN (replaces localhost references)
+const formatSiteUrl = (urlOrPath) => {
+  if (!urlOrPath) return SITE_DOMAIN;
+  if (urlOrPath.startsWith('http')) {
+    return urlOrPath.replace(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?/i, SITE_DOMAIN);
+  }
+  const cleanPath = urlOrPath.startsWith('/') ? urlOrPath : `/${urlOrPath}`;
+  return `${SITE_DOMAIN}${cleanPath}`;
+};
+
+// Page options — clean paths matching Markup.js routes
 const PAGE_OPTIONS = [
   { label: 'Home',              path: '/' },
   { label: 'About Us',          path: '/about-us' },
@@ -52,7 +65,7 @@ export default function MetaTags() {
           label: `Service: ${srv.title || srv.service || srv.category || 'Unnamed'}`,
           url: `/services-details/${srv.slug || (srv.title || '').toLowerCase().replace(/[^a-z0-9]+/g, '-')}`
         }));
-        setServiceCategories(serviceItems.map(s => ({ label: s.label, url: `${SITE_DOMAIN}${s.url}` })));
+        setServiceCategories(serviceItems.map(s => ({ label: s.label, url: formatSiteUrl(s.url) })));
       }
     } catch (err) {
       console.error('Error fetching service categories:', err);
@@ -60,7 +73,7 @@ export default function MetaTags() {
   };
 
   const allPageOptions = [
-    ...PAGE_OPTIONS.map(p => ({ label: p.label, url: `${SITE_DOMAIN}${p.path}` })),
+    ...PAGE_OPTIONS.map(p => ({ label: p.label, url: formatSiteUrl(p.path) })),
     ...serviceCategories
   ];
 
@@ -70,10 +83,16 @@ export default function MetaTags() {
       const res = await fetch(`${API_URL}/meta`);
       if (!res.ok) throw new Error('fetch failed');
       const data = await res.json();
-      setMetaList(data);
+      const cleaned = data.map(item => ({ ...item, pageUrl: formatSiteUrl(item.pageUrl) }));
+      setMetaList(cleaned);
     } catch {
       const cached = localStorage.getItem('ee_meta_list_v1');
-      if (cached) setMetaList(JSON.parse(cached));
+      if (cached) {
+        try {
+          const parsed = JSON.parse(cached);
+          setMetaList(parsed.map(item => ({ ...item, pageUrl: formatSiteUrl(item.pageUrl) })));
+        } catch { setMetaList([]); }
+      }
     } finally {
       setLoading(false);
     }
@@ -100,7 +119,7 @@ export default function MetaTags() {
     setEditItem(item);
     setForm({
       page: item.page,
-      pageUrl: item.pageUrl,
+      pageUrl: formatSiteUrl(item.pageUrl),
       metaTitle: item.metaTitle,
       metaDescription: item.metaDescription,
       metaKeywords: item.metaKeywords || '',

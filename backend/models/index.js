@@ -30,6 +30,11 @@ async function initDB() {
       console.log('Altered banners table image column to LONGTEXT.');
     } catch (e) {}
 
+    try {
+      await sequelize.query("UPDATE metatags SET pageUrl = REPLACE(pageUrl, 'http://localhost:3000', 'https://empireesttates.freshmindz.in') WHERE pageUrl LIKE '%localhost%';");
+      console.log('Updated metatags table pageUrl localhost references.');
+    } catch (e) {}
+
 
 
     // Seed admins

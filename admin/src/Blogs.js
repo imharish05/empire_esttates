@@ -3,6 +3,50 @@ import Swal from 'sweetalert2';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
+function ToolBtn({ onClick, title, children }) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className="h-8 px-2 flex items-center justify-center rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-700 transition-colors focus:outline-none"
+    >
+      {children}
+    </button>
+  );
+}
+
+const stripHtml = (html) => {
+  if (!html) return '';
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const text = doc.body.textContent || doc.body.innerText || '';
+    return text.replace(/\u00a0/g, ' ').replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').trim();
+  } catch (e) {
+    return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/gi, ' ').replace(/\s+/g, ' ').trim();
+  }
+};
+
+const sanitizeDescription = (html) => {
+  if (!html) return '';
+  return html
+    .replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/\u00a0/g, ' ')
+    .replace(/&#8203;/g, '')
+    .replace(/\u200b/g, '');
+};
+
+const sanitizeText = (str) => {
+  if (!str) return '';
+  return str
+    .replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
+const truncate = (str, n) => str?.length > n ? str.slice(0, n) + '...' : str;
+
 // Summernote-style Rich Text Editor with Selection Preservation
 function RichEditor({ value, onChange }) {
   const editorRef = useRef(null);
@@ -127,6 +171,51 @@ function RichEditor({ value, onChange }) {
     { label: 'Heading 3 (H3)', val: 'H3' },
     { label: 'Quote', val: 'BLOCKQUOTE' },
   ];
+
+  const notifySpecialCharBlocked = () => {
+    Swal.fire({
+      toast: true,
+      position: 'top-end',
+      icon: 'warning',
+      title: 'Special characters are not allowed',
+      showConfirmButton: false,
+      timer: 1500
+    });
+  };
+
+  const handleKeyDown = (e) => {
+    const forbiddenChars = ['^', '%', '$', '#', '*', '~', '\\', '|', '{', '}', '[', ']', '`'];
+    if (forbiddenChars.includes(e.key)) {
+      e.preventDefault();
+      notifySpecialCharBlocked();
+    }
+  };
+
+  const handlePaste = (e) => {
+    e.preventDefault();
+    const text = e.clipboardData ? e.clipboardData.getData('text/plain') : '';
+    const cleanText = text.replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '');
+    if (text !== cleanText) {
+      notifySpecialCharBlocked();
+    }
+    document.execCommand('insertText', false, cleanText);
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  };
+
+  const handleInput = () => {
+    if (editorRef.current) {
+      const rawHtml = editorRef.current.innerHTML;
+      const cleanedHtml = rawHtml.replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '');
+      if (rawHtml !== cleanedHtml) {
+        saveSelection();
+        editorRef.current.innerHTML = cleanedHtml;
+        restoreSelection();
+      }
+      onChange(cleanedHtml);
+    }
+  };
 
   return (
     <div className="border border-neutral-300 rounded-lg overflow-hidden bg-white shadow-sm">
@@ -269,24 +358,13 @@ function RichEditor({ value, onChange }) {
         suppressContentEditableWarning
         onMouseUp={saveSelection}
         onKeyUp={saveSelection}
-        onInput={() => onChange(editorRef.current.innerHTML)}
+        onKeyDown={handleKeyDown}
+        onPaste={handlePaste}
+        onInput={handleInput}
         onBlur={saveSelection}
         className="p-4 min-h-[200px] max-h-[380px] overflow-y-auto text-sm text-neutral-900 focus:outline-none leading-relaxed"
       />
     </div>
-  );
-}
-
-function ToolBtn({ onClick, title, children }) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      title={title}
-      className="h-8 px-2 flex items-center justify-center rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-700 transition-colors focus:outline-none"
-    >
-      {children}
-    </button>
   );
 }
 
@@ -316,18 +394,28 @@ function BlogModal({ blog, onClose, onSave }) {
   const handleSubmit = () => {
     if (!form.heading.trim()) { Swal.fire('Error', 'Heading is required', 'error'); return; }
     if (!form.image) { Swal.fire('Error', 'Image is required', 'error'); return; }
-    if (!form.description.trim() || form.description === '<p></p>' || form.description === '<p><br></p>') { Swal.fire('Error', 'Description content is required', 'error'); return; }
     if (!form.metaTitle.trim()) { Swal.fire('Error', 'Meta Title is required', 'error'); return; }
     if (!form.metaDescription.trim()) { Swal.fire('Error', 'Meta Description is required', 'error'); return; }
     if (!form.metaKeyword.trim()) { Swal.fire('Error', 'Meta Keyword is required', 'error'); return; }
 
-    const cleanedDescription = form.description
-      .replace(/&nbsp;/gi, ' ')
-      .replace(/\u00a0/g, ' ')
-      .replace(/&#8203;/g, '')
-      .replace(/\u200b/g, '');
+    const cleanDesc = sanitizeDescription(form.description);
+    const descPlainText = stripHtml(cleanDesc);
 
-    onSave({ ...blog, ...form, description: cleanedDescription, id: blog?.id || Date.now() });
+    if (!descPlainText || cleanDesc === '<p></p>' || cleanDesc === '<p><br></p>') {
+      Swal.fire('Invalid Description', 'Please enter valid description content without special characters.', 'error');
+      return;
+    }
+
+    onSave({
+      ...blog,
+      heading: form.heading.trim(),
+      image: form.image,
+      description: cleanDesc,
+      metaTitle: form.metaTitle.trim(),
+      metaDescription: form.metaDescription.trim(),
+      metaKeyword: form.metaKeyword.trim(),
+      id: blog?.id || Date.now()
+    });
   };
 
   return (
@@ -358,7 +446,10 @@ function BlogModal({ blog, onClose, onSave }) {
 
           {/* Description */}
           <div>
-            <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">Description <span className="text-red-500">*</span></label>
+            <div className="flex items-center justify-between mb-1">
+              <label className="block text-xs font-bold uppercase text-neutral-600">Description <span className="text-red-500">*</span></label>
+              <span className="text-[11px] text-amber-600 font-medium">(Special characters ^, %, $, #, *, ~ are not allowed)</span>
+            </div>
             <RichEditor value={form.description} onChange={v => setForm(f => ({ ...f, description: v }))} />
           </div>
 
@@ -408,16 +499,16 @@ export default function Blogs() {
   const [showModal, setShowModal] = useState(false);
   const [editBlog, setEditBlog] = useState(null);
 
-  const cleanDescStr = (str) => {
-    if (!str) return '';
-    return str.replace(/&nbsp;/gi, ' ').replace(/\u00a0/g, ' ').replace(/&#8203;/g, '').replace(/\u200b/g, '');
-  };
+  const cleanBlogItem = (b) => ({
+    ...b,
+    description: sanitizeDescription(b.description),
+  });
 
   useEffect(() => {
     fetch(`${API_URL}/blogs`)
       .then(r => r.ok ? r.json() : [])
       .then(d => {
-        const cleaned = (Array.isArray(d) ? d : []).map(b => ({ ...b, description: cleanDescStr(b.description) }));
+        const cleaned = (Array.isArray(d) ? d : []).map(cleanBlogItem);
         setBlogs(cleaned);
         setLoading(false);
       })
@@ -425,7 +516,7 @@ export default function Blogs() {
         const saved = localStorage.getItem('ee_blogs_v1');
         try {
           const parsed = saved ? JSON.parse(saved) : [];
-          setBlogs(parsed.map(b => ({ ...b, description: cleanDescStr(b.description) })));
+          setBlogs(parsed.map(cleanBlogItem));
         } catch { setBlogs([]); }
         setLoading(false);
       });
@@ -468,18 +559,6 @@ export default function Blogs() {
         }
       });
   };
-
-  const stripHtml = (html) => {
-    if (!html) return '';
-    try {
-      const doc = new DOMParser().parseFromString(html, 'text/html');
-      const text = doc.body.textContent || doc.body.innerText || '';
-      return text.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
-    } catch (e) {
-      return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
-    }
-  };
-  const truncate = (str, n) => str?.length > n ? str.slice(0, n) + '...' : str;
 
   return (
     <div style={{ padding: '0' }}>
