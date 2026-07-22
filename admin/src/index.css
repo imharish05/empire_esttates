@@ -1,0 +1,74 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+*, *::before, *::after, body {
+  font-family: 'Poppins', sans-serif !important;
+}
+
+h1, h2, h3, h4, h5, h6, .title, .title-small, .title-box {
+  font-family: 'Playfair', serif !important;
+}
+
+body {
+  background-color: #000000; /* Pure black base background */
+  color: #FFFFFF;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom Gold & Black Theme Classes based on specifications */
+.theme-gold-text {
+  color: #D4A64A;
+}
+
+.theme-border-gold {
+  border-color: #B8860B;
+}
+
+.login-card-container {
+  background-color: #111111;
+  border: 1px solid #B8860B;
+  border-top: 3px solid #D4A64A;
+  box-shadow: 0 10px 40px -10px rgba(184, 134, 11, 0.2);
+}
+
+.theme-button-gold {
+  background-color: #D4A64A;
+  color: #000000;
+  transition: all 0.3s ease-in-out;
+}
+
+.theme-button-gold:hover {
+  background-color: #F2D27A;
+  box-shadow: 0 0 15px rgba(242, 210, 122, 0.45);
+}
+
+.form-input-theme {
+  background-color: #000000;
+  border: 1px solid #B8860B;
+  color: #FFFFFF;
+  transition: all 0.25s ease-in-out;
+}
+
+.form-input-theme:focus {
+  outline: none;
+  border-color: #F2D27A;
+  box-shadow: 0 0 8px rgba(242, 210, 122, 0.3);
+}
+
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined' !important;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+}
+
+/* Architectural hairline styling in gold */
+.hairline-divider {
+  height: 1px;
+  background: linear-gradient(to right, transparent, #B8860B, transparent);
+}
+
+/* Global override to ensure all form inputs, textareas, and select dropdowns write in black text */
+input, textarea, select, select option {
+  color: #000000 !important;
+}

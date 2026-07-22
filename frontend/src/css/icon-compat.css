@@ -1,0 +1,37 @@
+.fa-phone-volume:before {
+  content: "\f095";
+}
+
+.fa-file-alt:before,
+.fa-file-contract:before {
+  content: "\f15c";
+}
+
+.fa-blog:before,
+.fa-newspaper:before {
+  content: "\f1ea";
+}
+
+.fa-clock:before {
+  content: "\f017";
+}
+
+.fa-shield-alt:before {
+  content: "\f132";
+}
+
+.fa-award:before {
+  content: "\f091";
+}
+
+.fa-map-marked-alt:before {
+  content: "\f279";
+}
+
+.fa-user-friends:before {
+  content: "\f0c0";
+}
+
+.fa-hand-holding-usd:before {
+  content: "\f0d6";
+}

@@ -1,0 +1,476 @@
+/*
+  responsive-nav.css
+  Mobile-responsive navbar styles for Empire Estates
+  Breakpoints: ≤991px tablet/mobile, ≤575px small phone
+*/
+
+/* ─────────────────────────────────────────────
+   HAMBURGER BUTTON
+───────────────────────────────────────────── */
+.mobile-hamburger {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 38px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 3px 0;
+  z-index: 10001;
+  flex-shrink: 0;
+}
+
+.mobile-hamburger span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background: #c8902a;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.2s ease, background 0.2s ease;
+  transform-origin: center;
+}
+
+.mobile-hamburger.is-open span:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+.mobile-hamburger.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-hamburger.is-open span:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+/* Sticky bar hamburger — hidden on desktop, shown on mobile via media query */
+.mobile-hamburger-sticky-mobile {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  width: 38px;
+  height: 28px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 3px 0;
+  z-index: 10001;
+  flex-shrink: 0;
+}
+
+.mobile-hamburger-sticky-mobile span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background: #c8902a;
+  border-radius: 2px;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+
+.mobile-hamburger-sticky-mobile.is-open span:nth-child(1) {
+  transform: translateY(10px) rotate(45deg);
+}
+.mobile-hamburger-sticky-mobile.is-open span:nth-child(2) {
+  opacity: 0;
+  transform: scaleX(0);
+}
+.mobile-hamburger-sticky-mobile.is-open span:nth-child(3) {
+  transform: translateY(-10px) rotate(-45deg);
+}
+
+/* Both hamburgers use brand gold color */
+
+/* ─────────────────────────────────────────────
+   OVERLAY
+───────────────────────────────────────────── */
+.mobile-nav-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 10002;
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  animation: fadeInOverlay 0.2s ease forwards;
+}
+
+@keyframes fadeInOverlay {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE DRAWER
+───────────────────────────────────────────── */
+.mobile-nav-drawer {
+  position: fixed;
+  top: 0;
+  right: -320px;
+  width: 300px;
+  max-width: 85vw;
+  height: 100vh;
+  background: linear-gradient(160deg, #1a1e2e 0%, #0e1118 100%);
+  z-index: 10003;
+  display: flex;
+  flex-direction: column;
+  transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: -6px 0 40px rgba(0, 0, 0, 0.4);
+  overflow-y: auto;
+}
+
+.mobile-nav-drawer--open {
+  right: 0;
+}
+
+/* Drawer Header */
+.mobile-nav-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px;
+  border-bottom: 1px solid rgba(200, 144, 42, 0.25);
+  background: rgba(200, 144, 42, 0.05);
+  flex-shrink: 0;
+}
+
+.mobile-nav-drawer__logo {
+  height: 44px;
+  width: auto;
+  object-fit: contain;
+}
+
+.mobile-nav-drawer__close {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: #ffffff;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, color 0.2s, border-color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+
+.mobile-nav-drawer__close:hover {
+  background: #c8902a;
+  border-color: #c8902a;
+}
+
+/* Drawer Body */
+.mobile-nav-drawer__body {
+  flex: 1;
+  padding: 8px 0;
+  overflow-y: auto;
+}
+
+/* Drawer Footer */
+.mobile-nav-drawer__footer {
+  padding: 18px 20px 28px;
+  border-top: 1px solid rgba(200, 144, 42, 0.2);
+  flex-shrink: 0;
+}
+
+.mobile-nav-drawer__footer-label {
+  font-size: 11px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.4);
+  margin: 0 0 10px;
+}
+
+.mobile-nav-drawer__socials {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.mobile-nav-drawer__social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+  font-size: 15px;
+  text-decoration: none;
+  transition: background 0.25s;
+}
+
+.mobile-nav-drawer__social-btn:hover {
+  background: var(--hover-bg, #c8902a);
+}
+
+.mobile-nav-drawer__phone {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 14px;
+  margin: 0;
+}
+
+/* ─────────────────────────────────────────────
+   MOBILE NAV LINKS (Accordion)
+───────────────────────────────────────────── */
+.mobile-nav-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.mobile-nav-links li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.mobile-nav-links li > a {
+  display: block;
+  padding: 14px 22px;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 500;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.2s, background 0.2s;
+}
+
+.mobile-nav-links li > a:hover,
+.mobile-nav-links li > a.active {
+  color: #c8902a;
+  background: rgba(200, 144, 42, 0.08);
+}
+
+/* Services accordion toggle button */
+.mobile-nav-links__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 14px 22px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 15px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: color 0.2s, background 0.2s;
+}
+
+.mobile-nav-links__toggle svg {
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+.mobile-nav-links__toggle.is-open svg {
+  transform: rotate(180deg);
+}
+
+.mobile-nav-links__toggle:hover,
+.mobile-nav-links__toggle.is-open {
+  color: #c8902a;
+  background: rgba(200, 144, 42, 0.08);
+}
+
+/* Collapsible submenu */
+.mobile-nav-links__sub {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 0;
+  overflow: hidden;
+  background: rgba(0, 0, 0, 0.25);
+  transition: max-height 0.35s ease;
+}
+
+.mobile-nav-links__sub.is-open {
+  max-height: 400px;
+}
+
+.mobile-nav-links__sub li {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.mobile-nav-links__sub li:last-child {
+  border-bottom: none;
+}
+
+.mobile-nav-links__sub li > a {
+  padding: 11px 22px 11px 36px;
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.65);
+  text-transform: capitalize;
+  letter-spacing: 0;
+  font-weight: 400;
+}
+
+.mobile-nav-links__sub li > a:hover {
+  color: #c8902a;
+  background: rgba(200, 144, 42, 0.07);
+}
+
+.mobile-nav-links__sub li > a::before {
+  content: '›';
+  margin-right: 8px;
+  color: #c8902a;
+  font-size: 18px;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* ─────────────────────────────────────────────
+   OVERRIDE custom-font.css DESKTOP RULES
+   (These have !important and break mobile layout)
+───────────────────────────────────────────── */
+@media only screen and (max-width: 991px) {
+
+  /* custom-font.css sets margin-left:150px → reset for mobile */
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
+
+  /* custom-font.css sets height:130px → shrink for mobile */
+  .studio1-logo img {
+    height: 40px !important;
+    max-height: 44px !important;
+  }
+
+  /* custom-font.css sets padding:0 45px → mobile-friendly padding */
+  .studio1-top-row {
+    padding: 10px 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Prevent logo from growing and pushing hamburger off row */
+  .studio1-logo {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  /* Branches hidden on mobile (address/socials/phone) */
+  .studio1-branches {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .studio1-logo img {
+    height: 34px !important;
+    max-height: 38px !important;
+  }
+  .studio1-top-row {
+    padding: 8px 12px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+───────────────────────────────────────────── */
+
+/* ≤ 1199px — tablet landscape: shrink top row */
+@media only screen and (max-width: 1199px) {
+  .studio1-top-row {
+    padding: 10px 20px;
+  }
+}
+
+/* ≤ 991px — tablet/mobile: show hamburger, hide desktop nav */
+@media only screen and (max-width: 991px) {
+
+  /* Show overlay when active (JS adds it to DOM) */
+  .mobile-nav-overlay {
+    display: block;
+  }
+
+  /* Top row: logo on left + hamburger on right */
+  .studio1-top-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+  }
+
+  /* Hide address/socials/phone on mobile — only logo + hamburger */
+  .studio1-top-row .studio1-branches {
+    display: none !important;
+  }
+
+  /* Show top-row hamburger */
+  .mobile-hamburger {
+    display: flex !important;
+  }
+
+  /* Hide desktop pill navbar */
+  .studio1-nav-pill-wrapper {
+    display: none !important;
+  }
+
+  /* ── STICKY BAR: HIDDEN by default on mobile ──
+     Only shown when page is scrolled (.is-fixed-sticky is added to site-header) */
+  .studio1-sticky-bar {
+    display: none !important;
+  }
+
+  /* When sticky is active: hide top-row, show sticky bar with hamburger */
+  .site-header.is-fixed-sticky .studio1-top-row {
+    display: none !important;
+  }
+
+  /* Override desktop padding from custom-font.css (padding: 8px 50px) → mobile-friendly */
+  .site-header.is-fixed-sticky .studio1-sticky-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+    height: 60px !important;
+  }
+
+  .site-header.is-fixed-sticky .studio1-sticky-menu {
+    display: none !important;
+  }
+
+  .site-header.is-fixed-sticky .mobile-hamburger-sticky-mobile {
+    display: flex !important;
+  }
+
+  /* Logo size on mobile */
+  .studio1-logo img,
+  .studio1-sticky-logo img {
+    height: 40px !important;
+    width: auto !important;
+  }
+}
+
+/* ≤ 575px — small phones: tighten spacing */
+@media only screen and (max-width: 575px) {
+  .studio1-top-row {
+    padding: 10px 12px !important;
+  }
+
+  .studio1-logo img,
+  .studio1-sticky-logo img {
+    height: 34px !important;
+  }
+
+  .mobile-hamburger {
+    width: 32px !important;
+    height: 24px !important;
+  }
+}
