@@ -1,14 +1,14 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { footerConfig } from './footerConfig';
 
 export default function SocialIcons() {
   return (
     <div className="dlab-social-icon">
       <ul>
-        <li><Link to={"#"} className="site-button circle fa fa-facebook" ></Link></li>
-        <li><Link to={"#"} className="site-button  circle fa fa-twitter" ></Link></li>
-        <li><Link to={"#"} className="site-button circle fa fa-linkedin" ></Link></li>
-        <li><Link to={"#"} className="site-button circle fa fa-instagram"></Link></li>
+        <li><a href={footerConfig.socials.facebook} target="_blank" rel="noopener noreferrer" className="site-button circle fa fa-facebook"></a></li>
+        <li><a href={footerConfig.socials.instagram} target="_blank" rel="noopener noreferrer" className="site-button circle fa fa-instagram"></a></li>
+        <li><a href={footerConfig.socials.whatsapp} target="_blank" rel="noopener noreferrer" className="site-button circle fa fa-whatsapp"></a></li>
+        <li><a href={footerConfig.socials.youtube} target="_blank" rel="noopener noreferrer" className="site-button circle fa fa-youtube"></a></li>
       </ul>
     </div>
   );

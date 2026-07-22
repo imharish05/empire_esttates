@@ -27,7 +27,7 @@ export const footerConfig = {
   },
   socials: {
     facebook: "https://www.facebook.com/profile.php?id=61591146081912",
-    instagram: "https://www.instagram.com/empireesttates/",
+    instagram: "https://www.instagram.com/empireesttates?igsh=ZjNuM2x0eDlvMHE0",
     whatsapp: "https://wa.me/918825471748",
     youtube: "https://www.youtube.com/@empireesttates461"
   },
@@ -39,6 +39,6 @@ export const footerConfig = {
   ],
   designedBy: {
     text: "Sai Techno Solutions",
-    url: "#"
+    url: "https://saitechnosolutions.com/"
   }
 };

@@ -98,7 +98,7 @@ const Footer2 = () => {
                             <span>
                                 &copy; {new Date().getFullYear()} {footerConfig.about.logoText}. All Rights Reserved.
                                 <span style={{ margin: '0 10px', opacity: 0.5 }}>|</span>
-                                Crafted with ❤️ by <a href={footerConfig.designedBy.url} style={{ color: '#fff', textDecoration: 'underline', fontWeight: '500' }} onMouseEnter={(e) => e.target.style.color = '#ffe8cf'} onMouseLeave={(e) => e.target.style.color = '#fff'}>{footerConfig.designedBy.text}</a>
+                                Crafted with ❤️ by <a target="_blank" rel="noopener noreferrer" href={footerConfig.designedBy.url} style={{ color: '#fff', textDecoration: 'underline', fontWeight: '500' }} onMouseEnter={(e) => e.target.style.color = '#ffe8cf'} onMouseLeave={(e) => e.target.style.color = '#fff'}>{footerConfig.designedBy.text}</a>
                             </span>
                         </div>
 
