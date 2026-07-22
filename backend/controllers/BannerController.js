@@ -22,7 +22,10 @@ exports.createBanner = async (req, res) => {
     if (!title || !image) {
       return res.status(400).json({ message: 'Title and image are required.' });
     }
-    const bannerData = req.body;
+    const bannerData = {
+      ...req.body,
+      active: req.body.active !== undefined ? req.body.active : true
+    };
     const newBanner = await Banner.create(bannerData);
     res.status(201).json(newBanner);
   } catch (error) {

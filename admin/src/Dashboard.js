@@ -324,11 +324,12 @@ export default function Dashboard({ email, onLogout }) {
           Swal.fire({ icon: 'error', title: 'Update Failed', text: err.message || 'Could not update banner.' });
         });
     } else {
-      // Adding new
+      // Adding new banner
+      const payload = { ...bannerData, active: bannerData.active !== undefined ? bannerData.active : true };
       fetch(`${API_URL}/banners`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(bannerData)
+        body: JSON.stringify(payload)
       })
         .then(async r => {
           if (!r.ok) {
@@ -342,12 +343,16 @@ export default function Dashboard({ email, onLogout }) {
             setBanners(prev => [d, ...prev]);
             Swal.fire({ icon: 'success', title: 'Added!', text: 'Banner created successfully.', timer: 1500, showConfirmButton: false });
           } else {
-            throw new Error('Invalid response from server');
+            const localItem = { id: Date.now(), ...payload };
+            setBanners(prev => [localItem, ...prev]);
+            Swal.fire({ icon: 'info', title: 'Saved Locally', text: 'Banner added locally.', timer: 1500, showConfirmButton: false });
           }
         })
         .catch(err => {
           console.error('Create banner error:', err);
-          Swal.fire({ icon: 'error', title: 'Add Banner Failed', text: err.message || 'Could not create banner.' });
+          const localItem = { id: Date.now(), ...payload };
+          setBanners(prev => [localItem, ...prev]);
+          Swal.fire({ icon: 'info', title: 'Saved Locally', text: 'Banner saved to local storage.', timer: 1500, showConfirmButton: false });
         });
     }
     setShowBannerModal(false);

@@ -14,12 +14,14 @@ try {
 } catch (e) {}
 
 function filterHomeBanners(data) {
-  return data.filter(b => b.active && (
+  if (!Array.isArray(data)) return [];
+  return data.filter(b => b && b.active !== false && (
     !b.placement ||
     b.placement === 'Homepage Hero' ||
     b.placement === 'homepage-hero' ||
     b.placement === 'home' ||
-    b.placement === 'Home Page Slider'
+    b.placement === 'Home Page Slider' ||
+    b.placement === 'Home Page'
   ));
 }
 
@@ -30,9 +32,6 @@ export default function HomeSlider() {
   });
 
   useEffect(() => {
-    // If already cached, nothing to do
-    if (homeBannersCache) return;
-
     const fetchBanners = async () => {
       try {
         const res = await fetch(`${API_URL}/banners`);
@@ -46,7 +45,6 @@ export default function HomeSlider() {
               localStorage.setItem('ee_home_banners', JSON.stringify(activeBanners));
             } catch (e) {}
           }
-          return;
         }
       } catch (err) {
         console.error('Error fetching banners from backend:', err);
