@@ -3,12 +3,12 @@
 @tailwind components;
 @tailwind utilities;
 
-*, *::before, *::after, body {
-  font-family: 'Poppins', sans-serif !important;
+body {
+  font-family: 'Poppins', sans-serif;
 }
 
 h1, h2, h3, h4, h5, h6, .title, .title-small, .title-box {
-  font-family: 'Playfair', serif !important;
+  font-family: 'Playfair', serif;
 }
 
 body {

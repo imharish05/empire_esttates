@@ -49,25 +49,43 @@ function RichEditor({ value, onChange }) {
   const applyFontFamily = (fontName) => {
     if (!fontName) return;
     restoreSelection();
-    try {
-      document.execCommand('styleWithCSS', false, true);
-    } catch (e) {}
-
-    document.execCommand('fontName', false, fontName);
 
     const sel = window.getSelection();
-    if (sel && sel.isCollapsed && editorRef.current) {
-      const span = document.createElement('span');
-      span.style.fontFamily = fontName;
-      span.innerHTML = '&#8203;';
-      const range = sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
-      if (range && editorRef.current.contains(range.commonAncestorContainer)) {
-        range.insertNode(span);
-        const newRange = document.createRange();
-        newRange.setStart(span, 1);
-        newRange.setEnd(span, 1);
-        sel.removeAllRanges();
-        sel.addRange(newRange);
+    if (sel && sel.rangeCount > 0 && editorRef.current) {
+      const range = sel.getRangeAt(0);
+      if (!sel.isCollapsed && editorRef.current.contains(range.commonAncestorContainer)) {
+        // Highlighted text selection -> wrap selection in inline span with font-family
+        const span = document.createElement('span');
+        span.style.fontFamily = fontName;
+        try {
+          span.appendChild(range.extractContents());
+          range.insertNode(span);
+          // Re-select the wrapped span text
+          const newRange = document.createRange();
+          newRange.selectNodeContents(span);
+          sel.removeAllRanges();
+          sel.addRange(newRange);
+        } catch (e) {
+          try {
+            document.execCommand('styleWithCSS', false, true);
+          } catch (err) {}
+          document.execCommand('fontName', false, fontName);
+        }
+      } else {
+        // No text highlighted -> insert zero-width span for typing at cursor
+        const span = document.createElement('span');
+        span.style.fontFamily = fontName;
+        span.innerHTML = '&#8203;';
+        if (range && editorRef.current.contains(range.commonAncestorContainer)) {
+          range.insertNode(span);
+          const newRange = document.createRange();
+          newRange.setStart(span, 1);
+          newRange.setEnd(span, 1);
+          sel.removeAllRanges();
+          sel.addRange(newRange);
+        } else {
+          editorRef.current.appendChild(span);
+        }
       }
     }
 
