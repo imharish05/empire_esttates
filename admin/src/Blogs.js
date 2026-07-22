@@ -3,51 +3,221 @@ import Swal from 'sweetalert2';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
-// Simple Rich Text Toolbar
+// Summernote-style Rich Text Editor with Selection Preservation
 function RichEditor({ value, onChange }) {
   const editorRef = useRef(null);
+  const savedRangeRef = useRef(null);
 
   useEffect(() => {
     if (editorRef.current && editorRef.current.innerHTML !== value) {
       editorRef.current.innerHTML = value || '';
     }
-  }, []);
+  }, [value]);
 
-  const exec = (cmd, val = null) => {
-    editorRef.current.focus();
-    document.execCommand(cmd, false, val);
-    onChange(editorRef.current.innerHTML);
+  const saveSelection = () => {
+    const sel = window.getSelection();
+    if (sel && sel.rangeCount > 0) {
+      if (editorRef.current && editorRef.current.contains(sel.anchorNode)) {
+        savedRangeRef.current = sel.getRangeAt(0).cloneRange();
+      }
+    }
   };
 
-  const FONTS = ['sans-serif', 'serif', 'monospace', 'Arial', 'Georgia'];
+  const restoreSelection = () => {
+    if (editorRef.current) {
+      editorRef.current.focus();
+    }
+    if (savedRangeRef.current) {
+      const sel = window.getSelection();
+      sel.removeAllRanges();
+      sel.addRange(savedRangeRef.current);
+    }
+  };
+
+  const exec = (cmd, val = null) => {
+    restoreSelection();
+    document.execCommand(cmd, false, val);
+    saveSelection();
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  };
+
+  const FONTS = [
+    { label: 'Georgia', value: 'Georgia, serif' },
+    { label: 'Arial', value: 'Arial, sans-serif' },
+    { label: 'Times New Roman', value: 'Times New Roman, serif' },
+    { label: 'Courier New', value: 'Courier New, monospace' },
+    { label: 'Verdana', value: 'Verdana, sans-serif' },
+    { label: 'Trebuchet MS', value: 'Trebuchet MS, sans-serif' },
+    { label: 'Impact', value: 'Impact, sans-serif' },
+    { label: 'Roboto', value: 'Roboto, sans-serif' },
+    { label: 'Poppins', value: 'Poppins, sans-serif' },
+    { label: 'sans-serif', value: 'sans-serif' },
+    { label: 'serif', value: 'serif' },
+    { label: 'monospace', value: 'monospace' },
+  ];
+
+  const FONT_SIZES = [
+    { label: 'Small (12px)', val: '1' },
+    { label: 'Normal (14px)', val: '3' },
+    { label: 'Medium (18px)', val: '4' },
+    { label: 'Large (24px)', val: '5' },
+    { label: 'Huge (32px)', val: '6' },
+  ];
+
+  const HEADINGS = [
+    { label: 'Paragraph', val: 'P' },
+    { label: 'Heading 1 (H1)', val: 'H1' },
+    { label: 'Heading 2 (H2)', val: 'H2' },
+    { label: 'Heading 3 (H3)', val: 'H3' },
+    { label: 'Quote', val: 'BLOCKQUOTE' },
+  ];
 
   return (
-    <div style={{ border: '1px solid #d1d5db', borderRadius: '6px', overflow: 'hidden' }}>
-      {/* Toolbar */}
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '2px', padding: '6px 8px', background: '#f9fafb', borderBottom: '1px solid #e5e7eb' }}>
-        <ToolBtn onClick={() => exec('bold')} title="Bold"><b>B</b></ToolBtn>
-        <ToolBtn onClick={() => exec('italic')} title="Italic"><i>I</i></ToolBtn>
-        <ToolBtn onClick={() => exec('underline')} title="Underline"><u>U</u></ToolBtn>
-        <ToolBtn onClick={() => exec('strikeThrough')} title="Strike"><s>S</s></ToolBtn>
-        <select onChange={e => exec('fontName', e.target.value)} style={{ fontSize: '12px', border: '1px solid #d1d5db', borderRadius: '4px', padding: '2px 4px', cursor: 'pointer' }}>
-          {FONTS.map(f => <option key={f} value={f}>{f}</option>)}
+    <div className="border border-neutral-300 rounded-lg overflow-hidden bg-white shadow-sm">
+      {/* Summernote-style Toolbar */}
+      <div
+        className="flex flex-wrap items-center gap-1.5 p-2 bg-neutral-50 border-b border-neutral-200 text-xs select-none"
+        onMouseDown={saveSelection}
+      >
+        {/* Style Dropdown (Heading) */}
+        <select
+          onFocus={saveSelection}
+          onChange={e => exec('formatBlock', e.target.value)}
+          className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
+          title="Paragraph Format"
+        >
+          {HEADINGS.map(h => (
+            <option key={h.val} value={h.val}>{h.label}</option>
+          ))}
         </select>
-        <ToolBtn onClick={() => exec('insertUnorderedList')} title="Bullet List">☰</ToolBtn>
-        <ToolBtn onClick={() => exec('insertOrderedList')} title="Numbered List">①</ToolBtn>
-        <ToolBtn onClick={() => exec('justifyLeft')} title="Left">⬛</ToolBtn>
-        <ToolBtn onClick={() => exec('justifyCenter')} title="Center">▪</ToolBtn>
-        <ToolBtn onClick={() => exec('justifyRight')} title="Right">▪▪</ToolBtn>
-        <ToolBtn onClick={() => { const url = prompt('URL:'); if (url) exec('createLink', url); }} title="Link">🔗</ToolBtn>
-        <ToolBtn onClick={() => exec('removeFormat')} title="Clear">&lt;/&gt;</ToolBtn>
+
+        {/* Font Family Dropdown */}
+        <select
+          onFocus={saveSelection}
+          onChange={e => exec('fontName', e.target.value)}
+          className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
+          title="Font Family"
+        >
+          <option value="">Font Family</option>
+          {FONTS.map(f => (
+            <option key={f.label} value={f.value} style={{ fontFamily: f.value }}>{f.label}</option>
+          ))}
+        </select>
+
+        {/* Font Size Dropdown */}
+        <select
+          onFocus={saveSelection}
+          onChange={e => exec('fontSize', e.target.value)}
+          className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
+          title="Font Size"
+        >
+          <option value="">Font Size</option>
+          {FONT_SIZES.map(s => (
+            <option key={s.val} value={s.val}>{s.label}</option>
+          ))}
+        </select>
+
+        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
+
+        {/* Bold, Italic, Underline, Strikethrough */}
+        <ToolBtn onClick={() => exec('bold')} title="Bold (Ctrl+B)">
+          <span className="material-symbols-outlined text-[18px]">format_bold</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('italic')} title="Italic (Ctrl+I)">
+          <span className="material-symbols-outlined text-[18px]">format_italic</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('underline')} title="Underline (Ctrl+U)">
+          <span className="material-symbols-outlined text-[18px]">format_underlined</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('strikethrough')} title="Strikethrough">
+          <span className="material-symbols-outlined text-[18px]">strikethrough_s</span>
+        </ToolBtn>
+
+        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
+
+        {/* Text Color Picker */}
+        <div className="relative flex items-center h-8 px-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 cursor-pointer" title="Text Color">
+          <span className="material-symbols-outlined text-[18px] text-neutral-700">format_color_text</span>
+          <input
+            type="color"
+            onFocus={saveSelection}
+            onChange={e => exec('foreColor', e.target.value)}
+            className="w-5 h-5 ml-1 p-0 border-0 bg-transparent cursor-pointer"
+          />
+        </div>
+
+        {/* Background Highlight Color Picker */}
+        <div className="relative flex items-center h-8 px-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 cursor-pointer" title="Highlight Color">
+          <span className="material-symbols-outlined text-[18px] text-neutral-700">format_color_fill</span>
+          <input
+            type="color"
+            onFocus={saveSelection}
+            onChange={e => exec('hiliteColor', e.target.value)}
+            className="w-5 h-5 ml-1 p-0 border-0 bg-transparent cursor-pointer"
+          />
+        </div>
+
+        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
+
+        {/* Alignment */}
+        <ToolBtn onClick={() => exec('justifyLeft')} title="Align Left">
+          <span className="material-symbols-outlined text-[18px]">format_align_left</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('justifyCenter')} title="Align Center">
+          <span className="material-symbols-outlined text-[18px]">format_align_center</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('justifyRight')} title="Align Right">
+          <span className="material-symbols-outlined text-[18px]">format_align_right</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('justifyFull')} title="Justify">
+          <span className="material-symbols-outlined text-[18px]">format_align_justify</span>
+        </ToolBtn>
+
+        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
+
+        {/* Lists & Indent */}
+        <ToolBtn onClick={() => exec('insertUnorderedList')} title="Bullet List">
+          <span className="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('insertOrderedList')} title="Numbered List">
+          <span className="material-symbols-outlined text-[18px]">format_list_numbered</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('indent')} title="Increase Indent">
+          <span className="material-symbols-outlined text-[18px]">format_indent_increase</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('outdent')} title="Decrease Indent">
+          <span className="material-symbols-outlined text-[18px]">format_indent_decrease</span>
+        </ToolBtn>
+
+        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
+
+        {/* Link & Clear Format & Undo/Redo */}
+        <ToolBtn onClick={() => { saveSelection(); const url = prompt('Enter Link URL:'); if (url) exec('createLink', url); }} title="Insert Link">
+          <span className="material-symbols-outlined text-[18px]">link</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('removeFormat')} title="Clear Formatting">
+          <span className="material-symbols-outlined text-[18px]">format_clear</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('undo')} title="Undo">
+          <span className="material-symbols-outlined text-[18px]">undo</span>
+        </ToolBtn>
+        <ToolBtn onClick={() => exec('redo')} title="Redo">
+          <span className="material-symbols-outlined text-[18px]">redo</span>
+        </ToolBtn>
       </div>
-      {/* Editor area */}
+
+      {/* Editor Area */}
       <div
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
+        onMouseUp={saveSelection}
+        onKeyUp={saveSelection}
         onInput={() => onChange(editorRef.current.innerHTML)}
-        style={{ minHeight: '160px', padding: '12px', fontSize: '14px', outline: 'none', color: '#000000' }}
-        data-placeholder="Enter description here..."
+        onBlur={saveSelection}
+        className="p-4 min-h-[200px] max-h-[380px] overflow-y-auto text-sm text-neutral-900 focus:outline-none leading-relaxed"
       />
     </div>
   );
@@ -55,8 +225,12 @@ function RichEditor({ value, onChange }) {
 
 function ToolBtn({ onClick, title, children }) {
   return (
-    <button type="button" onClick={onClick} title={title}
-      style={{ padding: '3px 8px', fontSize: '13px', border: '1px solid #d1d5db', borderRadius: '4px', background: '#fff', cursor: 'pointer', minWidth: '28px' }}>
+    <button
+      type="button"
+      onClick={onClick}
+      title={title}
+      className="h-8 px-2 flex items-center justify-center rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-700 transition-colors focus:outline-none"
+    >
       {children}
     </button>
   );
