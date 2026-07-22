@@ -37,6 +37,7 @@ export const footerConfig = {
     { label: "Terms & Conditions", url: "/terms" },
     { label: "Return Policy", url: "/return-policy" }
   ],
+  
   designedBy: {
     text: "Sai Techno Solutions",
     url: "https://saitechnosolutions.com/"
