@@ -6,7 +6,7 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 // Module-level cache — fetched once, reused on every page navigation
 let bannersCache = null;
 try {
-  const cached = localStorage.getItem('ee_banners');
+  const cached = localStorage.getItem('ee_banners_v2') || localStorage.getItem('ee_banners');
   if (cached) {
     bannersCache = JSON.parse(cached);
   }

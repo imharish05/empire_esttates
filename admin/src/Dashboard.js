@@ -213,15 +213,28 @@ export default function Dashboard({ email, onLogout }) {
   // ── Banners ──
   const [banners, setBanners] = useState(() => {
     const s = localStorage.getItem('ee_banners_v2');
-    try { return s ? JSON.parse(s) : []; } catch { return []; }
+    try {
+      if (!s) return [];
+      const parsed = JSON.parse(s);
+      return Array.isArray(parsed) ? parsed.filter(b => b && (b.title || b.image)) : [];
+    } catch { return []; }
   });
   useEffect(() => {
-    fetch(`${API_URL}/banners`).then(r => r.ok && r.json()).then(d => d && setBanners(d)).catch(() => {});
+    fetch(`${API_URL}/banners`)
+      .then(r => r.ok ? r.json() : null)
+      .then(d => {
+        if (Array.isArray(d)) {
+          const valid = d.filter(b => b && (b.title || b.image));
+          setBanners(valid);
+        }
+      })
+      .catch(() => {});
   }, []);
   useEffect(() => {
     if (banners.length > 0) {
       try {
-        localStorage.setItem('ee_banners_v2', JSON.stringify(banners));
+        const valid = banners.filter(b => b && (b.title || b.image));
+        localStorage.setItem('ee_banners_v2', JSON.stringify(valid));
       } catch (e) {
         console.warn('Failed to save ee_banners_v2 to localStorage:', e);
       }
@@ -277,6 +290,11 @@ export default function Dashboard({ email, onLogout }) {
   };
 
   const handleSaveBanner = (bannerData) => {
+    if (!bannerData.title || !bannerData.image) {
+      Swal.fire({ icon: 'error', title: 'Missing Information', text: 'Title and Image are required.' });
+      return;
+    }
+
     if (editBannerItem) {
       // Editing
       const b = editBannerItem;
@@ -286,14 +304,24 @@ export default function Dashboard({ email, onLogout }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(updatedData)
       })
-        .then(r => r.json())
-        .then(d => {
-          setBanners(prev => prev.map(x => x.id === b.id ? d : x));
-          Swal.fire({ icon: 'success', title: 'Updated!', text: 'Banner updated successfully.', timer: 1500, showConfirmButton: false });
+        .then(async r => {
+          if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to update banner.');
+          }
+          return r.json();
         })
-        .catch(() => {
-          setBanners(prev => prev.map(x => x.id === b.id ? updatedData : x));
-          Swal.fire({ icon: 'info', title: 'Updated Locally', text: 'Banner updated in local storage.', timer: 1500, showConfirmButton: false });
+        .then(d => {
+          if (d && (d.title || d.image)) {
+            setBanners(prev => prev.map(x => x.id === b.id ? d : x));
+            Swal.fire({ icon: 'success', title: 'Updated!', text: 'Banner updated successfully.', timer: 1500, showConfirmButton: false });
+          } else {
+            throw new Error('Invalid response from server');
+          }
+        })
+        .catch(err => {
+          console.error('Update banner error:', err);
+          Swal.fire({ icon: 'error', title: 'Update Failed', text: err.message || 'Could not update banner.' });
         });
     } else {
       // Adding new
@@ -302,14 +330,24 @@ export default function Dashboard({ email, onLogout }) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(bannerData)
       })
-        .then(r => r.json())
-        .then(d => {
-          setBanners(prev => [d, ...prev]);
-          Swal.fire({ icon: 'success', title: 'Added!', text: 'Banner created successfully.', timer: 1500, showConfirmButton: false });
+        .then(async r => {
+          if (!r.ok) {
+            const err = await r.json().catch(() => ({}));
+            throw new Error(err.message || 'Failed to create banner.');
+          }
+          return r.json();
         })
-        .catch(() => {
-          setBanners(prev => [{ id: Date.now(), ...bannerData, active: true }, ...prev]);
-          Swal.fire({ icon: 'info', title: 'Saved Locally', text: 'Banner saved to local storage.', timer: 1500, showConfirmButton: false });
+        .then(d => {
+          if (d && (d.title || d.image)) {
+            setBanners(prev => [d, ...prev]);
+            Swal.fire({ icon: 'success', title: 'Added!', text: 'Banner created successfully.', timer: 1500, showConfirmButton: false });
+          } else {
+            throw new Error('Invalid response from server');
+          }
+        })
+        .catch(err => {
+          console.error('Create banner error:', err);
+          Swal.fire({ icon: 'error', title: 'Add Banner Failed', text: err.message || 'Could not create banner.' });
         });
     }
     setShowBannerModal(false);
@@ -327,15 +365,11 @@ export default function Dashboard({ email, onLogout }) {
       confirmButtonText: 'Yes, delete it'
     }).then(result => {
       if (result.isConfirmed) {
-        fetch(`${API_URL}/banners/${id}`, { method: 'DELETE' })
-          .then(() => {
-            setBanners(prev => prev.filter(b => b.id !== id));
-            Swal.fire('Deleted!', 'Banner has been deleted.', 'success');
-          })
-          .catch(() => {
-            setBanners(prev => prev.filter(b => b.id !== id));
-            Swal.fire('Deleted Locally', 'Banner removed from local state.', 'info');
-          });
+        if (id) {
+          fetch(`${API_URL}/banners/${id}`, { method: 'DELETE' }).catch(() => {});
+        }
+        setBanners(prev => prev.filter(b => b.id !== id && (b.title || b.image)));
+        Swal.fire('Deleted!', 'Banner has been deleted.', 'success');
       }
     });
   };

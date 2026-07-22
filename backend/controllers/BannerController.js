@@ -6,7 +6,9 @@ exports.getAllBanners = async (req, res) => {
     const banners = await Banner.findAll({
       order: [['id', 'ASC']]
     });
-    res.status(200).json(banners);
+    // Filter out invalid/blank banner entries
+    const validBanners = banners.filter(b => b && (b.title || b.image));
+    res.status(200).json(validBanners);
   } catch (error) {
     console.error('Error fetching banners:', error);
     res.status(500).json({ message: 'Failed to retrieve banners.', error: error.message });
@@ -16,6 +18,10 @@ exports.getAllBanners = async (req, res) => {
 // Create a new banner
 exports.createBanner = async (req, res) => {
   try {
+    const { title, image } = req.body;
+    if (!title || !image) {
+      return res.status(400).json({ message: 'Title and image are required.' });
+    }
     const bannerData = req.body;
     const newBanner = await Banner.create(bannerData);
     res.status(201).json(newBanner);

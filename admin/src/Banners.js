@@ -34,8 +34,8 @@ export default function Banners({ banners, onNewBanner, onEditBanner, onDeleteBa
             </tr>
           </thead>
           <tbody className="divide-y divide-neutral-100">
-            {banners.map((banner) => (
-              <tr key={banner.id} className="hover:bg-neutral-50/50 transition-colors align-middle">
+            {banners.filter(b => b && (b.title || b.image)).map((banner, index) => (
+              <tr key={banner.id || index} className="hover:bg-neutral-50/50 transition-colors align-middle">
 
                 {/* Banner thumbnail + title */}
                 <td className="py-4 px-5">

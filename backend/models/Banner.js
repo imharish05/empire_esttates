@@ -28,7 +28,7 @@ const Banner = sequelize.define('Banner', {
     type: DataTypes.STRING
   },
   image: {
-    type: DataTypes.TEXT
+    type: DataTypes.TEXT('long')
   }
 }, {
   tableName: 'banners',

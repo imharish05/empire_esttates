@@ -25,6 +25,11 @@ async function initDB() {
       console.log('Could not set max_allowed_packet (might need root privileges), continuing...');
     }
 
+    try {
+      await sequelize.query('ALTER TABLE banners MODIFY COLUMN image LONGTEXT;');
+      console.log('Altered banners table image column to LONGTEXT.');
+    } catch (e) {}
+
 
 
     // Seed admins
