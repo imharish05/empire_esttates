@@ -13,25 +13,29 @@ try {
 } catch (e) {}
 
 function findBanner(allBanners, placement, motherMenu) {
-  const liveBanners = allBanners.filter(b => b.active !== false);
+  if (!Array.isArray(allBanners) || allBanners.length === 0) return null;
+  const liveBanners = allBanners.filter(b => b && b.active !== false);
+
+  // Search through liveBanners (or reverse if order is ASC)
   const matched = liveBanners.find(b => {
-    const bPlace = (b.placement || '').toLowerCase();
-    const pReq = (placement || '').toLowerCase();
-    const mReq = (motherMenu || '').toLowerCase();
+    const bPlace = (b.placement || '').trim().toLowerCase();
+    const pReq = (placement || '').trim().toLowerCase();
+    const mReq = (motherMenu || '').trim().toLowerCase();
 
     if (pReq && bPlace === pReq) return true;
+    if (mReq && bPlace === mReq) return true;
+    if (pReq && pReq.includes('project') && bPlace.includes('project')) return true;
+    if (pReq && pReq.includes('about') && bPlace.includes('about')) return true;
+    if (pReq && pReq.includes('service') && bPlace.includes('service')) return true;
+    if (pReq && pReq.includes('contact') && bPlace.includes('contact')) return true;
+    if (pReq && pReq.includes('layout') && bPlace.includes('layout')) return true;
+    if (pReq && pReq.includes('elevation') && bPlace.includes('elevation')) return true;
+    if (pReq && pReq.includes('blog') && bPlace.includes('blog')) return true;
     if (mReq && bPlace.includes(mReq)) return true;
-    if (mReq && bPlace.includes('project') && mReq.includes('project')) return true;
-    if (mReq && bPlace.includes('about') && mReq.includes('about')) return true;
-    if (mReq && bPlace.includes('service') && mReq.includes('service')) return true;
-    if (mReq && bPlace.includes('contact') && mReq.includes('contact')) return true;
-    if (mReq && bPlace.includes('layout') && mReq.includes('layout')) return true;
     return false;
   });
 
-  if (matched) return matched;
-
-  return null;
+  return matched || null;
 }
 
 const PageTitle = ({ motherMenu, activeMenu, placement }) => {
@@ -43,28 +47,34 @@ const PageTitle = ({ motherMenu, activeMenu, placement }) => {
   const [loading, setLoading] = useState(!bannersCache);
 
   useEffect(() => {
-    // If we have cache, we already set it in useState.
-    // Now, fetch latest from background silently to keep it fresh.
     const fetchBanners = async () => {
+      let data = null;
       try {
         const res = await fetch(`${API_URL}/banners`);
         if (res.ok) {
-          const data = await res.json();
-          if (Array.isArray(data) && data.length > 0) {
-            bannersCache = data;
-            try {
-              localStorage.setItem('ee_banners_v2', JSON.stringify(data));
-            } catch (e) {}
-            const matched = findBanner(data, placement, motherMenu);
-            // Always set banner after fetch to get new updates
-            setBanner(matched || null);
-          }
+          data = await res.json();
         }
       } catch (err) {
         console.error("Failed to fetch page banner from backend:", err);
-      } finally {
-        setLoading(false);
       }
+
+      // If backend was unreachable or empty, fallback to local storage
+      if (!Array.isArray(data) || data.length === 0) {
+        try {
+          const cached = localStorage.getItem('ee_banners_v2') || localStorage.getItem('ee_banners');
+          if (cached) data = JSON.parse(cached);
+        } catch (e) {}
+      }
+
+      if (Array.isArray(data) && data.length > 0) {
+        bannersCache = data;
+        try {
+          localStorage.setItem('ee_banners_v2', JSON.stringify(data));
+        } catch (e) {}
+        const matched = findBanner(data, placement, motherMenu);
+        setBanner(matched || null);
+      }
+      setLoading(false);
     };
 
     fetchBanners();

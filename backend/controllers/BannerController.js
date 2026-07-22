@@ -4,7 +4,7 @@ const { Banner } = require('../models');
 exports.getAllBanners = async (req, res) => {
   try {
     const banners = await Banner.findAll({
-      order: [['id', 'ASC']]
+      order: [['id', 'DESC']]
     });
     // Filter out invalid/blank banner entries
     const validBanners = banners.filter(b => b && (b.title || b.image));
