@@ -450,7 +450,16 @@ export default function Blogs() {
       });
   };
 
-  const stripHtml = (html) => html?.replace(/<[^>]*>/g, '') || '';
+  const stripHtml = (html) => {
+    if (!html) return '';
+    try {
+      const doc = new DOMParser().parseFromString(html, 'text/html');
+      const text = doc.body.textContent || doc.body.innerText || '';
+      return text.replace(/\u00a0/g, ' ').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    } catch (e) {
+      return html.replace(/<[^>]*>/g, '').replace(/&nbsp;/g, ' ').replace(/\s+/g, ' ').trim();
+    }
+  };
   const truncate = (str, n) => str?.length > n ? str.slice(0, n) + '...' : str;
 
   return (
