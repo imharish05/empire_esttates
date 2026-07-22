@@ -320,7 +320,14 @@ function BlogModal({ blog, onClose, onSave }) {
     if (!form.metaTitle.trim()) { Swal.fire('Error', 'Meta Title is required', 'error'); return; }
     if (!form.metaDescription.trim()) { Swal.fire('Error', 'Meta Description is required', 'error'); return; }
     if (!form.metaKeyword.trim()) { Swal.fire('Error', 'Meta Keyword is required', 'error'); return; }
-    onSave({ ...blog, ...form, id: blog?.id || Date.now() });
+
+    const cleanedDescription = form.description
+      .replace(/&nbsp;/gi, ' ')
+      .replace(/\u00a0/g, ' ')
+      .replace(/&#8203;/g, '')
+      .replace(/\u200b/g, '');
+
+    onSave({ ...blog, ...form, description: cleanedDescription, id: blog?.id || Date.now() });
   };
 
   return (
@@ -401,13 +408,25 @@ export default function Blogs() {
   const [showModal, setShowModal] = useState(false);
   const [editBlog, setEditBlog] = useState(null);
 
+  const cleanDescStr = (str) => {
+    if (!str) return '';
+    return str.replace(/&nbsp;/gi, ' ').replace(/\u00a0/g, ' ').replace(/&#8203;/g, '').replace(/\u200b/g, '');
+  };
+
   useEffect(() => {
     fetch(`${API_URL}/blogs`)
       .then(r => r.ok ? r.json() : [])
-      .then(d => { setBlogs(Array.isArray(d) ? d : []); setLoading(false); })
+      .then(d => {
+        const cleaned = (Array.isArray(d) ? d : []).map(b => ({ ...b, description: cleanDescStr(b.description) }));
+        setBlogs(cleaned);
+        setLoading(false);
+      })
       .catch(() => {
         const saved = localStorage.getItem('ee_blogs_v1');
-        try { setBlogs(saved ? JSON.parse(saved) : []); } catch { setBlogs([]); }
+        try {
+          const parsed = saved ? JSON.parse(saved) : [];
+          setBlogs(parsed.map(b => ({ ...b, description: cleanDescStr(b.description) })));
+        } catch { setBlogs([]); }
         setLoading(false);
       });
   }, []);
