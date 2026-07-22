@@ -141,16 +141,52 @@ export default function ServicesDetails() {
               {/* Services Included Section */}
               {(() => {
                 let list = [];
-                if (Array.isArray(service.servicesIncluded)) {
-                  list = service.servicesIncluded;
-                } else if (typeof service.servicesIncluded === 'string') {
-                  try {
-                    const parsed = JSON.parse(service.servicesIncluded);
-                    list = Array.isArray(parsed) ? parsed : [];
-                  } catch (e) {
-                    list = [];
+                const value = service.servicesIncluded;
+                if (value) {
+                  if (Array.isArray(value)) {
+                    list = value;
+                  } else if (typeof value === 'string') {
+                    const trimmed = value.trim();
+                    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+                      try {
+                        const parsed = JSON.parse(trimmed);
+                        list = Array.isArray(parsed) ? parsed : [parsed];
+                      } catch (e) {
+                        try {
+                          const unescaped = trimmed.replace(/\\"/g, '"');
+                          const parsed = JSON.parse(unescaped);
+                          if (Array.isArray(parsed)) {
+                            list = parsed;
+                          }
+                        } catch (err) {
+                          list = trimmed.slice(1, -1).split(',').map(s => s.trim());
+                        }
+                      }
+                    } else {
+                      list = value.split(',').map(s => s.trim());
+                    }
                   }
                 }
+
+                // Deeply clean all items to remove any leftover JSON quotes, brackets or escape characters
+                list = list
+                  .map(item => {
+                    if (!item) return '';
+                    let cleaned = String(item).trim();
+                    let prev;
+                    do {
+                      prev = cleaned;
+                      cleaned = cleaned.replace(/^\\*"/, '').replace(/\\*"$/, '');
+                      cleaned = cleaned.replace(/^\\*'/, '').replace(/\\*'$/, '');
+                      cleaned = cleaned.replace(/^\["?|"?\]$/g, '');
+                      cleaned = cleaned.trim();
+                    } while (cleaned !== prev);
+                    
+                    cleaned = cleaned.replace(/\\"/g, '"').replace(/\\'/g, "'").replace(/\\/g, '');
+                    return cleaned;
+                  })
+                  .filter(Boolean);
+
                 if (list.length === 0) return null;
                 
                 return (

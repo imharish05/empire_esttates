@@ -31,6 +31,55 @@ const getImagesArray = (imagesVal) => {
   return [];
 };
 
+const getServicesIncludedString = (val) => {
+  if (!val) return '';
+  let list = [];
+  if (Array.isArray(val)) {
+    list = val;
+  } else if (typeof val === 'string') {
+    const trimmed = val.trim();
+    if (trimmed.startsWith('[') && trimmed.endsWith(']')) {
+      try {
+        const parsed = JSON.parse(trimmed);
+        list = Array.isArray(parsed) ? parsed : [parsed];
+      } catch (e) {
+        try {
+          const unescaped = trimmed.replace(/\\"/g, '"');
+          const parsed = JSON.parse(unescaped);
+          if (Array.isArray(parsed)) {
+            list = parsed;
+          }
+        } catch (err) {
+          list = trimmed.slice(1, -1).split(',').map(s => s.trim());
+        }
+      }
+    } else {
+      list = val.split(',').map(s => s.trim());
+    }
+  }
+
+  // Clean each item to remove any leftover JSON quotes, brackets or escape characters
+  list = list
+    .map(item => {
+      if (!item) return '';
+      let cleaned = String(item).trim();
+      let prev;
+      do {
+        prev = cleaned;
+        cleaned = cleaned.replace(/^\\*"/, '').replace(/\\*"$/, '');
+        cleaned = cleaned.replace(/^\\*'/, '').replace(/\\*'$/, '');
+        cleaned = cleaned.replace(/^\["?|"?\]$/g, '');
+        cleaned = cleaned.trim();
+      } while (cleaned !== prev);
+      
+      cleaned = cleaned.replace(/\\"/g, '"').replace(/\\'/g, "'").replace(/\\/g, '');
+      return cleaned;
+    })
+    .filter(Boolean);
+
+  return list.join(', ');
+};
+
 export default function Services() {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -77,7 +126,7 @@ export default function Services() {
       title: srv.title || srv.service || '',
       images: srvImages,
       description: srv.description || '',
-      servicesIncluded: Array.isArray(srv.servicesIncluded) ? srv.servicesIncluded.join(', ') : (srv.servicesIncluded || ''),
+      servicesIncluded: getServicesIncludedString(srv.servicesIncluded),
     });
     setImagePreviews(srvImages);
     setShowModal(true);
