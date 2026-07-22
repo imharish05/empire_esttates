@@ -36,6 +36,9 @@ function RichEditor({ value, onChange }) {
 
   const exec = (cmd, val = null) => {
     restoreSelection();
+    try {
+      document.execCommand('styleWithCSS', false, true);
+    } catch (e) {}
     document.execCommand(cmd, false, val);
     saveSelection();
     if (editorRef.current) {
@@ -43,16 +46,49 @@ function RichEditor({ value, onChange }) {
     }
   };
 
+  const applyFontFamily = (fontName) => {
+    if (!fontName) return;
+    restoreSelection();
+    try {
+      document.execCommand('styleWithCSS', false, true);
+    } catch (e) {}
+
+    document.execCommand('fontName', false, fontName);
+
+    const sel = window.getSelection();
+    if (sel && sel.isCollapsed && editorRef.current) {
+      const span = document.createElement('span');
+      span.style.fontFamily = fontName;
+      span.innerHTML = '&#8203;';
+      const range = sel.rangeCount > 0 ? sel.getRangeAt(0) : null;
+      if (range && editorRef.current.contains(range.commonAncestorContainer)) {
+        range.insertNode(span);
+        const newRange = document.createRange();
+        newRange.setStart(span, 1);
+        newRange.setEnd(span, 1);
+        sel.removeAllRanges();
+        sel.addRange(newRange);
+      }
+    }
+
+    saveSelection();
+    if (editorRef.current) {
+      onChange(editorRef.current.innerHTML);
+    }
+  };
+
   const FONTS = [
-    { label: 'Georgia', value: 'Georgia, serif' },
-    { label: 'Arial', value: 'Arial, sans-serif' },
-    { label: 'Times New Roman', value: 'Times New Roman, serif' },
-    { label: 'Courier New', value: 'Courier New, monospace' },
-    { label: 'Verdana', value: 'Verdana, sans-serif' },
-    { label: 'Trebuchet MS', value: 'Trebuchet MS, sans-serif' },
-    { label: 'Impact', value: 'Impact, sans-serif' },
-    { label: 'Roboto', value: 'Roboto, sans-serif' },
-    { label: 'Poppins', value: 'Poppins, sans-serif' },
+    { label: 'Georgia', value: 'Georgia' },
+    { label: 'Arial', value: 'Arial' },
+    { label: 'Times New Roman', value: 'Times New Roman' },
+    { label: 'Courier New', value: 'Courier New' },
+    { label: 'Verdana', value: 'Verdana' },
+    { label: 'Trebuchet MS', value: 'Trebuchet MS' },
+    { label: 'Impact', value: 'Impact' },
+    { label: 'Comic Sans MS', value: 'Comic Sans MS' },
+    { label: 'Roboto', value: 'Roboto' },
+    { label: 'Poppins', value: 'Poppins' },
+    { label: 'Manrope', value: 'Manrope' },
     { label: 'sans-serif', value: 'sans-serif' },
     { label: 'serif', value: 'serif' },
     { label: 'monospace', value: 'monospace' },
@@ -96,7 +132,7 @@ function RichEditor({ value, onChange }) {
         {/* Font Family Dropdown */}
         <select
           onFocus={saveSelection}
-          onChange={e => exec('fontName', e.target.value)}
+          onChange={e => applyFontFamily(e.target.value)}
           className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
           title="Font Family"
         >
