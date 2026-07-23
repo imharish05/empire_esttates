@@ -551,36 +551,88 @@ i:not(.blog-content-render *), i::before, i::after,
 /* Fix italic address style in contact page */
 .contact-question li p { font-style: normal !important; }
 
+/* Blog Content Render Heading Styling */
+.blog-content-render h1 {
+  font-size: 28px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 24px 0 12px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.blog-content-render h2 {
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 20px 0 10px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.blog-content-render h3 {
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 16px 0 8px !important;
+  display: block !important;
+  width: 100% !important;
+}
+
+/* Blog Content Render Container Alignment */
+.blog-content-render {
+  text-align: left !important;
+  overflow: visible !important;
+}
+
 /* Blog Content Render List Styling Override */
 .blog-content-render ul,
-div.blog-content-render ul,
-.blog-content-render ul li {
+div.blog-content-render ul {
   list-style-type: disc !important;
   list-style: disc !important;
-  display: list-item !important;
+  display: block !important;
+  padding-left: 36px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
 }
 
 .blog-content-render ol,
-div.blog-content-render ol,
-.blog-content-render ol li {
+div.blog-content-render ol {
+  list-style-type: decimal !important;
+  list-style: decimal !important;
+  display: block !important;
+  padding-left: 36px !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+.blog-content-render ul > li,
+div.blog-content-render ul > li {
+  list-style-type: disc !important;
+  list-style: disc !important;
+  display: list-item !important;
+  list-style-position: outside !important;
+}
+
+.blog-content-render ol > li,
+div.blog-content-render ol > li {
   list-style-type: decimal !important;
   list-style: decimal !important;
   display: list-item !important;
-}
-
-.blog-content-render ul,
-.blog-content-render ol {
-  padding-left: 28px !important;
-  margin-top: 12px !important;
-  margin-bottom: 18px !important;
+  list-style-position: outside !important;
 }
 
 .blog-content-render li {
-  display: list-item !important;
-  margin-bottom: 8px !important;
-  font-size: 16px;
-  line-height: 1.8;
-  color: #2a2a2a;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 4px !important;
+  margin-bottom: 10px !important;
+  font-size: 16px !important;
+  line-height: 1.8 !important;
+  color: #2a2a2a !important;
+  text-align: left !important;
 }
 
 .blog-content-render p {
@@ -589,11 +641,16 @@ div.blog-content-render ol,
   max-width: 100% !important;
   clear: both !important;
   float: none !important;
-  flex: 0 0 100% !important;
-  margin-bottom: 18px !important;
-  font-size: 16px;
-  line-height: 1.9;
-  color: #2a2a2a;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  font-size: 16px !important;
+  line-height: 1.8 !important;
+  color: #2a2a2a !important;
+  text-align: left !important;
 }
 
 .blog-content-render li::before,

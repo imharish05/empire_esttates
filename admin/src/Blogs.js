@@ -50,54 +50,86 @@ const cleanJunkMetadata = (str) => {
     .replace(/style=["'][^"']*(display\s*:\s*flex|columns\s*:|grid-template|float\s*:)[^"']*["']/gi, '');
 };
 
+// Entity/whitespace cleanup that runs before the markup is handed to the DOM
+// parser below.
 const cleanLiLeadingMarkers = (html) => {
   if (typeof html !== 'string' || !html) return '';
-  let str = html
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&#160;/g, ' ')
+  return html
     .replace(/&#8203;/g, '')
-    .replace(/\u00a0/g, ' ')
     .replace(/\u200b/g, '');
-
-  for (let i = 0; i < 8; i++) {
-    const prev = str;
-    str = str.replace(/(<li\b[^>]*>(?:\s*<[^>]+>)*)\s*([•\-\*\.]|&bull;|\u2022|\b\d+[\.\)]|\b\d+\b)\s*/gi, '$1');
-    if (str === prev) break;
-  }
-
-  return str
-    .replace(/<b>\s*<\/b>/gi, '')
-    .replace(/<strong>\s*<\/strong>/gi, '')
-    .replace(/<span>\s*<\/span>/gi, '')
-    .replace(/<p>\s*<\/p>/gi, '');
 };
 
+// Strip a manually-typed bullet/number (e.g. "1.", "3)", "•") sitting at the
+// very start of a <li>'s actual text, no matter how many wrapper tags (<p>,
+// <strong>, <span>, ...) sit between the <li> and that text. Walking the
+// parsed DOM (instead of raw HTML strings) means this works regardless of how
+// the markup around the number is nested.
+const LIST_MARKER_REGEX = /^[\s\u00a0]*(?:[•\u2022\-\*]|&bull;|\d+[.)])[\s\u00a0]*/;
+
+const stripLeadingListMarker = (li, doc) => {
+  const walker = doc.createTreeWalker(li, NodeFilter.SHOW_TEXT, null, false);
+  let node = walker.nextNode();
+  while (node) {
+    if (node.textContent && node.textContent.trim()) {
+      const cleaned = node.textContent.replace(LIST_MARKER_REGEX, '');
+      if (cleaned !== node.textContent) node.textContent = cleaned;
+      break;
+    }
+    node = walker.nextNode();
+  }
+};
+
+// Renders every <li>/<ol> combo in the article as ONE continuous numbered
+// sequence, no matter how many separate <ol> elements the pasted content was
+// split into (even when paragraphs, headings, or bullet lists sit between
+// them). Rather than patching raw HTML with regex — which breaks the moment a
+// list item is wrapped in extra tags — this walks the real DOM tree:
+//   1. Removes any duplicate hand-typed numbering/bullets left inside <li> text.
+//   2. Assigns the correct `start` attribute to every top-level <ol> so the
+//      numbers keep counting up (1,2,3,4,5...) instead of restarting at 1.
+// Nested sub-lists (an <ol>/<ul> inside a <li>) keep independent numbering,
+// since those are genuinely separate lists.
 const fixOrderedListSequentialNumbering = (html) => {
   if (typeof html !== 'string' || !html) return '';
-  let str = html;
+  if (typeof document === 'undefined' || typeof DOMParser === 'undefined') {
+    return html;
+  }
 
-  // Strip value="..." attributes from <li> elements so list counters are not overridden
-  str = str.replace(/(<li\b[^>]*)\s+value=["']?\d+["']?/gi, '$1');
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const root = doc.body;
 
-  // Merge adjacent lists (ol/ul) to preserve sequential numbering
-  str = str
-    .replace(/<\/ol>\s*<ol\b[^>]*>/gi, '')
-    .replace(/<\/ul>\s*<ul\b[^>]*>/gi, '');
+    root.querySelectorAll('li').forEach((li) => {
+      li.removeAttribute('value');
+      stripLeadingListMarker(li, doc);
+    });
 
-  // Calculate running count across multiple <ol> elements in the article
-  let runningCount = 1;
-  return str.replace(/<ol\b([^>]*)>([\s\S]*?)<\/ol>/gi, (match, attrs, content) => {
-    const cleanContent = content.replace(/(<li\b[^>]*)\s+value=["']?\d+["']?/gi, '$1');
-    const liMatches = cleanContent.match(/<li\b/gi);
-    const count = liMatches ? liMatches.length : 0;
-    let startAttr = '';
-    if (runningCount > 1) {
-      startAttr = ` start="${runningCount}"`;
+    let runningCount = 1;
+    root.querySelectorAll('ol').forEach((ol) => {
+      const isNestedList = ol.parentElement && !!ol.parentElement.closest('li');
+      const directItems = Array.from(ol.children).filter((child) => child.tagName === 'LI');
+      if (isNestedList) return;
+      if (runningCount > 1) {
+        ol.setAttribute('start', String(runningCount));
+      } else {
+        ol.removeAttribute('start');
+      }
+      runningCount += directItems.length;
+    });
+
+    // Clean up now-empty inline wrapper tags left behind after marker removal
+    let out = root.innerHTML;
+    for (let i = 0; i < 4; i++) {
+      const prev = out;
+      out = out
+        .replace(/<(strong|b|em|i|span|u)>\s*<\/\1>/gi, '')
+        .replace(/<p>\s*<\/p>/gi, '');
+      if (out === prev) break;
     }
-    runningCount += count;
-    const cleanAttrs = (attrs || '').replace(/\s*start=["']?\d+["']?/gi, '');
-    return `<ol${cleanAttrs}${startAttr}>${cleanContent}</ol>`;
-  });
+    return out;
+  } catch (e) {
+    return html;
+  }
 };
 
 const normalizeRichTextHtml = (html) => {
@@ -283,7 +315,6 @@ function RichEditor({ value, onChange }) {
   };
 
   const handleKeyUp = () => {
-    isEditingRef.current = false;
     saveSelection();
   };
 

@@ -165,50 +165,93 @@ const cleanJunkMetadata = (str) => {
     .replace(/style=["'][^"']*(display\s*:\s*flex|columns\s*:|grid-template|float\s*:)[^"']*["']/gi, '');
 };
 
+// Entity/whitespace cleanup that runs before the markup is handed to the DOM
+// parser below.
 const cleanLiLeadingMarkers = (html) => {
   if (typeof html !== 'string' || !html) return '';
-  let str = html
-    .replace(/&nbsp;/gi, ' ')
-    .replace(/&#160;/g, ' ')
+  return html
     .replace(/&#8203;/g, '')
-    .replace(/\u00a0/g, ' ')
     .replace(/\u200b/g, '');
-
-  for (let i = 0; i < 8; i++) {
-    const prev = str;
-    str = str.replace(/(<li\b[^>]*>(?:\s*<[^>]+>)*)\s*([•\-\*\.]|&bull;|\u2022|\d+[\.\)]|\b\d+\b)\s*/gi, '$1');
-    if (str === prev) break;
-  }
-
-  return str
-    .replace(/<b>\s*<\/b>/gi, '')
-    .replace(/<strong>\s*<\/strong>/gi, '')
-    .replace(/<span>\s*<\/span>/gi, '')
-    .replace(/<p>\s*<\/p>/gi, '');
 };
 
+// Strip a manually-typed bullet/number (e.g. "1.", "3)", "•") sitting at the
+// very start of a <li>'s actual text, no matter how many wrapper tags (<p>,
+// <strong>, <span>, ...) sit between the <li> and that text. Walking the
+// parsed DOM (instead of raw HTML strings) means this works regardless of how
+// the markup around the number is nested.
+const LIST_MARKER_REGEX = /^[\s\u00a0]*(?:[•\u2022\-\*\.]|&bull;|\d+[\.\)\:]|\b\d+\b)[\s\u00a0]*/i;
+
+const stripLeadingListMarker = (li, doc) => {
+  for (let i = 0; i < 5; i++) {
+    const walker = doc.createTreeWalker(li, NodeFilter.SHOW_TEXT, null, false);
+    let node = walker.nextNode();
+    let stripped = false;
+    while (node) {
+      if (node.textContent && node.textContent.trim()) {
+        const cleaned = node.textContent.replace(LIST_MARKER_REGEX, '');
+        if (cleaned !== node.textContent) {
+          node.textContent = cleaned;
+          stripped = true;
+        }
+        break;
+      }
+      node = walker.nextNode();
+    }
+    if (!stripped) break;
+  }
+};
+
+// Renders every <li>/<ol> combo in the article as ONE continuous numbered
+// sequence, no matter how many separate <ol> elements the pasted content was
+// split into (even when paragraphs, headings, or bullet lists sit between
+// them). Rather than patching raw HTML with regex — which breaks the moment a
+// list item is wrapped in extra tags — this walks the real DOM tree:
+//   1. Removes any duplicate hand-typed numbering/bullets left inside <li> text.
+//   2. Assigns the correct `start` attribute to every top-level <ol> so the
+//      numbers keep counting up (1,2,3,4,5...) instead of restarting at 1.
+// Nested sub-lists (an <ol>/<ul> inside a <li>) keep independent numbering,
+// since those are genuinely separate lists.
 const fixOrderedListSequentialNumbering = (html) => {
   if (typeof html !== 'string' || !html) return '';
-  let str = html;
+  if (typeof document === 'undefined' || typeof DOMParser === 'undefined') {
+    return html;
+  }
 
-  // Merge adjacent lists (ol/ul) to preserve sequential numbering
-  str = str
-    .replace(/<\/ol>\s*<ol\b[^>]*>/gi, '')
-    .replace(/<\/ul>\s*<ul\b[^>]*>/gi, '');
+  try {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const root = doc.body;
 
-  // Calculate running count across multiple <ol> elements in the article
-  let runningCount = 1;
-  return str.replace(/<ol\b([^>]*)>([\s\S]*?)<\/ol>/gi, (match, attrs, content) => {
-    const liMatches = content.match(/<li\b/gi);
-    const count = liMatches ? liMatches.length : 0;
-    let startAttr = '';
-    if (runningCount > 1) {
-      startAttr = ` start="${runningCount}"`;
+    root.querySelectorAll('li').forEach((li) => {
+      li.removeAttribute('value');
+      stripLeadingListMarker(li, doc);
+    });
+
+    let runningCount = 1;
+    root.querySelectorAll('ol').forEach((ol) => {
+      const isNestedList = ol.parentElement && !!ol.parentElement.closest('li');
+      const directItems = Array.from(ol.children).filter((child) => child.tagName === 'LI');
+      if (isNestedList) return;
+      if (runningCount > 1) {
+        ol.setAttribute('start', String(runningCount));
+      } else {
+        ol.removeAttribute('start');
+      }
+      runningCount += directItems.length;
+    });
+
+    // Clean up now-empty inline wrapper tags left behind after marker removal
+    let out = root.innerHTML;
+    for (let i = 0; i < 4; i++) {
+      const prev = out;
+      out = out
+        .replace(/<(strong|b|em|i|span|u)>\s*<\/\1>/gi, '')
+        .replace(/<p>\s*<\/p>/gi, '');
+      if (out === prev) break;
     }
-    runningCount += count;
-    const cleanAttrs = (attrs || '').replace(/\s*start=["']?\d+["']?/gi, '');
-    return `<ol${cleanAttrs}${startAttr}>${content}</ol>`;
-  });
+    return out;
+  } catch (e) {
+    return html;
+  }
 };
 
 const normalizeRichTextHtml = (html) => {
@@ -243,7 +286,6 @@ const normalizeRichTextHtml = (html) => {
   });
   return ensureParagraphWrapper(normalized);
 };
-
 /* ─────────────── BLOG DETAIL VIEW ─────────────── */
 function BlogDetailView({ blog, allBlogs, onBack }) {
   const imgSrc = blog.image || blog.imageUrl || blog.thumbnail || null;
@@ -255,61 +297,110 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
   return (
     <>
       <style>{`
+        /* Article Typography & Publishing Layout */
+        .blog-content-container {
+          max-width: 850px !important;
+          margin: 0 auto !important;
+          padding-left: 16px !important;
+          padding-right: 16px !important;
+        }
         .blog-content-render {
-          font-size: 16px;
-          line-height: 1.9;
-          color: #2a2a2a;
-          text-align: justify;
+          font-size: 16px !important;
+          line-height: 1.8 !important;
+          color: #2a2a2a !important;
+          text-align: left !important;
         }
         .blog-content-render p {
-          margin-bottom: 18px;
-          font-size: 16px;
-          line-height: 1.9;
-          color: #2a2a2a;
-          text-align: justify;
+          display: block !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          clear: both !important;
+          float: none !important;
+          margin-top: 0 !important;
+          margin-bottom: 18px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 0 !important;
+          padding-right: 0 !important;
+          font-size: 16px !important;
+          line-height: 1.8 !important;
+          color: #2a2a2a !important;
+          text-align: left !important;
         }
         .blog-content-render h1 {
           font-size: 28px !important;
           font-weight: 700 !important;
           color: #1a1a1a !important;
-          margin: 28px 0 14px;
+          margin-top: 32px !important;
+          margin-bottom: 16px !important;
+          line-height: 1.35 !important;
+          text-align: left !important;
         }
         .blog-content-render h2 {
           font-size: 22px !important;
           font-weight: 700 !important;
           color: #1a1a1a !important;
-          margin: 24px 0 12px;
+          margin-top: 28px !important;
+          margin-bottom: 14px !important;
+          line-height: 1.4 !important;
+          text-align: left !important;
         }
         .blog-content-render h3 {
           font-size: 18px !important;
           font-weight: 700 !important;
           color: #1a1a1a !important;
-          margin: 20px 0 10px;
+          margin-top: 24px !important;
+          margin-bottom: 12px !important;
+          line-height: 1.45 !important;
+          text-align: left !important;
         }
         .blog-content-render img {
           max-width: 100%;
-          border-radius: 6px;
-          margin: 20px 0;
+          border-radius: 8px;
+          margin: 24px 0;
         }
-        .blog-content-render ul {
+        .blog-content-render ul, div.blog-content-render ul {
           list-style-type: disc !important;
           list-style: disc !important;
-          padding-left: 28px !important;
-          margin-bottom: 18px !important;
+          display: block !important;
+          padding-left: 32px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          margin-top: 24px !important;
+          margin-bottom: 24px !important;
         }
-        .blog-content-render ol {
+        .blog-content-render ol, div.blog-content-render ol {
           list-style-type: decimal !important;
           list-style: decimal !important;
-          padding-left: 28px !important;
-          margin-bottom: 18px !important;
+          display: block !important;
+          padding-left: 32px !important;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          margin-top: 24px !important;
+          margin-bottom: 24px !important;
+        }
+        .blog-content-render ul > li, div.blog-content-render ul > li {
+          list-style-type: disc !important;
+          list-style: disc !important;
+          display: list-item !important;
+          list-style-position: outside !important;
+        }
+        .blog-content-render ol > li, div.blog-content-render ol > li {
+          list-style-type: decimal !important;
+          list-style: decimal !important;
+          display: list-item !important;
+          list-style-position: outside !important;
         }
         .blog-content-render li {
-          display: list-item !important;
-          margin-bottom: 8px !important;
-          font-size: 16px;
-          line-height: 1.8;
-          color: #2a2a2a;
-          text-align: justify;
+          margin-left: 0 !important;
+          margin-right: 0 !important;
+          padding-left: 4px !important;
+          margin-top: 0 !important;
+          margin-bottom: 12px !important;
+          font-size: 16px !important;
+          line-height: 1.8 !important;
+          color: #2a2a2a !important;
+          text-align: left !important;
         }
         .blog-content-render a {
           color: #c8902a;
@@ -317,13 +408,13 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
         }
         .blog-content-render blockquote {
           border-left: 4px solid #c8902a;
-          padding: 12px 18px;
+          padding: 14px 20px;
           background: #fff8ee;
           border-radius: 0 6px 6px 0;
-          margin: 22px 0;
+          margin: 24px 0;
           font-style: italic;
           color: #555;
-          text-align: justify;
+          text-align: left;
         }
         .blog-content-render strong, .blog-content-render b {
           font-weight: 700 !important;
@@ -335,69 +426,75 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
         .blog-content-render u {
           text-decoration: underline !important;
         }
+        .blog-content-render li::before, .blog-content-render li::after {
+          content: none !important;
+          display: none !important;
+        }
       `}</style>
 
       <div style={{ background: '#fff', paddingBottom: '60px' }}>
 
-        {/* Content Area — Bootstrap container matches Studio1 width */}
+        {/* Content Area — Centered Medium/HubSpot 850px Container */}
         <div className="container" style={{ paddingTop: '36px' }}>
+          <div className="blog-content-container">
 
-          {/* Contained Image with rounded corners */}
-          {imgSrc && (
-            <div style={{
-              width: '100%', borderRadius: '10px', overflow: 'hidden',
-              marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.10)'
+            {/* Contained Image with rounded corners */}
+            {imgSrc && (
+              <div style={{
+                width: '100%', borderRadius: '10px', overflow: 'hidden',
+                marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.10)'
+              }}>
+                <img
+                  src={imgSrc}
+                  alt={blog.title || blog.heading}
+                  style={{ width: '100%', display: 'block', maxHeight: '460px', objectFit: 'cover' }}
+                />
+              </div>
+            )}
+
+            {/* Title */}
+            <h1 style={{
+              fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 700,
+              color: '#1a1a1a', lineHeight: 1.35, marginBottom: '24px', textAlign: 'left'
             }}>
-              <img
-                src={imgSrc}
-                alt={blog.title || blog.heading}
-                style={{ width: '100%', display: 'block', maxHeight: '460px', objectFit: 'cover' }}
+              {blog.title || blog.heading}
+            </h1>
+
+            {/* Article Content */}
+            {rawContent ? (
+              <div
+                className="blog-content-render"
+                dangerouslySetInnerHTML={{ __html: rawContent }}
               />
+            ) : (
+              <p style={{ color: '#888', fontStyle: 'italic' }}>No content available for this post.</p>
+            )}
+
+            {/* Back Button */}
+            <div style={{ marginTop: '48px', borderTop: '1px solid #eee', paddingTop: '28px' }}>
+              <button
+                onClick={onBack}
+                style={{
+                  display: 'inline-block',
+                  background: '#c8902a',
+                  color: '#fff',
+                  border: 'none',
+                  borderRadius: '4px',
+                  padding: '11px 26px',
+                  fontWeight: 700,
+                  fontSize: '14px',
+                  cursor: 'pointer',
+                  letterSpacing: '0.5px',
+                  transition: 'background-color 0.2s'
+                }}
+                onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#c8902a'; }}
+              >
+                ← Back to All Blogs
+              </button>
             </div>
-          )}
 
-          {/* Title */}
-          <h1 style={{
-            fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 700,
-            color: '#1a1a1a', lineHeight: 1.35, marginBottom: '24px'
-          }}>
-            {blog.title || blog.heading}
-          </h1>
-
-          {/* Article Content */}
-          {rawContent ? (
-            <div
-              className="blog-content-render"
-              style={{ textAlign: 'justify' }}
-              dangerouslySetInnerHTML={{ __html: rawContent }}
-            />
-          ) : (
-            <p style={{ color: '#888', fontStyle: 'italic' }}>No content available for this post.</p>
-          )}
-
-          {/* Back Button */}
-          <div style={{ marginTop: '48px', borderTop: '1px solid #eee', paddingTop: '28px' }}>
-            <button
-              onClick={onBack}
-              style={{
-                display: 'inline-block',
-                background: '#c8902a',
-                color: '#fff',
-                border: 'none',
-                borderRadius: '3px',
-                padding: '11px 26px',
-                fontWeight: 700,
-                fontSize: '14px',
-                cursor: 'pointer',
-                letterSpacing: '0.5px',
-              }}
-              onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
-              onMouseLeave={e => { e.currentTarget.style.background = '#c8902a'; }}
-            >
-              ← Back to All Blogs
-            </button>
           </div>
-
         </div>
       </div>
     </>
