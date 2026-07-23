@@ -82,10 +82,10 @@ class Aboutus extends Component{
 										<h2 className="title font-weight-700 m-b20" style={{ color: '#1a1a2e', fontSize: '36px' }}>Empire Esttates: Civil Engineering & Contracting Excellence.</h2>
 										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
 									</div>
-									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px' }}>
+									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										We are <strong>Empire Esttates</strong>, a well-established firm of civil engineers and contractors dedicated to residential development in Chennai. Founded in 2001 by T. Karthik Pragass, a civil engineer with extensive experience in the construction industry, our primary objective is to promote and develop high-quality Residential Apartments and Individual Houses.
 									</p>
-									<p className="font-16 text-black m-t20" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px' }}>
+									<p className="font-16 text-black m-t20" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										<strong>Key Highlights:</strong><br/>
 										<strong>Expertise:</strong> Civil Engineering, Contracting, and Residential Development<br/>
 										<strong>Core Focus Areas:</strong> Chennai (specifically in and around Poonamallee, Valasaravakkam, Porur, Avadi, & Thiruvallur)
@@ -192,14 +192,14 @@ class Aboutus extends Component{
 										<h2 className="title font-weight-700 m-b20" style={{ color: '#1a1a2e', fontSize: '36px' }}>Focused. Professional. Statement. Proven Track Record.</h2>
 										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
 									</div>
-									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px' }}>
+									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										Our two decades in the industry have resulted in the successful completion of approximately 250 residential units, a balanced mix of apartments and individual houses. This volume of work is a testament to the trust placed in us. We are proud of our established reputation for delivering high-quality construction at a reasonable cost, consistently meeting deadlines.
 									</p>
 									<ul className="list-check primary m-b30 m-t20">
-										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500' }}>
+										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Structural Integrity:</strong> All projects feature a consultant-designed framed structure, ensuring long-term safety and engineering precision.
 										</li>
-										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500' }}>
+										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Aesthetic Appeal:</strong> We integrate aesthetic elevations crafted by our own team of architects, ensuring visually distinctive and modern homes.
 										</li>
 									</ul>
@@ -222,13 +222,13 @@ class Aboutus extends Component{
 											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#1a1a2e', whiteSpace: 'nowrap' }}>Our Mission</h3>
 										</div>
 										<div className="icon-content">
-											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555' }}>
+											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
 												Our mission is to be the preferred choice for residential construction in Chennai by consistently delivering safe, high-quality, and affordable homes built on trust. We commit to:
 											</p>
 											<ul className="list-circle primary m-t10" style={{ paddingLeft: '20px' }}>
-												<li className="m-b5"><strong>Quality & Technology:</strong> Utilizing the latest construction technologies and superior materials.</li>
-												<li className="m-b5"><strong>Affordability:</strong> Achieving the best possible value for our customers.</li>
-												<li className="m-b5"><strong>Trust & Service:</strong> Guaranteeing timely project handover and reliable after-sales support.</li>
+												<li className="m-b5" style={{ textAlign: 'justify' }}><strong>Quality & Technology:</strong> Utilizing the latest construction technologies and superior materials.</li>
+												<li className="m-b5" style={{ textAlign: 'justify' }}><strong>Affordability:</strong> Achieving the best possible value for our customers.</li>
+												<li className="m-b5" style={{ textAlign: 'justify' }}><strong>Trust & Service:</strong> Guaranteeing timely project handover and reliable after-sales support.</li>
 											</ul>
 										</div>
 									</div>
@@ -244,12 +244,12 @@ class Aboutus extends Component{
 											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#1a1a2e', whiteSpace: 'nowrap' }}>Our Vision</h3>
 										</div>
 										<div className="icon-content">
-											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555' }}>
+											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
 												Our vision is to become the preferred and most trusted residential developer in Chennai, serving a wide customer base that seeks an unparalleled combination of international-standard quality construction at a truly affordable cost.
 											</p>
 											<ul className="list-circle primary m-t10" style={{ paddingLeft: '20px' }}>
-												<li className="m-b5"><strong>Technology Integration:</strong> Adopting the latest materials meeting global benchmarks.</li>
-												<li className="m-b5"><strong>Customer-Centric:</strong> Valuing trust and ensuring a satisfying homeownership journey.</li>
+												<li className="m-b5" style={{ textAlign: 'justify' }}><strong>Technology Integration:</strong> Adopting the latest materials meeting global benchmarks.</li>
+												<li className="m-b5" style={{ textAlign: 'justify' }}><strong>Customer-Centric:</strong> Valuing trust and ensuring a satisfying homeownership journey.</li>
 											</ul>
 										</div>
 									</div>

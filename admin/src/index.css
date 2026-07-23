@@ -72,3 +72,78 @@ body {
 input, textarea, select, select option {
   color: #000000 !important;
 }
+
+/* Rich Text Editor Content Area Styles */
+.rich-editor-content {
+  color: #1a1a1a !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+.rich-editor-content h1 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 24px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  margin: 16px 0 8px !important;
+}
+.rich-editor-content h2 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 20px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  margin: 14px 0 8px !important;
+}
+.rich-editor-content h3 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #1a1a1a !important;
+  margin: 12px 0 6px !important;
+}
+.rich-editor-content p {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  clear: both !important;
+  float: none !important;
+  flex: 0 0 100% !important;
+  margin-bottom: 16px !important;
+  line-height: 1.6;
+  font-size: 14px;
+}
+.rich-editor-content b,
+.rich-editor-content strong {
+  font-weight: 700 !important;
+  color: #000000 !important;
+}
+.rich-editor-content h1 b, .rich-editor-content h1 strong,
+.rich-editor-content h2 b, .rich-editor-content h2 strong,
+.rich-editor-content h3 b, .rich-editor-content h3 strong {
+  font-weight: 600 !important;
+}
+.rich-editor-content ul {
+  list-style-type: disc !important;
+  list-style: disc !important;
+  padding-left: 28px !important;
+  margin: 10px 0 !important;
+}
+.rich-editor-content ol {
+  list-style-type: decimal !important;
+  list-style: decimal !important;
+  padding-left: 28px !important;
+  margin: 10px 0 !important;
+}
+.rich-editor-content li {
+  display: list-item !important;
+  margin-bottom: 4px !important;
+  font-size: 14px;
+}
+.rich-editor-content li::before,
+.rich-editor-content li::after {
+  content: none !important;
+  display: none !important;
+}
+.rich-editor-content a {
+  color: #c8902a;
+  text-decoration: underline;
+}
+

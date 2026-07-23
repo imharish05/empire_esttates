@@ -7,6 +7,9 @@ function ToolBtn({ onClick, title, children }) {
   return (
     <button
       type="button"
+      onMouseDown={(e) => {
+        e.preventDefault();
+      }}
       onClick={onClick}
       title={title}
       className="h-8 px-2 flex items-center justify-center rounded border border-neutral-300 bg-white hover:bg-neutral-100 text-neutral-700 transition-colors focus:outline-none"
@@ -27,10 +30,130 @@ const stripHtml = (html) => {
   }
 };
 
+const removeQuotes = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html.replace(/<\/?blockquote\b[^>]*>/gi, '');
+  return str.replace(/(^|>)([^<]*)(<|$)/g, (match, open, text, close) => {
+    const cleanText = text.replace(/["'“”‘’`]/g, '');
+    return `${open}${cleanText}${close}`;
+  });
+};
+
+const cleanJunkMetadata = (str) => {
+  if (typeof str !== 'string' || !str) return '';
+  return str
+    .replace(/\*\]:[^>]*data-turn=[^>]*>/gi, '')
+    .replace(/data-turn-id\b[^>]*>/gi, '')
+    .replace(/R6Vx5W_[^\s<>]*/gi, '')
+    .replace(/scroll-mb-calc[^\s<>]*/gi, '')
+    .replace(/scroll-mt-calc[^\s<>]*/gi, '')
+    .replace(/style=["'][^"']*(display\s*:\s*flex|columns\s*:|grid-template|float\s*:)[^"']*["']/gi, '');
+};
+
+const cleanLiLeadingMarkers = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&#160;/g, ' ')
+    .replace(/&#8203;/g, '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u200b/g, '');
+
+  for (let i = 0; i < 8; i++) {
+    const prev = str;
+    str = str.replace(/(<li\b[^>]*>(?:\s*<[^>]+>)*)\s*([•\-\*\.]|&bull;|\u2022|\b\d+[\.\)]|\b\d+\b)\s*/gi, '$1');
+    if (str === prev) break;
+  }
+
+  return str
+    .replace(/<b>\s*<\/b>/gi, '')
+    .replace(/<strong>\s*<\/strong>/gi, '')
+    .replace(/<span>\s*<\/span>/gi, '')
+    .replace(/<p>\s*<\/p>/gi, '');
+};
+
+const fixOrderedListSequentialNumbering = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html;
+
+  // Strip value="..." attributes from <li> elements so list counters are not overridden
+  str = str.replace(/(<li\b[^>]*)\s+value=["']?\d+["']?/gi, '$1');
+
+  // Merge adjacent lists (ol/ul) to preserve sequential numbering
+  str = str
+    .replace(/<\/ol>\s*<ol\b[^>]*>/gi, '')
+    .replace(/<\/ul>\s*<ul\b[^>]*>/gi, '');
+
+  // Calculate running count across multiple <ol> elements in the article
+  let runningCount = 1;
+  return str.replace(/<ol\b([^>]*)>([\s\S]*?)<\/ol>/gi, (match, attrs, content) => {
+    const cleanContent = content.replace(/(<li\b[^>]*)\s+value=["']?\d+["']?/gi, '$1');
+    const liMatches = cleanContent.match(/<li\b/gi);
+    const count = liMatches ? liMatches.length : 0;
+    let startAttr = '';
+    if (runningCount > 1) {
+      startAttr = ` start="${runningCount}"`;
+    }
+    runningCount += count;
+    const cleanAttrs = (attrs || '').replace(/\s*start=["']?\d+["']?/gi, '');
+    return `<ol${cleanAttrs}${startAttr}>${cleanContent}</ol>`;
+  });
+};
+
+const normalizeRichTextHtml = (html) => {
+  if (!html) return '';
+  const sizeMap = {
+    '1': '12px',
+    '2': '13px',
+    '3': '14px',
+    '4': '18px',
+    '5': '24px',
+    '6': '32px',
+    '7': '48px',
+  };
+
+  let str = removeQuotes(html);
+  str = cleanJunkMetadata(str);
+
+  // Strip all repeated duplicate bullets, numbers, and dots from inside <li> tags
+  str = cleanLiLeadingMarkers(str);
+
+  // Fix continuous sequential numbering across multiple <ol> elements
+  str = fixOrderedListSequentialNumbering(str);
+
+  // Convert legacy <font> tags to <span style="...">
+  str = str.replace(/<font\b([^>]*)>([\s\S]*?)<\/font>/gi, (match, attrs, content) => {
+    let styles = [];
+    const sizeMatch = attrs.match(/size=["']?(\d+)["']?/i);
+    if (sizeMatch && sizeMap[sizeMatch[1]]) {
+      styles.push(`font-size: ${sizeMap[sizeMatch[1]]}`);
+    }
+    const colorMatch = attrs.match(/color=["']?([^"'\s>]+)["']?/i);
+    if (colorMatch) {
+      styles.push(`color: ${colorMatch[1]}`);
+    }
+    const faceMatch = attrs.match(/face=["']?([^"'\s>]+)["']?/i);
+    if (faceMatch) {
+      styles.push(`font-family: ${faceMatch[1]}`);
+    }
+    const styleAttrMatch = attrs.match(/style=["']([^"']+)["']/i);
+    if (styleAttrMatch) {
+      styles.push(styleAttrMatch[1]);
+    }
+    if (styles.length > 0) {
+      return `<span style="${styles.join('; ')}">${content}</span>`;
+    }
+    return content;
+  });
+
+  return str;
+};
+
 const sanitizeDescription = (html) => {
   if (!html) return '';
-  return html
-    .replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '')
+  const normalized = normalizeRichTextHtml(html);
+  return normalized
+    .replace(/[\^%\$~\\\|\{\}\[`]/g, '')
     .replace(/&nbsp;/gi, ' ')
     .replace(/\u00a0/g, ' ')
     .replace(/&#8203;/g, '')
@@ -51,10 +174,28 @@ const truncate = (str, n) => str?.length > n ? str.slice(0, n) + '...' : str;
 function RichEditor({ value, onChange }) {
   const editorRef = useRef(null);
   const savedRangeRef = useRef(null);
+  const isEditingRef = useRef(false);
 
   useEffect(() => {
-    if (editorRef.current && editorRef.current.innerHTML !== value) {
-      editorRef.current.innerHTML = value || '';
+    const handleSelectionChange = () => {
+      const sel = window.getSelection();
+      if (sel && sel.rangeCount > 0 && editorRef.current && editorRef.current.contains(sel.anchorNode)) {
+        savedRangeRef.current = sel.getRangeAt(0).cloneRange();
+      }
+    };
+    document.addEventListener('selectionchange', handleSelectionChange);
+    return () => document.removeEventListener('selectionchange', handleSelectionChange);
+  }, []);
+
+  useEffect(() => {
+    if (isEditingRef.current) {
+      return;
+    }
+    if (editorRef.current) {
+      const normalized = normalizeRichTextHtml(value || '');
+      if (editorRef.current.innerHTML !== normalized) {
+        editorRef.current.innerHTML = normalized;
+      }
     }
   }, [value]);
 
@@ -67,110 +208,59 @@ function RichEditor({ value, onChange }) {
     }
   };
 
-  const restoreSelection = () => {
-    if (editorRef.current) {
-      editorRef.current.focus();
+  const ensureEditorFocus = () => {
+    const sel = window.getSelection();
+    // If selection is already active inside editor, do not alter range
+    if (sel && sel.rangeCount > 0 && editorRef.current && editorRef.current.contains(sel.anchorNode)) {
+      return;
     }
-    if (savedRangeRef.current) {
-      const sel = window.getSelection();
-      sel.removeAllRanges();
-      sel.addRange(savedRangeRef.current);
+    // Restore saved range only if focus was lost outside editor
+    if (savedRangeRef.current && editorRef.current) {
+      try {
+        sel.removeAllRanges();
+        sel.addRange(savedRangeRef.current);
+      } catch (e) {}
     }
+  };
+
+  const emitChange = (html) => {
+    const normalized = normalizeRichTextHtml(html);
+    onChange(normalized);
   };
 
   const exec = (cmd, val = null) => {
-    restoreSelection();
+    ensureEditorFocus();
     try {
-      document.execCommand('styleWithCSS', false, true);
+      document.execCommand('styleWithCSS', false, false);
     } catch (e) {}
     document.execCommand(cmd, false, val);
-    saveSelection();
     if (editorRef.current) {
-      onChange(editorRef.current.innerHTML);
+      emitChange(normalizeRichTextHtml(editorRef.current.innerHTML));
     }
   };
-
-  const applyFontFamily = (fontName) => {
-    if (!fontName) return;
-    restoreSelection();
-
-    const sel = window.getSelection();
-    if (sel && sel.rangeCount > 0 && editorRef.current) {
-      const range = sel.getRangeAt(0);
-      if (!sel.isCollapsed && editorRef.current.contains(range.commonAncestorContainer)) {
-        // Highlighted text selection -> wrap selection in inline span with font-family
-        const span = document.createElement('span');
-        span.style.fontFamily = fontName;
-        try {
-          span.appendChild(range.extractContents());
-          range.insertNode(span);
-          // Re-select the wrapped span text
-          const newRange = document.createRange();
-          newRange.selectNodeContents(span);
-          sel.removeAllRanges();
-          sel.addRange(newRange);
-        } catch (e) {
-          try {
-            document.execCommand('styleWithCSS', false, true);
-          } catch (err) {}
-          document.execCommand('fontName', false, fontName);
-        }
-      } else {
-        // No text highlighted -> insert zero-width span for typing at cursor
-        const span = document.createElement('span');
-        span.style.fontFamily = fontName;
-        span.innerHTML = '&#8203;';
-        if (range && editorRef.current.contains(range.commonAncestorContainer)) {
-          range.insertNode(span);
-          const newRange = document.createRange();
-          newRange.setStart(span, 1);
-          newRange.setEnd(span, 1);
-          sel.removeAllRanges();
-          sel.addRange(newRange);
-        } else {
-          editorRef.current.appendChild(span);
-        }
-      }
-    }
-
-    saveSelection();
-    if (editorRef.current) {
-      onChange(editorRef.current.innerHTML);
-    }
-  };
-
-  const FONTS = [
-    { label: 'Georgia', value: 'Georgia' },
-    { label: 'Arial', value: 'Arial' },
-    { label: 'Times New Roman', value: 'Times New Roman' },
-    { label: 'Courier New', value: 'Courier New' },
-    { label: 'Verdana', value: 'Verdana' },
-    { label: 'Trebuchet MS', value: 'Trebuchet MS' },
-    { label: 'Impact', value: 'Impact' },
-    { label: 'Comic Sans MS', value: 'Comic Sans MS' },
-    { label: 'Roboto', value: 'Roboto' },
-    { label: 'Poppins', value: 'Poppins' },
-    { label: 'Manrope', value: 'Manrope' },
-    { label: 'sans-serif', value: 'sans-serif' },
-    { label: 'serif', value: 'serif' },
-    { label: 'monospace', value: 'monospace' },
-  ];
-
-  const FONT_SIZES = [
-    { label: 'Small (12px)', val: '1' },
-    { label: 'Normal (14px)', val: '3' },
-    { label: 'Medium (18px)', val: '4' },
-    { label: 'Large (24px)', val: '5' },
-    { label: 'Huge (32px)', val: '6' },
-  ];
 
   const HEADINGS = [
     { label: 'Paragraph', val: 'P' },
     { label: 'Heading 1 (H1)', val: 'H1' },
     { label: 'Heading 2 (H2)', val: 'H2' },
     { label: 'Heading 3 (H3)', val: 'H3' },
-    { label: 'Quote', val: 'BLOCKQUOTE' },
   ];
+
+  const applyFormatBlock = (tag) => {
+    if (!tag) return;
+    ensureEditorFocus();
+    const formattedTag = (tag.startsWith('<') && tag.endsWith('>')) ? tag : `<${tag}>`;
+    try {
+      document.execCommand('formatBlock', false, formattedTag);
+    } catch (e) {
+      try {
+        document.execCommand('formatBlock', false, tag);
+      } catch (err) {}
+    }
+    if (editorRef.current) {
+      emitChange(normalizeRichTextHtml(editorRef.current.innerHTML));
+    }
+  };
 
   const notifySpecialCharBlocked = () => {
     Swal.fire({
@@ -184,170 +274,76 @@ function RichEditor({ value, onChange }) {
   };
 
   const handleKeyDown = (e) => {
-    const forbiddenChars = ['^', '%', '$', '#', '*', '~', '\\', '|', '{', '}', '[', ']', '`'];
+    isEditingRef.current = true;
+    const forbiddenChars = ['^', '%', '$', '~', '\\', '|', '{', '}', '[', ']', '`', '"', "'", '“', '”', '‘', '’'];
     if (forbiddenChars.includes(e.key)) {
       e.preventDefault();
       notifySpecialCharBlocked();
     }
   };
 
+  const handleKeyUp = () => {
+    isEditingRef.current = false;
+    saveSelection();
+  };
+
   const handlePaste = (e) => {
     e.preventDefault();
     const text = e.clipboardData ? e.clipboardData.getData('text/plain') : '';
-    const cleanText = text.replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '');
+    const cleanText = text.replace(/[\^%\$~\\\|\{\}\[`"'“”‘’]/g, '');
     if (text !== cleanText) {
       notifySpecialCharBlocked();
     }
     document.execCommand('insertText', false, cleanText);
     if (editorRef.current) {
-      onChange(editorRef.current.innerHTML);
+      emitChange(normalizeRichTextHtml(editorRef.current.innerHTML));
     }
   };
 
   const handleInput = () => {
     if (editorRef.current) {
       const rawHtml = editorRef.current.innerHTML;
-      const cleanedHtml = rawHtml.replace(/[\^%\$#\*~\\\|\{\}\[`]/g, '');
-      if (rawHtml !== cleanedHtml) {
-        saveSelection();
-        editorRef.current.innerHTML = cleanedHtml;
-        restoreSelection();
-      }
-      onChange(cleanedHtml);
+      const cleanedHtml = normalizeRichTextHtml(rawHtml.replace(/[\^%\$~\\\|\{\}\[`"'“”‘’]/g, ''));
+      emitChange(cleanedHtml);
     }
   };
 
   return (
     <div className="border border-neutral-300 rounded-lg overflow-hidden bg-white shadow-sm">
-      {/* Summernote-style Toolbar */}
+      {/* Clean & Focused Toolbar */}
       <div
-        className="flex flex-wrap items-center gap-1.5 p-2 bg-neutral-50 border-b border-neutral-200 text-xs select-none"
+        className="flex flex-wrap items-center gap-2 p-2 bg-neutral-50 border-b border-neutral-200 text-xs select-none"
         onMouseDown={saveSelection}
       >
-        {/* Style Dropdown (Heading) */}
+        {/* Paragraph & Heading Dropdown (Heading 1, Heading 2, Heading 3, Paragraph) */}
         <select
           onFocus={saveSelection}
-          onChange={e => exec('formatBlock', e.target.value)}
+          onChange={e => applyFormatBlock(e.target.value)}
           className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
-          title="Paragraph Format"
+          title="Paragraph / Heading Format"
         >
           {HEADINGS.map(h => (
             <option key={h.val} value={h.val}>{h.label}</option>
           ))}
         </select>
 
-        {/* Font Family Dropdown */}
-        <select
-          onFocus={saveSelection}
-          onChange={e => applyFontFamily(e.target.value)}
-          className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
-          title="Font Family"
-        >
-          <option value="">Font Family</option>
-          {FONTS.map(f => (
-            <option key={f.label} value={f.value} style={{ fontFamily: f.value }}>{f.label}</option>
-          ))}
-        </select>
-
-        {/* Font Size Dropdown */}
-        <select
-          onFocus={saveSelection}
-          onChange={e => exec('fontSize', e.target.value)}
-          className="h-8 rounded border border-neutral-300 px-2 bg-white text-xs text-neutral-700 focus:outline-none focus:ring-1 focus:ring-[#d4af37] cursor-pointer font-medium"
-          title="Font Size"
-        >
-          <option value="">Font Size</option>
-          {FONT_SIZES.map(s => (
-            <option key={s.val} value={s.val}>{s.label}</option>
-          ))}
-        </select>
-
         <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
 
-        {/* Bold, Italic, Underline, Strikethrough */}
+        {/* Bold Button */}
         <ToolBtn onClick={() => exec('bold')} title="Bold (Ctrl+B)">
-          <span className="material-symbols-outlined text-[18px]">format_bold</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('italic')} title="Italic (Ctrl+I)">
-          <span className="material-symbols-outlined text-[18px]">format_italic</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('underline')} title="Underline (Ctrl+U)">
-          <span className="material-symbols-outlined text-[18px]">format_underlined</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('strikethrough')} title="Strikethrough">
-          <span className="material-symbols-outlined text-[18px]">strikethrough_s</span>
+          <span className="material-symbols-outlined text-[20px] font-bold">format_bold</span>
         </ToolBtn>
 
         <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
 
-        {/* Text Color Picker */}
-        <div className="relative flex items-center h-8 px-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 cursor-pointer" title="Text Color">
-          <span className="material-symbols-outlined text-[18px] text-neutral-700">format_color_text</span>
-          <input
-            type="color"
-            onFocus={saveSelection}
-            onChange={e => exec('foreColor', e.target.value)}
-            className="w-5 h-5 ml-1 p-0 border-0 bg-transparent cursor-pointer"
-          />
-        </div>
-
-        {/* Background Highlight Color Picker */}
-        <div className="relative flex items-center h-8 px-1.5 rounded border border-neutral-300 bg-white hover:bg-neutral-100 cursor-pointer" title="Highlight Color">
-          <span className="material-symbols-outlined text-[18px] text-neutral-700">format_color_fill</span>
-          <input
-            type="color"
-            onFocus={saveSelection}
-            onChange={e => exec('hiliteColor', e.target.value)}
-            className="w-5 h-5 ml-1 p-0 border-0 bg-transparent cursor-pointer"
-          />
-        </div>
-
-        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
-
-        {/* Alignment */}
-        <ToolBtn onClick={() => exec('justifyLeft')} title="Align Left">
-          <span className="material-symbols-outlined text-[18px]">format_align_left</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('justifyCenter')} title="Align Center">
-          <span className="material-symbols-outlined text-[18px]">format_align_center</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('justifyRight')} title="Align Right">
-          <span className="material-symbols-outlined text-[18px]">format_align_right</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('justifyFull')} title="Justify">
-          <span className="material-symbols-outlined text-[18px]">format_align_justify</span>
-        </ToolBtn>
-
-        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
-
-        {/* Lists & Indent */}
+        {/* Bullet List Button */}
         <ToolBtn onClick={() => exec('insertUnorderedList')} title="Bullet List">
-          <span className="material-symbols-outlined text-[18px]">format_list_bulleted</span>
+          <span className="material-symbols-outlined text-[20px]">format_list_bulleted</span>
         </ToolBtn>
+
+        {/* Numbered List Button */}
         <ToolBtn onClick={() => exec('insertOrderedList')} title="Numbered List">
-          <span className="material-symbols-outlined text-[18px]">format_list_numbered</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('indent')} title="Increase Indent">
-          <span className="material-symbols-outlined text-[18px]">format_indent_increase</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('outdent')} title="Decrease Indent">
-          <span className="material-symbols-outlined text-[18px]">format_indent_decrease</span>
-        </ToolBtn>
-
-        <div className="h-5 w-[1px] bg-neutral-300 mx-0.5" />
-
-        {/* Link & Clear Format & Undo/Redo */}
-        <ToolBtn onClick={() => { saveSelection(); const url = prompt('Enter Link URL:'); if (url) exec('createLink', url); }} title="Insert Link">
-          <span className="material-symbols-outlined text-[18px]">link</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('removeFormat')} title="Clear Formatting">
-          <span className="material-symbols-outlined text-[18px]">format_clear</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('undo')} title="Undo">
-          <span className="material-symbols-outlined text-[18px]">undo</span>
-        </ToolBtn>
-        <ToolBtn onClick={() => exec('redo')} title="Redo">
-          <span className="material-symbols-outlined text-[18px]">redo</span>
+          <span className="material-symbols-outlined text-[20px]">format_list_numbered</span>
         </ToolBtn>
       </div>
 
@@ -356,13 +352,14 @@ function RichEditor({ value, onChange }) {
         ref={editorRef}
         contentEditable
         suppressContentEditableWarning
+        onFocus={() => { isEditingRef.current = true; }}
         onMouseUp={saveSelection}
         onKeyUp={saveSelection}
         onKeyDown={handleKeyDown}
         onPaste={handlePaste}
         onInput={handleInput}
-        onBlur={saveSelection}
-        className="p-4 min-h-[200px] max-h-[380px] overflow-y-auto text-sm text-neutral-900 focus:outline-none leading-relaxed"
+        onBlur={() => { isEditingRef.current = false; saveSelection(); }}
+        className="p-4 min-h-[200px] max-h-[380px] overflow-y-auto text-sm text-neutral-900 focus:outline-none leading-relaxed rich-editor-content"
       />
     </div>
   );

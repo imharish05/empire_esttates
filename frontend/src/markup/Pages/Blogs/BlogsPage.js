@@ -5,7 +5,9 @@ import PageTitle from '../../Layout/PageTitle';
 import { applyMetaTags } from '../../../utils/meta';
 import { useParams, useHistory } from 'react-router-dom';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+const API_URL = window.location.hostname === 'localhost'
+  ? 'http://localhost:5000/api'
+  : process.env.REACT_APP_API_URL || 'https://empireesttatesapi.freshmindz.in/api';
 
 
 
@@ -120,25 +122,219 @@ function BlogListView({ blogs, loading, onSelect }) {
   );
 }
 
+const decodeHtml = (str) => {
+  if (typeof str !== 'string' || !str) return '';
+  let decoded = str;
+  try {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = str;
+    decoded = txt.value;
+  } catch (e) {
+    decoded = str.replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&amp;/g, '&');
+  }
+  return decoded;
+};
+
+const removeQuotes = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html.replace(/<\/?blockquote\b[^>]*>/gi, '');
+  return str.replace(/(^|>)([^<]*)(<|$)/g, (match, open, text, close) => {
+    const cleanText = text.replace(/["'“”‘’`]/g, '');
+    return `${open}${cleanText}${close}`;
+  });
+};
+
+const ensureParagraphWrapper = (html) => {
+  if (!html || typeof html !== 'string') return '';
+  const trimmed = html.trim();
+  if (!trimmed) return '';
+  if (/^<(p|div|h[1-6]|ul|ol)\b/i.test(trimmed)) {
+    return trimmed;
+  }
+  return `<p>${trimmed}</p>`;
+};
+
+const cleanJunkMetadata = (str) => {
+  if (typeof str !== 'string' || !str) return '';
+  return str
+    .replace(/\*\]:[^>]*data-turn=[^>]*>/gi, '')
+    .replace(/data-turn-id\b[^>]*>/gi, '')
+    .replace(/R6Vx5W_[^\s<>]*/gi, '')
+    .replace(/scroll-mb-calc[^\s<>]*/gi, '')
+    .replace(/scroll-mt-calc[^\s<>]*/gi, '')
+    .replace(/style=["'][^"']*(display\s*:\s*flex|columns\s*:|grid-template|float\s*:)[^"']*["']/gi, '');
+};
+
+const cleanLiLeadingMarkers = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&#160;/g, ' ')
+    .replace(/&#8203;/g, '')
+    .replace(/\u00a0/g, ' ')
+    .replace(/\u200b/g, '');
+
+  for (let i = 0; i < 8; i++) {
+    const prev = str;
+    str = str.replace(/(<li\b[^>]*>(?:\s*<[^>]+>)*)\s*([•\-\*\.]|&bull;|\u2022|\d+[\.\)]|\b\d+\b)\s*/gi, '$1');
+    if (str === prev) break;
+  }
+
+  return str
+    .replace(/<b>\s*<\/b>/gi, '')
+    .replace(/<strong>\s*<\/strong>/gi, '')
+    .replace(/<span>\s*<\/span>/gi, '')
+    .replace(/<p>\s*<\/p>/gi, '');
+};
+
+const fixOrderedListSequentialNumbering = (html) => {
+  if (typeof html !== 'string' || !html) return '';
+  let str = html;
+
+  // Merge adjacent lists (ol/ul) to preserve sequential numbering
+  str = str
+    .replace(/<\/ol>\s*<ol\b[^>]*>/gi, '')
+    .replace(/<\/ul>\s*<ul\b[^>]*>/gi, '');
+
+  // Calculate running count across multiple <ol> elements in the article
+  let runningCount = 1;
+  return str.replace(/<ol\b([^>]*)>([\s\S]*?)<\/ol>/gi, (match, attrs, content) => {
+    const liMatches = content.match(/<li\b/gi);
+    const count = liMatches ? liMatches.length : 0;
+    let startAttr = '';
+    if (runningCount > 1) {
+      startAttr = ` start="${runningCount}"`;
+    }
+    runningCount += count;
+    const cleanAttrs = (attrs || '').replace(/\s*start=["']?\d+["']?/gi, '');
+    return `<ol${cleanAttrs}${startAttr}>${content}</ol>`;
+  });
+};
+
+const normalizeRichTextHtml = (html) => {
+  if (typeof html !== 'string') return html;
+  const decoded = decodeHtml(html);
+  const noJunk = cleanJunkMetadata(decoded);
+  const noQuotes = removeQuotes(noJunk);
+  const sizeMap = {
+    '1': '12px',
+    '2': '13px',
+    '3': '14px',
+    '4': '18px',
+    '5': '24px',
+    '6': '32px',
+    '7': '48px',
+  };
+  let merged = cleanLiLeadingMarkers(noQuotes);
+  merged = fixOrderedListSequentialNumbering(merged);
+
+  const normalized = merged.replace(/<font\b([^>]*)>([\s\S]*?)<\/font>/gi, (match, attrs, content) => {
+    let styles = [];
+    const sizeMatch = attrs.match(/size=["']?(\d+)["']?/i);
+    if (sizeMatch && sizeMap[sizeMatch[1]]) styles.push(`font-size: ${sizeMap[sizeMatch[1]]}`);
+    const colorMatch = attrs.match(/color=["']?([^"'\s>]+)["']?/i);
+    if (colorMatch) styles.push(`color: ${colorMatch[1]}`);
+    const faceMatch = attrs.match(/face=["']?([^"'\s>]+)["']?/i);
+    if (faceMatch) styles.push(`font-family: ${faceMatch[1]}`);
+    const styleAttrMatch = attrs.match(/style=["']([^"']+)["']/i);
+    if (styleAttrMatch) styles.push(styleAttrMatch[1]);
+    if (styles.length > 0) return `<span style="${styles.join('; ')}">${content}</span>`;
+    return content;
+  });
+  return ensureParagraphWrapper(normalized);
+};
+
 /* ─────────────── BLOG DETAIL VIEW ─────────────── */
 function BlogDetailView({ blog, allBlogs, onBack }) {
   const imgSrc = blog.image || blog.imageUrl || blog.thumbnail || null;
-  const rawContent = blog.content || blog.body || blog.description || '';
+  const rawContent = normalizeRichTextHtml(blog.content || blog.body || blog.description || '');
+  const hasHtmlTags = rawContent.includes('<') && rawContent.includes('>');
 
   useEffect(() => { window.scrollTo({ top: 0, behavior: 'smooth' }); }, []);
 
   return (
     <>
       <style>{`
-        .blog-content-render p { margin-bottom: 18px; font-size: 16px; line-height: 1.9; color: #3a3a3a; }
-        .blog-content-render h2 { font-size: 22px; color: #1a1a1a; font-weight: 700; margin: 30px 0 12px; }
-        .blog-content-render h3 { font-size: 18px; color: #1a1a1a; font-weight: 700; margin: 24px 0 10px; }
-        .blog-content-render img { max-width: 100%; border-radius: 6px; margin: 20px 0; }
-        .blog-content-render ul, .blog-content-render ol { padding-left: 24px; margin-bottom: 18px; }
-        .blog-content-render li { margin-bottom: 10px; font-size: 15px; line-height: 1.8; color: #3a3a3a; }
-        .blog-content-render a { color: #c8902a; text-decoration: underline; }
-        .blog-content-render blockquote { border-left: 4px solid #c8902a; padding: 12px 18px; background: #fff8ee; border-radius: 0 6px 6px 0; margin: 22px 0; font-style: italic; color: #555; }
-        .blog-content-render strong { color: #1a1a1a; font-weight: 700; }
+        .blog-content-render {
+          font-size: 16px;
+          line-height: 1.9;
+          color: #2a2a2a;
+          text-align: justify;
+        }
+        .blog-content-render p {
+          margin-bottom: 18px;
+          font-size: 16px;
+          line-height: 1.9;
+          color: #2a2a2a;
+          text-align: justify;
+        }
+        .blog-content-render h1 {
+          font-size: 28px !important;
+          font-weight: 700 !important;
+          color: #1a1a1a !important;
+          margin: 28px 0 14px;
+        }
+        .blog-content-render h2 {
+          font-size: 22px !important;
+          font-weight: 700 !important;
+          color: #1a1a1a !important;
+          margin: 24px 0 12px;
+        }
+        .blog-content-render h3 {
+          font-size: 18px !important;
+          font-weight: 700 !important;
+          color: #1a1a1a !important;
+          margin: 20px 0 10px;
+        }
+        .blog-content-render img {
+          max-width: 100%;
+          border-radius: 6px;
+          margin: 20px 0;
+        }
+        .blog-content-render ul {
+          list-style-type: disc !important;
+          list-style: disc !important;
+          padding-left: 28px !important;
+          margin-bottom: 18px !important;
+        }
+        .blog-content-render ol {
+          list-style-type: decimal !important;
+          list-style: decimal !important;
+          padding-left: 28px !important;
+          margin-bottom: 18px !important;
+        }
+        .blog-content-render li {
+          display: list-item !important;
+          margin-bottom: 8px !important;
+          font-size: 16px;
+          line-height: 1.8;
+          color: #2a2a2a;
+          text-align: justify;
+        }
+        .blog-content-render a {
+          color: #c8902a;
+          text-decoration: underline;
+        }
+        .blog-content-render blockquote {
+          border-left: 4px solid #c8902a;
+          padding: 12px 18px;
+          background: #fff8ee;
+          border-radius: 0 6px 6px 0;
+          margin: 22px 0;
+          font-style: italic;
+          color: #555;
+          text-align: justify;
+        }
+        .blog-content-render strong, .blog-content-render b {
+          font-weight: 700 !important;
+          color: #1a1a1a !important;
+        }
+        .blog-content-render em, .blog-content-render i {
+          font-style: italic !important;
+        }
+        .blog-content-render u {
+          text-decoration: underline !important;
+        }
       `}</style>
 
       <div style={{ background: '#fff', paddingBottom: '60px' }}>
@@ -170,20 +366,11 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
 
           {/* Article Content */}
           {rawContent ? (
-            rawContent.includes('<') ? (
-              <div
-                className="blog-content-render"
-                dangerouslySetInnerHTML={{ __html: rawContent }}
-              />
-            ) : (
-              <div>
-                {rawContent.split('\n').map((para, i) =>
-                  para.trim()
-                    ? <p key={i} style={{ fontSize: '16px', lineHeight: '1.9', color: '#3a3a3a', marginBottom: '20px' }}>{para}</p>
-                    : null
-                )}
-              </div>
-            )
+            <div
+              className="blog-content-render"
+              style={{ textAlign: 'justify' }}
+              dangerouslySetInnerHTML={{ __html: rawContent }}
+            />
           ) : (
             <p style={{ color: '#888', fontStyle: 'italic' }}>No content available for this post.</p>
           )}
@@ -227,36 +414,127 @@ export default function BlogsPage() {
   const [loading, setLoading] = useState(true);
   const [selectedBlog, setSelectedBlog] = useState(null);
 
+  const getStoredBlogs = () => {
+    try {
+      const saved = localStorage.getItem('ee_blogs_v1');
+      return saved ? JSON.parse(saved) : [];
+    } catch {
+      return [];
+    }
+  };
+
+  const mergeBlogs = (remoteList, storedList) => {
+    const combined = new Map();
+    (remoteList || []).forEach(blog => {
+      if (blog && blog.id != null) combined.set(String(blog.id), blog);
+      else if (blog && blog.slug) combined.set(`slug:${blog.slug}`, blog);
+    });
+    (storedList || []).forEach(blog => {
+      if (blog && blog.id != null) {
+        const existing = combined.get(String(blog.id));
+        combined.set(String(blog.id), existing ? { ...existing, ...blog } : blog);
+      } else if (blog && blog.slug) {
+        const existing = combined.get(`slug:${blog.slug}`);
+        combined.set(`slug:${blog.slug}`, existing ? { ...existing, ...blog } : blog);
+      }
+    });
+    return Array.from(combined.values());
+  };
+
+  const selectMatched = (list) => {
+    if (slug) {
+      const matched = list.find(b => String(b.slug) === String(slug) || String(b.id) === String(slug));
+      setSelectedBlog(matched || null);
+    } else {
+      setSelectedBlog(null);
+    }
+  };
+
+  const loadBlogs = async () => {
+    const storedBlogs = getStoredBlogs();
+    try {
+      const res = await fetch(`${API_URL}/blogs`);
+      if (!res.ok) throw new Error('Failed to fetch blogs');
+      const data = await res.json();
+      const remoteList = Array.isArray(data) ? data : [];
+      const list = mergeBlogs(remoteList, storedBlogs);
+      setBlogs(list);
+      if (slug) {
+        const matched = list.find(b => String(b.slug) === String(slug) || String(b.id) === String(slug));
+        if (matched) setSelectedBlog(matched);
+      }
+    } catch (error) {
+      const list = mergeBlogs([], storedBlogs);
+      setBlogs(list);
+      if (slug) {
+        const matched = list.find(b => String(b.slug) === String(slug) || String(b.id) === String(slug));
+        if (matched) setSelectedBlog(matched);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const loadBlogBySlug = async (blogSlug) => {
+    if (!blogSlug) {
+      setSelectedBlog(null);
+      return;
+    }
+
+    const storedBlogs = getStoredBlogs();
+    const storedMatched = storedBlogs.find(
+      b => String(b.slug) === String(blogSlug) || String(b.id) === String(blogSlug)
+    );
+
+    try {
+      const res = await fetch(`${API_URL}/blogs/slug/${blogSlug}`);
+      if (res.ok) {
+        const remoteData = await res.json();
+        if (remoteData) {
+          const finalBlog = (storedMatched && storedMatched.description) ? { ...remoteData, ...storedMatched } : remoteData;
+          setSelectedBlog(finalBlog);
+          return;
+        }
+      }
+    } catch (error) {
+      // Fallback
+    }
+
+    if (storedMatched) {
+      setSelectedBlog(storedMatched);
+    } else {
+      const list = mergeBlogs([], storedBlogs);
+      const matched = list.find(b => String(b.slug) === String(blogSlug) || String(b.id) === String(blogSlug));
+      setSelectedBlog(matched || null);
+    }
+  };
+
   useEffect(() => {
     applyMetaTags("Blogs | Empire Estates", "Read the latest news and blogs from Empire Estates.");
-    
-    const selectMatched = (list) => {
-      if (slug) {
-        const matched = list.find(b => b.slug === slug || String(b.id) === String(slug));
-        if (matched) {
-          setSelectedBlog(matched);
-        } else {
-          setSelectedBlog(null);
-        }
-      } else {
-        setSelectedBlog(null);
+    loadBlogs();
+
+    const onStorageEvent = (event) => {
+      if (!event || event.key === 'ee_blogs_v1' || event.key === null) {
+        loadBlogs();
       }
     };
 
-    if (blogs.length > 0) {
-      selectMatched(blogs);
-    } else {
-      fetch(`${API_URL}/blogs`)
-        .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-        .then(data => {
-          const list = data && Array.isArray(data) ? data : [];
-          setBlogs(list);
-          selectMatched(list);
-        })
-        .catch(() => setBlogs([]))
-        .finally(() => setLoading(false));
-    }
-  }, [slug, blogs.length]);
+    const onFocus = () => {
+      loadBlogs();
+    };
+
+    window.addEventListener('storage', onStorageEvent);
+    window.addEventListener('focus', onFocus);
+
+    return () => {
+      window.removeEventListener('storage', onStorageEvent);
+      window.removeEventListener('focus', onFocus);
+    };
+  }, []);
+
+  useEffect(() => {
+    loadBlogBySlug(slug);
+  }, [slug]);
 
   const handleSelect = (blog) => {
     history.push(`/blogs/${blog.slug || blog.id}`);
