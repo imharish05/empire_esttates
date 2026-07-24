@@ -130,14 +130,14 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
   return (
     <>
       <style>{`
-        .blog-content-render p { margin-bottom: 18px; font-size: 16px; line-height: 1.9; color: #3a3a3a; }
+        .blog-content-render p { margin-bottom: 18px; font-size: 16px; line-height: 1.9; color: #3a3a3a; text-align: justify; }
         .blog-content-render h2 { font-size: 22px; color: #1a1a1a; font-weight: 700; margin: 30px 0 12px; }
         .blog-content-render h3 { font-size: 18px; color: #1a1a1a; font-weight: 700; margin: 24px 0 10px; }
         .blog-content-render img { max-width: 100%; border-radius: 6px; margin: 20px 0; }
         .blog-content-render ul, .blog-content-render ol { padding-left: 24px; margin-bottom: 18px; }
-        .blog-content-render li { margin-bottom: 10px; font-size: 15px; line-height: 1.8; color: #3a3a3a; }
+        .blog-content-render li { margin-bottom: 10px; font-size: 15px; line-height: 1.8; color: #3a3a3a; text-align: justify; }
         .blog-content-render a { color: #c8902a; text-decoration: underline; }
-        .blog-content-render blockquote { border-left: 4px solid #c8902a; padding: 12px 18px; background: #fff8ee; border-radius: 0 6px 6px 0; margin: 22px 0; font-style: italic; color: #555; }
+        .blog-content-render blockquote { border-left: 4px solid #c8902a; padding: 12px 18px; background: #fff8ee; border-radius: 0 6px 6px 0; margin: 22px 0; font-style: italic; color: #555; text-align: justify; }
         .blog-content-render strong { color: #1a1a1a; font-weight: 700; }
       `}</style>
 
@@ -179,7 +179,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
               <div>
                 {rawContent.split('\n').map((para, i) =>
                   para.trim()
-                    ? <p key={i} style={{ fontSize: '16px', lineHeight: '1.9', color: '#3a3a3a', marginBottom: '20px' }}>{para}</p>
+                    ? <p key={i} style={{ fontSize: '16px', lineHeight: '1.9', color: '#3a3a3a', marginBottom: '20px', textAlign: 'justify' }}>{para}</p>
                     : null
                 )}
               </div>

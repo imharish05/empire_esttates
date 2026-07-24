@@ -402,6 +402,7 @@ class Index1 extends React.Component{
 														fontSize: '15px', 
 														lineHeight: '1.6', 
 														margin: 0,
+														textAlign: 'justify',
 														display: '-webkit-box',
 														WebkitLineClamp: 3,
 														WebkitBoxOrient: 'vertical',

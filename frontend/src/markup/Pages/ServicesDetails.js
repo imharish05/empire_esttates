@@ -112,7 +112,7 @@ export default function ServicesDetails() {
               </h2>
 
               {/* Description with Drop Cap */}
-              <div style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root' }}>
+              <div style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root', textAlign: 'justify' }}>
                 {service.description ? (
                   <p>
                     <span style={{ 
