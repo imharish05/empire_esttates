@@ -72,3 +72,110 @@ body {
 input, textarea, select, select option {
   color: #000000 !important;
 }
+
+/* Rich Text Editor Content Area Styles */
+.rich-editor-content {
+  color: #1a1a1a !important;
+  font-family: 'Poppins', sans-serif !important;
+}
+.rich-editor-content h1 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 26px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 18px 0 10px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.rich-editor-content h2 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 22px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 16px 0 8px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.rich-editor-content h3 {
+  font-family: 'Poppins', sans-serif !important;
+  font-size: 18px !important;
+  font-weight: 700 !important;
+  color: #1a1a1a !important;
+  margin: 14px 0 6px !important;
+  display: block !important;
+  width: 100% !important;
+}
+.rich-editor-content p {
+  display: block !important;
+  width: 100% !important;
+  max-width: 100% !important;
+  clear: both !important;
+  float: none !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  line-height: 1.8 !important;
+  font-size: 14px;
+  text-align: left !important;
+}
+.rich-editor-content b,
+.rich-editor-content strong {
+  font-weight: 700 !important;
+  color: #000000 !important;
+}
+.rich-editor-content h1 b, .rich-editor-content h1 strong,
+.rich-editor-content h2 b, .rich-editor-content h2 strong,
+.rich-editor-content h3 b, .rich-editor-content h3 strong {
+  font-weight: 600 !important;
+}
+.rich-editor-content ul {
+  list-style-type: disc !important;
+  list-style: disc !important;
+  padding-left: 36px !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  display: block !important;
+}
+.rich-editor-content ol {
+  list-style-type: decimal !important;
+  list-style: decimal !important;
+  padding-left: 36px !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 16px !important;
+  display: block !important;
+}
+.rich-editor-content ul > li {
+  list-style-type: disc !important;
+  list-style: disc !important;
+  display: list-item !important;
+  list-style-position: outside !important;
+}
+.rich-editor-content ol > li {
+  list-style-type: decimal !important;
+  list-style: decimal !important;
+  display: list-item !important;
+  list-style-position: outside !important;
+}
+.rich-editor-content li {
+  margin-left: 0 !important;
+  padding-left: 4px !important;
+  margin-bottom: 10px !important;
+  font-size: 14px;
+  line-height: 1.8 !important;
+  text-align: left !important;
+}
+.rich-editor-content li::before,
+.rich-editor-content li::after {
+  content: none !important;
+  display: none !important;
+}
+.rich-editor-content a {
+  color: #c8902a;
+  text-decoration: underline;
+}
+

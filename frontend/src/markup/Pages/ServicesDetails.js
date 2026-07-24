@@ -114,7 +114,7 @@ export default function ServicesDetails() {
               {/* Description with Drop Cap */}
               <div style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root', textAlign: 'justify' }}>
                 {service.description ? (
-                  <p>
+                  <p style={{ textAlign: 'justify' }}>
                     <span style={{ 
                       float: 'left', 
                       fontSize: 40, 
@@ -134,7 +134,7 @@ export default function ServicesDetails() {
                     {service.description.substring(1)}
                   </p>
                 ) : (
-                   <p>No description available for this service.</p>
+                   <p style={{ textAlign: 'justify' }}>No description available for this service.</p>
                 )}
               </div>
 
