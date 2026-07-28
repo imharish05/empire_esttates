@@ -94,21 +94,21 @@ const ContactUs1 = () => {
                                 <ul className="contact-question">
                                     <li>
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaMapMarkerAlt style={{ color: '#c8902a', fontSize: '20px' }} />
+                                            <FaMapMarkerAlt style={{ color: '#a4711e', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Address</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>{footerConfig.contact.address}</p>
                                     </li>
                                     <li>
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaRegEnvelope style={{ color: '#c8902a', fontSize: '20px' }} />
+                                            <FaRegEnvelope style={{ color: '#a4711e', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Email</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>
                                             <a
                                                 href={`mailto:${footerConfig.contact.email}`}
                                                 style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.color = '#c8902a'}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#a4711e'}
                                                 onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
                                                 title="Send email"
                                             >
@@ -118,14 +118,14 @@ const ContactUs1 = () => {
                                     </li>
                                     <li>
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaPhone style={{ color: '#c8902a', fontSize: '20px' }} />
+                                            <FaPhone style={{ color: '#a4711e', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Phone</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>
                                             <a
                                                 href={`tel:+91${footerConfig.contact.phone.replace(/\s+/g, '')}`}
                                                 style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.color = '#c8902a'}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#a4711e'}
                                                 onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
                                                 title="Call phone number"
                                             >

@@ -91,7 +91,7 @@ export default function ServicesDetails() {
     <Fragment>
       <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#3b46a2', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#302e44', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       </div>
       <Footer2 />
     </Fragment>
@@ -102,7 +102,7 @@ export default function ServicesDetails() {
       <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
         <p style={{ color: '#c0392b' }}>{error || 'Service not found'}</p>
-        <Link to="/" style={{ color: '#3b46a2', fontWeight: 600 }}>Back to Home</Link>
+        <Link to="/" style={{ color: '#302e44', fontWeight: 600 }}>Back to Home</Link>
       </div>
       <Footer2 />
     </Fragment>
@@ -129,7 +129,7 @@ export default function ServicesDetails() {
               </div>
 
               {/* Service Title */}
-              <h2 style={{ fontSize: 32, fontWeight: 700, color: '#1a1a2e', marginBottom: 20 }}>
+              <h2 style={{ fontSize: 32, fontWeight: 700, color: '#302e44', marginBottom: 20 }}>
                 {service.title || service.service}
               </h2>
 
@@ -143,7 +143,7 @@ export default function ServicesDetails() {
                       lineHeight: '70px', 
                       fontWeight: 700, 
                       color: '#fff', 
-                      background: '#3b46a2', 
+                      background: '#302e44',
                       width: '70px',
                       height: '70px',
                       textAlign: 'center',
@@ -212,8 +212,8 @@ export default function ServicesDetails() {
                 
                 return (
                   <div style={{ marginTop: 50, marginBottom: 50 }}>
-                    <h3 style={{ fontSize: 28, fontWeight: 700, color: '#1a1a2e', marginBottom: 25, borderBottom: '2px solid #f0f0f0', paddingBottom: '15px' }}>
-                      <span style={{ color: '#3b46a2' }}>Services</span> Included
+                    <h3 style={{ fontSize: 28, fontWeight: 700, color: '#302e44', marginBottom: 25, borderBottom: '2px solid #f0f0f0', paddingBottom: '15px' }}>
+                      <span style={{ color: '#302e44' }}>Services</span> Included
                     </h3>
                     <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', listStyle: 'none', padding: 0 }}>
                       {list.map((item, idx) => (
@@ -232,10 +232,10 @@ export default function ServicesDetails() {
                           cursor: 'default'
                         }}
                         onMouseEnter={(e) => { 
-                          e.currentTarget.style.borderColor = '#3b46a2'; 
+                          e.currentTarget.style.borderColor = '#302e44';
                           e.currentTarget.style.transform = 'translateY(-3px)'; 
-                          e.currentTarget.style.boxShadow = '0 6px 15px rgba(59,70,162,0.15)'; 
-                          e.currentTarget.style.color = '#3b46a2';
+                          e.currentTarget.style.boxShadow = '0 6px 15px rgba(48,46,68,0.15)';
+                          e.currentTarget.style.color = '#302e44';
                         }}
                         onMouseLeave={(e) => { 
                           e.currentTarget.style.borderColor = '#eee'; 
@@ -251,8 +251,8 @@ export default function ServicesDetails() {
                             width: '26px', 
                             height: '26px', 
                             borderRadius: '50%', 
-                            background: 'rgba(59,70,162,0.1)', 
-                            color: '#3b46a2', 
+                            background: 'rgba(48,46,68,0.1)',
+                            color: '#302e44',
                             marginRight: '12px',
                             flexShrink: 0
                           }}>
@@ -286,7 +286,7 @@ export default function ServicesDetails() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            background: isActive ? '#3b46a2' : '#f5f6f8',
+                            background: isActive ? '#302e44' : '#f5f6f8',
                             color: isActive ? '#fff' : '#222',
                             padding: '18px 25px',
                             fontWeight: 600,
@@ -299,7 +299,7 @@ export default function ServicesDetails() {
                           }}
                         >
                           {s.title || s.service}
-                          <FaArrowRight style={{ color: isActive ? '#fff' : '#1a1a2e', fontSize: 14 }} />
+                          <FaArrowRight style={{ color: isActive ? '#fff' : '#302e44', fontSize: 14 }} />
                         </Link>
                       </li>
                     );
@@ -326,7 +326,7 @@ export default function ServicesDetails() {
 
       {/* Full-width Primary Blue Banner */}
       <div style={{ 
-        background: '#3b46a2', 
+        background: '#302e44',
         padding: '50px 0', 
       }}>
         <div className="container">
@@ -346,7 +346,7 @@ export default function ServicesDetails() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 background: '#fff',
-                color: '#3b46a2',
+                color: '#302e44',
                 fontWeight: 700,
                 fontSize: 15,
                 padding: '12px 30px',

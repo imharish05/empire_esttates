@@ -13,10 +13,10 @@ import about3 from './../../../images/about/about3.png';
 import { FaAward, FaMapMarkedAlt, FaUserFriends, FaShieldAlt, FaBullseye, FaEye, FaFileContract, FaCheckCircle, FaHandHoldingUsd, FaRoad } from '../../../icons';
 
 const counterBlog = [
-	{icon: <FaAward style={{ fontSize: '40px', color: '#c8902a' }} />, num: 23,  title: 'Years of Excellence',},	
-	{icon: <FaMapMarkedAlt style={{ fontSize: '40px', color: '#c8902a' }} />, num: 15,    title: 'High-Growth Locations',},	
-	{icon: <FaUserFriends style={{ fontSize: '40px', color: '#c8902a' }} />, num: 250,   title: 'Units Completed',},	
-	{icon: <FaShieldAlt style={{ fontSize: '40px', color: '#c8902a' }} />, num: 100, title: 'Clear Legal Titles %',},	
+	{icon: <FaAward style={{ fontSize: '40px', color: '#a4711e' }} />, num: 23,  title: 'Years of Excellence',},
+	{icon: <FaMapMarkedAlt style={{ fontSize: '40px', color: '#a4711e' }} />, num: 15,    title: 'High-Growth Locations',},
+	{icon: <FaUserFriends style={{ fontSize: '40px', color: '#a4711e' }} />, num: 250,   title: 'Units Completed',},
+	{icon: <FaShieldAlt style={{ fontSize: '40px', color: '#a4711e' }} />, num: 100, title: 'Clear Legal Titles %',},
 ];
 
 const timelineItems = [
@@ -66,7 +66,12 @@ class Aboutus extends Component{
 			<Fragment>
 				<Header isTransparent={true} />
 				<div className="page-content bg-white">
-					<PageTitle motherMenu="About Us" activeMenu="About Us" placement="About Us Banner" />
+					<PageTitle
+						motherMenu="About Us"
+						activeMenu="About Us"
+						placement="About Us Banner"
+						className="about-page-banner"
+					/>
 					
 					{/* Section-0: Introduction */}
 					<section className="content-inner bg-white" style={{ padding: '80px 0 40px 0' }}>
@@ -74,13 +79,13 @@ class Aboutus extends Component{
 							<div className="row align-items-center">
 								{/* Left Content */}
 								<div className="col-lg-6 col-md-12 m-b30">
-									<p className="font-16 m-b20" style={{ lineHeight: '1.8', fontSize: '18px', color: '#1a1a2e', background: 'linear-gradient(135deg, rgba(200,144,42,0.1), rgba(232,184,75,0.15))', padding: '16px 24px', borderLeft: '5px solid #c8902a', borderRadius: '0 8px 8px 0', width: '100%' }}>
-										<strong style={{ fontSize: '20px', color: '#c8902a', fontWeight: '800', letterSpacing: '0.5px' }}>1000+ Houses Successfully Constructed</strong>
+									<p className="font-16 m-b20" style={{ lineHeight: '1.8', fontSize: '18px', color: '#302e44', background: 'linear-gradient(135deg, rgba(164,113,30,0.1), rgba(232,184,75,0.15))', padding: '16px 24px', borderLeft: '5px solid #a4711e', borderRadius: '0 8px 8px 0', width: '100%' }}>
+										<strong style={{ fontSize: '20px', color: '#a4711e', fontWeight: '800', letterSpacing: '0.5px' }}>1000+ Houses Successfully Constructed</strong>
 									</p>
 									<div className="section-head style-1">
-										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#c8902a' }}>Welcome to Empire Estates</span>
-										<h2 className="title font-weight-700 m-b20" style={{ color: '#1a1a2e', fontSize: '36px' }}>Empire Esttates: Civil Engineering & Contracting Excellence.</h2>
-										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
+										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Welcome to Empire Estates</span>
+										<h2 className="title font-weight-700 m-b20" style={{ color: '#302e44', fontSize: '36px' }}>Empire Esttates: Civil Engineering & Contracting Excellence.</h2>
+										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 									</div>
 									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										We are <strong>Empire Esttates</strong>, a well-established firm of civil engineers and contractors dedicated to residential development in Chennai. Founded in 2001 by T. Karthik Pragass, a civil engineer with extensive experience in the construction industry, our primary objective is to promote and develop high-quality Residential Apartments and Individual Houses.
@@ -106,22 +111,22 @@ class Aboutus extends Component{
 					<section className="content-inner bg-light" style={{ padding: '80px 0' }}>
 						<div className="container">
 							<div className="section-head text-center style-1" style={{ marginBottom: '50px' }}>
-								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#c8902a' }}>Our Strengths</span>
-								<h2 className="title font-weight-700 m-b15" style={{ color: '#1a1a2e', fontSize: '36px' }}>Professional Strengths & Additional Points</h2>
-								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
+								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Our Strengths</span>
+								<h2 className="title font-weight-700 m-b15" style={{ color: '#302e44', fontSize: '36px' }}>Professional Strengths & Additional Points</h2>
+								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 							</div>
 							
 							<div className="row justify-content-center">
 								{/* Item 1 */}
 								<div className="col-lg-3 col-md-6 col-sm-6 mb-4">
 									<div className="icon-bx-wraper style-1 text-center p-a30 bg-white radius-sm shadow-sm h-100 transition-all hover-up" style={{ padding: '30px', borderBottom: '3px solid transparent' }}
-										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#c8902a'}
+										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#a4711e'}
 										onMouseLeave={e => e.currentTarget.style.borderBottomColor = 'transparent'}>
-										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(200, 144, 42, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
-											<FaCheckCircle style={{ color: '#c8902a', fontSize: '24px' }} />
+										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(164, 113, 30, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
+											<FaCheckCircle style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#1a1a2e' }}>Commitment to Quality</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Commitment to Quality</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Projects adhering to the highest standards of structural integrity, engineering excellence, and safety.</p>
 										</div>
 									</div>
@@ -130,13 +135,13 @@ class Aboutus extends Component{
 								{/* Item 2 */}
 								<div className="col-lg-3 col-md-6 col-sm-6 mb-4">
 									<div className="icon-bx-wraper style-1 text-center p-a30 bg-white radius-sm shadow-sm h-100 transition-all hover-up" style={{ padding: '30px', borderBottom: '3px solid transparent' }}
-										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#c8902a'}
+										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#a4711e'}
 										onMouseLeave={e => e.currentTarget.style.borderBottomColor = 'transparent'}>
-										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(200, 144, 42, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
-											<FaUserFriends style={{ color: '#c8902a', fontSize: '24px' }} />
+										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(164, 113, 30, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
+											<FaUserFriends style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#1a1a2e' }}>Client-Centric Approach</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Client-Centric Approach</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Transparent communication, timely delivery, and solutions meeting specific budget and design requirements.</p>
 										</div>
 									</div>
@@ -145,13 +150,13 @@ class Aboutus extends Component{
 								{/* Item 3 */}
 								<div className="col-lg-3 col-md-6 col-sm-6 mb-4">
 									<div className="icon-bx-wraper style-1 text-center p-a30 bg-white radius-sm shadow-sm h-100 transition-all hover-up" style={{ padding: '30px', borderBottom: '3px solid transparent' }}
-										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#c8902a'}
+										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#a4711e'}
 										onMouseLeave={e => e.currentTarget.style.borderBottomColor = 'transparent'}>
-										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(200, 144, 42, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
-											<FaMapMarkedAlt style={{ color: '#c8902a', fontSize: '24px' }} />
+										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(164, 113, 30, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
+											<FaMapMarkedAlt style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#1a1a2e' }}>Area Specialization</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Area Specialization</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Two decades of deep understanding of local real estate and regulatory landscapes.</p>
 										</div>
 									</div>
@@ -160,13 +165,13 @@ class Aboutus extends Component{
 								{/* Item 4 */}
 								<div className="col-lg-3 col-md-6 col-sm-6 mb-4">
 									<div className="icon-bx-wraper style-1 text-center p-a30 bg-white radius-sm shadow-sm h-100 transition-all hover-up" style={{ padding: '30px', borderBottom: '3px solid transparent' }}
-										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#c8902a'}
+										onMouseEnter={e => e.currentTarget.style.borderBottomColor = '#a4711e'}
 										onMouseLeave={e => e.currentTarget.style.borderBottomColor = 'transparent'}>
-										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(200, 144, 42, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
-											<FaAward style={{ color: '#c8902a', fontSize: '24px' }} />
+										<div className="icon-lg text-primary m-b20" style={{ display: 'inline-flex', width: '50px', height: '50px', borderRadius: '50%', background: 'rgba(164, 113, 30, 0.1)', alignItems: 'center', justifyContent: 'center' }}>
+											<FaAward style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#1a1a2e' }}>Project Portfolio</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Project Portfolio</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>A reliable builder with a track record of completing various residential projects.</p>
 										</div>
 									</div>
@@ -188,18 +193,18 @@ class Aboutus extends Component{
 								{/* Right Content */}
 								<div className="col-lg-6 col-md-12 m-b30">
 									<div className="section-head style-1">
-										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#c8902a' }}>Quality Design & Execution</span>
-										<h2 className="title font-weight-700 m-b20" style={{ color: '#1a1a2e', fontSize: '36px' }}>Focused. Professional. Statement. Proven Track Record.</h2>
-										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
+										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Quality Design & Execution</span>
+										<h2 className="title font-weight-700 m-b20" style={{ color: '#302e44', fontSize: '36px' }}>Focused. Professional. Statement. Proven Track Record.</h2>
+										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 									</div>
 									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										Our two decades in the industry have resulted in the successful completion of approximately 250 residential units, a balanced mix of apartments and individual houses. This volume of work is a testament to the trust placed in us. We are proud of our established reputation for delivering high-quality construction at a reasonable cost, consistently meeting deadlines.
 									</p>
 									<ul className="list-check primary m-b30 m-t20">
-										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500', textAlign: 'justify' }}>
+										<li className="m-b10" style={{ fontSize: '16px', color: '#302e44', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Structural Integrity:</strong> All projects feature a consultant-designed framed structure, ensuring long-term safety and engineering precision.
 										</li>
-										<li className="m-b10" style={{ fontSize: '16px', color: '#1a1a2e', fontWeight: '500', textAlign: 'justify' }}>
+										<li className="m-b10" style={{ fontSize: '16px', color: '#302e44', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Aesthetic Appeal:</strong> We integrate aesthetic elevations crafted by our own team of architects, ensuring visually distinctive and modern homes.
 										</li>
 									</ul>
@@ -214,12 +219,12 @@ class Aboutus extends Component{
 							<div className="row justify-content-center">
 								{/* Mission Card */}
 								<div className="col-lg-6 col-md-12 m-b30">
-									<div className="icon-bx-wraper style-1 p-a40 bg-white radius-sm h-100 shadow-sm transition-all hover-up" style={{ borderTop: '4px solid #c8902a', padding: '40px' }}>
+									<div className="icon-bx-wraper style-1 p-a40 bg-white radius-sm h-100 shadow-sm transition-all hover-up" style={{ borderTop: '4px solid #a4711e', padding: '40px' }}>
 										<div className="d-flex align-items-center m-b20 text-primary" style={{ gap: '15px' }}>
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-												<FaBullseye style={{ color: '#c8902a', fontSize: '45px' }} />
+												<FaBullseye style={{ color: '#a4711e', fontSize: '45px' }} />
 											</div>
-											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#1a1a2e', whiteSpace: 'nowrap' }}>Our Mission</h3>
+											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#302e44', whiteSpace: 'nowrap' }}>Our Mission</h3>
 										</div>
 										<div className="icon-content">
 											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
@@ -236,12 +241,12 @@ class Aboutus extends Component{
 
 								{/* Vision Card */}
 								<div className="col-lg-6 col-md-12 m-b30">
-									<div className="icon-bx-wraper style-1 p-a40 bg-white radius-sm h-100 shadow-sm transition-all hover-up" style={{ borderTop: '4px solid #c8902a', padding: '40px' }}>
+									<div className="icon-bx-wraper style-1 p-a40 bg-white radius-sm h-100 shadow-sm transition-all hover-up" style={{ borderTop: '4px solid #a4711e', padding: '40px' }}>
 										<div className="d-flex align-items-center m-b20 text-primary" style={{ gap: '15px' }}>
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-												<FaEye style={{ color: '#c8902a', fontSize: '45px' }} />
+												<FaEye style={{ color: '#a4711e', fontSize: '45px' }} />
 											</div>
-											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#1a1a2e', whiteSpace: 'nowrap' }}>Our Vision</h3>
+											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#302e44', whiteSpace: 'nowrap' }}>Our Vision</h3>
 										</div>
 										<div className="icon-content">
 											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
@@ -282,7 +287,7 @@ class Aboutus extends Component{
 							content: '';
 							position: absolute;
 							width: 4px;
-							background-color: #c8902a;
+							background-color: #a4711e;
 							top: 0;
 							bottom: 0;
 							left: 50%;
@@ -307,7 +312,7 @@ class Aboutus extends Component{
 							height: 24px;
 							right: -12px;
 							background-color: white;
-							border: 4px solid #c8902a;
+							border: 4px solid #a4711e;
 							top: 25px;
 							border-radius: 50%;
 							z-index: 1;
@@ -321,7 +326,7 @@ class Aboutus extends Component{
 							position: relative;
 							border-radius: 8px;
 							box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-							border-top: 4px solid #c8902a;
+							border-top: 4px solid #a4711e;
 							transition: all 0.3s ease;
 						}
 						.timeline-content:hover {
@@ -348,9 +353,9 @@ class Aboutus extends Component{
 						</style>
 						<div className="container">
 							<div className="section-head text-center style-1" style={{ marginBottom: '60px' }}>
-								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#c8902a' }}>Our Journey</span>
-								<h2 className="title font-weight-700 m-b15" style={{ color: '#1a1a2e', fontSize: '36px' }}>Milestones of Success</h2>
-								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #c8902a, #e8b84b)', borderRadius: '2px' }}></div>
+								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Our Journey</span>
+								<h2 className="title font-weight-700 m-b15" style={{ color: '#302e44', fontSize: '36px' }}>Milestones of Success</h2>
+								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 							</div>
 							
 							<div className="custom-timeline">
@@ -359,7 +364,7 @@ class Aboutus extends Component{
 						return (
 							<div className={`timeline-container ${isLeft ? 'timeline-left' : 'timeline-right'}`} key={idx}>
 								<div className="timeline-content">
-									<h4 className="font-weight-700 m-b10" style={{ color: '#1a1a2e', fontSize: '26px' }}>{item.year}</h4>
+									<h4 className="font-weight-700 m-b10" style={{ color: '#302e44', fontSize: '26px' }}>{item.year}</h4>
 									{item.items ? (
 										<ul style={{ margin: 0, paddingLeft: '18px' }}>
 											{item.items.map((t, i) => (
@@ -388,7 +393,7 @@ class Aboutus extends Component{
 										<div className="counter-left archia-counter d-flex align-items-center justify-content-center">
 											<div className="icon-lg pull-left m-r15">{data.icon}</div>
 											<div className="clearfix">
-												<div className="counter m-b5" style={{ fontSize: '32px', fontWeight: '800', color: '#1a1a2e' }}>
+												<div className="counter m-b5" style={{ fontSize: '32px', fontWeight: '800', color: '#302e44' }}>
 													<CountUp end={data.num} duration={4}/>{data.num === 100 ? '%' : '+'}
 												</div>
 												<span className="font-16 text-black" style={{ fontSize: '14px', color: '#666' }}>{data.title}</span> 
@@ -401,7 +406,7 @@ class Aboutus extends Component{
 					</section>
 
 					{/* Section-6: Call To Action */}
-					<section className="content-inner bg-primary" style={{ padding: '60px 0', background: 'linear-gradient(90deg, #c8902a, #e8b84b)' }}>
+					<section className="content-inner bg-primary" style={{ padding: '60px 0', background: 'linear-gradient(90deg, #a4711e, #c9953a)' }}>
 						<div className="container">
 							<div className="row align-items-center text-white text-center text-lg-left">
 								<div className="col-lg-9 col-md-12 m-b20">
@@ -409,7 +414,7 @@ class Aboutus extends Component{
 									<p style={{ color: '#fff', fontSize: '16px', opacity: 0.9, marginBottom: 0 }}>Get in touch with our experts today to schedule a site visit and secure your dream home.</p>
 								</div>
 								<div className="col-lg-3 col-md-12 text-center text-lg-right">
-									<Link to="/contact-us" className="btn btn-white radius-md" style={{ background: '#fff', color: '#c8902a', fontWeight: '700', padding: '12px 30px', borderRadius: '4px', textTransform: 'uppercase', textDecoration: 'none', transition: 'all 0.3s' }}>
+									<Link to="/contact-us" className="btn btn-white radius-md" style={{ background: '#fff', color: '#a4711e', fontWeight: '700', padding: '12px 30px', borderRadius: '4px', textTransform: 'uppercase', textDecoration: 'none', transition: 'all 0.3s' }}>
 										Contact Us
 									</Link>
 								</div>

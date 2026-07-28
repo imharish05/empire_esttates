@@ -22,7 +22,7 @@ function BlogListView({ blogs, loading, onSelect }) {
         {/* Section Header */}
         <div style={{ textAlign: 'center', marginBottom: '50px' }}>
           <p style={{
-            color: '#c8902a', fontSize: '13px', fontWeight: 700,
+            color: '#a4711e', fontSize: '13px', fontWeight: 700,
             letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '10px'
           }}>
             OUR BLOG
@@ -36,7 +36,7 @@ function BlogListView({ blogs, loading, onSelect }) {
           <div style={{ textAlign: 'center', padding: '60px' }}>
             <div style={{
               width: '44px', height: '44px', border: '4px solid #f0f0f0',
-              borderTop: '4px solid #c8902a', borderRadius: '50%',
+              borderTop: '4px solid #a4711e', borderRadius: '50%',
               animation: 'spin 0.8s linear infinite', margin: '0 auto 16px'
             }} />
             <p style={{ color: '#888' }}>Loading blogs...</p>
@@ -71,7 +71,7 @@ function BlogListView({ blogs, loading, onSelect }) {
                           alignItems: 'center', justifyContent: 'center',
                           background: 'linear-gradient(135deg, #2c2c2c 0%, #444 100%)'
                         }}>
-                          <i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#c8902a', opacity: 0.6 }} />
+                          <i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#a4711e', opacity: 0.6 }} />
                         </div>
                       )}
                     </div>
@@ -93,7 +93,7 @@ function BlogListView({ blogs, loading, onSelect }) {
                         onClick={() => onSelect(blog)}
                         style={{
                           display: 'inline-block',
-                          background: '#c8902a',
+                          background: '#a4711e',
                           color: '#fff',
                           border: 'none',
                           borderRadius: '3px',
@@ -106,7 +106,7 @@ function BlogListView({ blogs, loading, onSelect }) {
                           transition: 'background 0.2s ease',
                         }}
                         onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#c8902a'; }}
+                        onMouseLeave={e => { e.currentTarget.style.background = '#a4711e'; }}
                       >
                         Read More
                       </button>
@@ -403,11 +403,11 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
           text-align: justify !important;
         }
         .blog-content-render a {
-          color: #c8902a;
+          color: #a4711e;
           text-decoration: underline;
         }
         .blog-content-render blockquote {
-          border-left: 4px solid #c8902a;
+          border-left: 4px solid #a4711e;
           padding: 14px 20px;
           background: #fff8ee;
           border-radius: 0 6px 6px 0;
@@ -476,7 +476,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
                 onClick={onBack}
                 style={{
                   display: 'inline-block',
-                  background: '#c8902a',
+                  background: '#a4711e',
                   color: '#fff',
                   border: 'none',
                   borderRadius: '4px',
@@ -488,7 +488,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
                   transition: 'background-color 0.2s'
                 }}
                 onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#c8902a'; }}
+                onMouseLeave={e => { e.currentTarget.style.background = '#a4711e'; }}
               >
                 ← Back to All Blogs
               </button>

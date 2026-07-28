@@ -37,10 +37,10 @@ const TagLi = ({ name, handlesettag, tagActive }) => {
           fontSize: '14px',
           fontWeight: '600',
           transition: 'all 0.3s ease',
-          background: tagActive ? '#c8902a' : '#ffffff',
+          background: tagActive ? '#a4711e' : '#ffffff',
           color: tagActive ? '#ffffff' : '#333333',
-          border: tagActive ? '1px solid #c8902a' : '1px solid rgba(0, 0, 0, 0.1)',
-          boxShadow: tagActive ? '0 5px 15px rgba(200, 144, 42, 0.25)' : 'none',
+          border: tagActive ? '1px solid #a4711e' : '1px solid rgba(0, 0, 0, 0.1)',
+          boxShadow: tagActive ? '0 5px 15px rgba(164, 113, 30, 0.25)' : 'none',
           textTransform: 'uppercase',
           letterSpacing: '1px'
         }}

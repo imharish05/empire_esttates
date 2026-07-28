@@ -75,7 +75,7 @@
     text-align: center;
 	
 	.testimonial-position {
-		color: #EFBB20;
+		color: #a4711e;
 	}
 	.testimonial-name,
 	.testimonial-position {
@@ -86,7 +86,7 @@
 		height: 36px;
 		line-height: 36px;
 		font-size: 16px;
-		background: #EFBB20;
+		background: #a4711e;
 		color: #FFF;
 		text-align: center;
 		left: 0;
@@ -126,7 +126,7 @@
 		height: 36px;
 		line-height: 36px;
 		font-size: 16px;
-		background: #EFBB20;
+		background: #a4711e;
 		color: #FFF;
 		text-align: center;
 		left: 0;
@@ -139,7 +139,7 @@
 	}
 	.testimonial-position{
 		padding: 2px 0;
-		color: #EFBB20;
+		color: #a4711e;
 	}
 	&.testimonial-bg{
 		.testimonial-text {
@@ -158,10 +158,10 @@
 	.quote-left:before {
 		position: static;
 		font-size: 40px;
-		color: #EFBB20;
+		color: #a4711e;
 	}
 	.testimonial-position {
-		color: #EFBB20;
+		color: #a4711e;
 		display: inline-block;
 	}
 	.testimonial-name {
@@ -183,7 +183,7 @@
 		background-color: #282a3c;
 		border-left-width: 4px;
 		border-left-style: solid;
-		border-left-color: #EFBB20;
+		border-left-color: #a4711e;
 		content: "";
 		position: absolute;
 		left: -80px;
@@ -202,7 +202,7 @@
 		top: 30px;
 		left: 0;
 		margin-left: -110px;
-		border-color: #EFBB20;
+		border-color: #a4711e;
 		border-width: 3px;
 		width: 90px;
 		height: 90px;
@@ -220,7 +220,7 @@
 		height: 0;
 		border-style: solid;
 		border-width: 30px;
-		border-color: #EFBB20;
+		border-color: #a4711e;
 		border-top-color: transparent !important;
 		border-left-color: transparent !important;
 		&:after,
@@ -243,7 +243,7 @@
 		text-transform: uppercase;
 		&:after {
 			content: "/";
-			color: #EFBB20;
+			color: #a4711e;
 			margin: 0 2px 0 5px;
 			@include respond('phone'){
 				transform: skewX(-10deg);

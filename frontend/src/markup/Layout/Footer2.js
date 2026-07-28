@@ -61,15 +61,15 @@ const Footer2 = () => {
                             <h5 style={{ color: '#fff', fontWeight: '600', marginBottom: '25px', textTransform: 'uppercase', letterSpacing: '1px', fontSize: '15px' }}>Contact Details</h5>
                             <ul style={{ listStyle: 'none', padding: 0, margin: 0 }}>
                                 <li style={{ display: 'flex', alignItems: 'flex-start', marginBottom: '15px', fontSize: '14px', lineHeight: '1.5', color: 'rgba(255, 255, 255, 0.8)' }}>
-                                    <FaMapMarkerAlt style={{ color: '#3b46a2', fontSize: '18px', marginRight: '12px', marginTop: '3px', minWidth: '18px' }} />
+                                    <FaMapMarkerAlt style={{ color: '#302e44', fontSize: '18px', marginRight: '12px', marginTop: '3px', minWidth: '18px' }} />
                                     <span>{footerConfig.contact.address}</span>
                                 </li>
                                 <li style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', fontSize: '14px' }}>
-                                    <FaPhoneAlt style={{ color: '#3b46a2', fontSize: '16px', marginRight: '12px', minWidth: '16px' }} />
+                                    <FaPhoneAlt style={{ color: '#302e44', fontSize: '16px', marginRight: '12px', minWidth: '16px' }} />
                                     <a href={`tel:${footerConfig.contact.phone}`} style={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', transition: 'color 0.3s' }} onMouseEnter={(e) => e.target.style.color = '#ffe8cf'} onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.8)'}>+91 {footerConfig.contact.phone}</a>
                                 </li>
                                 <li style={{ display: 'flex', alignItems: 'center', marginBottom: '15px', fontSize: '14px' }}>
-                                    <FaEnvelope style={{ color: '#3b46a2', fontSize: '16px', marginRight: '12px', minWidth: '16px' }} />
+                                    <FaEnvelope style={{ color: '#302e44', fontSize: '16px', marginRight: '12px', minWidth: '16px' }} />
                                     <a href={`mailto:${footerConfig.contact.email}`} style={{ color: 'rgba(255, 255, 255, 0.8)', textDecoration: 'none', transition: 'color 0.3s' }} onMouseEnter={(e) => e.target.style.color = '#ffe8cf'} onMouseLeave={(e) => e.target.style.color = 'rgba(255, 255, 255, 0.8)'}>{footerConfig.contact.email}</a>
                                 </li>
                             </ul>

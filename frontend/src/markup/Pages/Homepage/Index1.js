@@ -229,11 +229,11 @@ class Index1 extends React.Component{
 							<div className="row align-items-center">
 								{/* Left Content - Benefits */}
 								<div className="col-md-7 col-lg-7" style={{paddingRight: '40px'}}>
-									<h2 style={{color: '#1a1a2e', fontSize: '42px', fontWeight: '800', lineHeight: '1.2', marginBottom: '16px'}}>
-										Invest In Land,<br/><span style={{color: '#3b46a2'}}>Invest In Your Future</span>
+									<h2 style={{color: '#302e44', fontSize: '42px', fontWeight: '800', lineHeight: '1.2', marginBottom: '16px'}}>
+										Invest In Land,<br/><span style={{color: '#302e44'}}>Invest In Your Future</span>
 									</h2>
-									<div style={{width: '60px', height: '4px', background: 'linear-gradient(90deg, #3b46a2, #5a66c4)', borderRadius: '2px', marginBottom: '20px'}}></div>
-									<h5 style={{color: '#3b46a2', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '30px', textTransform: 'uppercase', fontSize: '13px'}}>Premium Plots <span style={{margin: '0 8px', color: '#1a1a2e'}}>|</span> Trusted Legacy <span style={{margin: '0 8px', color: '#1a1a2e'}}>|</span> Brighter Tomorrow</h5>
+									<div style={{width: '60px', height: '4px', background: 'linear-gradient(90deg, #302e44, #4c4968)', borderRadius: '2px', marginBottom: '20px'}}></div>
+									<h5 style={{color: '#302e44', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '30px', textTransform: 'uppercase', fontSize: '13px'}}>Premium Plots <span style={{margin: '0 8px', color: '#302e44'}}>|</span> Trusted Legacy <span style={{margin: '0 8px', color: '#302e44'}}>|</span> Brighter Tomorrow</h5>
 									
 									<div className="row mb-4">
 										{[
@@ -245,18 +245,18 @@ class Index1 extends React.Component{
 											{ icon: <FaUniversity/>, title: 'BANK LOAN ASSISTANCE', desc: 'Easy financing options to make your investment simple.' }
 										].map((item, index) => (
 											<div className="col-md-6 mb-4" key={index} style={{display: 'flex', gap: '15px'}}>
-												<div style={{minWidth: '45px', height: '45px', background: 'rgba(59, 70, 162, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b46a2', fontSize: '20px'}}>
+												<div style={{minWidth: '45px', height: '45px', background: 'rgba(48, 46, 68, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#302e44', fontSize: '20px'}}>
 													{item.icon}
 												</div>
 												<div>
-													<h5 style={{color: '#1a1a2e', fontSize: '14px', fontWeight: '800', marginBottom: '4px'}}>{item.title}</h5>
+													<h5 style={{color: '#302e44', fontSize: '14px', fontWeight: '800', marginBottom: '4px'}}>{item.title}</h5>
 													<p style={{color: '#666', fontSize: '13px', lineHeight: '1.5', margin: 0}}>{item.desc}</p>
 												</div>
 											</div>
 										))}
 									</div>
 
-									<Link to={"/about-us"} style={{display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(90deg, #3b46a2, #5a66c4)', color: '#fff', padding: '14px 32px', borderRadius: '4px', fontWeight: '700', textDecoration: 'none', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase', transition: 'all 0.3s'}}>
+									<Link to={"/about-us"} style={{display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(90deg, #302e44, #4c4968)', color: '#fff', padding: '14px 32px', borderRadius: '4px', fontWeight: '700', textDecoration: 'none', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase', transition: 'all 0.3s'}}>
 										Discover More <FaArrowRight />
 									</Link>
 								</div>
@@ -269,11 +269,11 @@ class Index1 extends React.Component{
 									</div>
 									{/* Floating Badge */}
 									<div style={{position: 'absolute', bottom: '30px', left: '40px', background: 'rgba(255,255,255,0.95)', borderRadius: '10px', padding: '14px 20px', boxShadow: '0 10px 40px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', gap: '12px'}}>
-										<div style={{width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b46a2, #5a66c4)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+										<div style={{width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #302e44, #4c4968)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
 											<FaShieldAlt style={{color: '#fff', fontSize: '20px'}} />
 										</div>
 										<div>
-											<div style={{fontWeight: '800', fontSize: '16px', color: '#1a1a2e'}}>CMDA & RERA APPROVED</div>
+											<div style={{fontWeight: '800', fontSize: '16px', color: '#302e44'}}>CMDA & RERA APPROVED</div>
 											<div style={{fontSize: '12px', color: '#888'}}>100% Legal & Verified</div>
 										</div>
 									</div>
@@ -290,7 +290,7 @@ class Index1 extends React.Component{
 						<div className="container">
 							<div className="row align-items-center" style={{ marginBottom: '50px' }}>
 								<div className="col-lg-8 col-md-12 mb-4 mb-lg-0 text-left">
-									<p style={{ color: '#3b46a2', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px' }}>WHAT WE DO</p>
+									<p style={{ color: '#302e44', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px' }}>WHAT WE DO</p>
 									<h2 className="title" style={{ fontSize: '40px', fontWeight: 700, color: '#1a1a1a' }}>Our Premium Services</h2>
 									<div className="dlab-separator bg-primary" style={{ margin: 0 }}></div>
 								</div>
@@ -298,14 +298,14 @@ class Index1 extends React.Component{
 									<div className="col-lg-4 col-md-12 text-lg-right" style={{ textAlign: 'right' }}>
 										<Link to="/services-details" style={{
 											display: 'inline-block',
-											background: '#3b46a2',
+											background: '#302e44',
 											color: '#fff',
 											padding: '12px 30px',
 											borderRadius: '4px',
 											fontWeight: 700,
 											fontSize: '16px',
 											textDecoration: 'none',
-											boxShadow: '0 4px 15px rgba(59, 70, 162, 0.3)'
+											boxShadow: '0 4px 15px rgba(48, 46, 68, 0.3)'
 										}}>
 											View All <FaArrowRight style={{ marginLeft: '8px' }} />
 										</Link>
@@ -347,7 +347,7 @@ class Index1 extends React.Component{
 										onMouseEnter={(e) => { 
 											e.currentTarget.style.transform = 'translateY(-10px)';
 											e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-											e.currentTarget.style.borderBottom = '4px solid #3b46a2';
+											e.currentTarget.style.borderBottom = '4px solid #302e44';
 										}}
 										onMouseLeave={(e) => { 
 											e.currentTarget.style.transform = 'translateY(0)';
@@ -361,14 +361,14 @@ class Index1 extends React.Component{
 													width: '100%',
 													position: 'relative',
 													overflow: 'hidden',
-													background: sImage ? '#f9f9f9' : 'linear-gradient(135deg, #1a1a2e 0%, #2c2c44 100%)'
+													background: sImage ? '#f9f9f9' : 'linear-gradient(135deg, #302e44 0%, #403d59 100%)'
 												}}>
 													{sImage ? (
 														<img src={sImage} alt={service.title || service.service} style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)'}} className="service-img-modern" />
 													) : (
 														<div style={{
 															width: '100%', height: '100%',
-															color: '#3b46a2',
+															color: '#302e44',
 															display: 'flex', alignItems: 'center', justifyContent: 'center',
 															fontSize: '72px',
 															transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)'
@@ -390,7 +390,7 @@ class Index1 extends React.Component{
 													<h4 style={{ 
 														fontSize: '22px', 
 														fontWeight: 800, 
-														color: '#1a1a2e', 
+														color: '#302e44',
 														marginBottom: '15px',
 														lineHeight: '1.3'
 													}}>
@@ -416,7 +416,7 @@ class Index1 extends React.Component{
 														marginTop: '25px',
 														display: 'flex',
 														alignItems: 'center',
-														color: '#3b46a2',
+														color: '#302e44',
 														fontWeight: 700,
 														fontSize: '14px',
 														textTransform: 'uppercase',
@@ -484,7 +484,7 @@ class Index1 extends React.Component{
 						}
 						.custom-flip-back {
 							transform: rotateY(180deg);
-							border-bottom: 3px solid #c8902a;
+							border-bottom: 3px solid #a4711e;
 							background-color: #2c2c39; /* Solid dark color on the back */
 						}
 					`}</style>
@@ -503,14 +503,14 @@ class Index1 extends React.Component{
 								<div className="col-lg-4 col-md-12 text-lg-right" style={{ textAlign: 'right' }}>
 									<Link to="/projects" style={{
 										display: 'inline-block',
-										background: '#3b46a2',
+										background: '#302e44',
 										color: '#fff',
 										padding: '12px 30px',
 										borderRadius: '4px',
 										fontWeight: 700,
 										fontSize: '16px',
 										textDecoration: 'none',
-										boxShadow: '0 4px 15px rgba(59, 70, 162, 0.3)'
+										boxShadow: '0 4px 15px rgba(48, 46, 68, 0.3)'
 									}}>
 										Explore <FaArrowRight style={{ marginLeft: '8px' }} />
 									</Link>
@@ -526,14 +526,14 @@ class Index1 extends React.Component{
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services1})` }}>
 												<div className="custom-flip-content">
 													<div style={{ marginBottom: '25px' }}>
-														<FaMapMarkedAlt style={{ fontSize: '60px', color: '#3b46a2' }} />
+														<FaMapMarkedAlt style={{ fontSize: '60px', color: '#302e44' }} />
 													</div>
 													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>Strategic Locations</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Strategic Locations</h4>
+													<h4 style={{ color: '#302e44', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Strategic Locations</h4>
 													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>We select the most high-growth areas to ensure maximum appreciation and convenience for your investment.</p>
 												</div>
 											</div>
@@ -548,14 +548,14 @@ class Index1 extends React.Component{
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services2})` }}>
 												<div className="custom-flip-content">
 													<div style={{ marginBottom: '25px' }}>
-														<FaShieldAlt style={{ fontSize: '60px', color: '#3b46a2' }} />
+														<FaShieldAlt style={{ fontSize: '60px', color: '#302e44' }} />
 													</div>
 													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>CMDA & RERA APPROVED</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>CMDA & RERA APPROVED</h4>
+													<h4 style={{ color: '#302e44', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>CMDA & RERA APPROVED</h4>
 													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>Every plot comes with 100% clear titles, proper legal documentation, and full CMDA & RERA approval for complete peace of mind.</p>
 												</div>
 											</div>
@@ -570,14 +570,14 @@ class Index1 extends React.Component{
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services3})` }}>
 												<div className="custom-flip-content">
 													<div style={{ marginBottom: '25px' }}>
-														<FaHome style={{ fontSize: '60px', color: '#3b46a2' }} />
+														<FaHome style={{ fontSize: '60px', color: '#302e44' }} />
 													</div>
 													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>Ready to Build</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Ready to Build</h4>
+													<h4 style={{ color: '#302e44', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Ready to Build</h4>
 													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>Our layouts feature wide blacktop roads, streetlights, and gated security, making them perfectly ready for immediate villa construction.</p>
 												</div>
 											</div>
@@ -629,7 +629,7 @@ class Index1 extends React.Component{
 														style={{
 															position: 'absolute',
 															inset: 0,
-															background: 'rgba(200, 144, 42, 0.7)',
+															background: 'rgba(164, 113, 30, 0.7)',
 															display: 'flex',
 															alignItems: 'center',
 															justifyContent: 'center',
@@ -654,7 +654,7 @@ class Index1 extends React.Component{
 					<section className="content-inner-2 home-section-wrap" data-content="BLOGS" id="sidenav_blogs" style={{padding: '80px 0'}}>
 						<div className="container">
 							<div className="section-head text-center" style={{marginBottom: '50px'}}>
-								<p style={{color: '#3b46a2', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px'}}>OUR INSIGHTS</p>
+								<p style={{color: '#302e44', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px'}}>OUR INSIGHTS</p>
 								<h2 className="title" style={{fontSize: '40px', fontWeight: 700, letterSpacing: '0.5px', margin: 0, marginBottom: '24px', color: '#1a1a1a'}}>Latest Blogs & News</h2>
 								<div className="dlab-separator bg-primary" style={{margin: '0 auto'}}></div>
 							</div>
@@ -687,7 +687,7 @@ class Index1 extends React.Component{
 															alignItems: 'center', justifyContent: 'center',
 															background: 'linear-gradient(135deg, #2c2c2c 0%, #444 100%)'
 														}}>
-															<i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#3b46a2', opacity: 0.6 }} />
+															<i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#302e44', opacity: 0.6 }} />
 														</div>
 													)}
 												</div>
@@ -703,7 +703,7 @@ class Index1 extends React.Component{
 													</h4>
 													<Link to={`/blogs/${blog.slug}`} style={{
 														display: 'inline-block',
-														background: '#3b46a2',
+														background: '#302e44',
 														color: '#fff',
 														border: 'none',
 														borderRadius: '3px',

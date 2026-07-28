@@ -5,7 +5,7 @@ import MenuLinks from './MenuLinks';
 import { footerConfig } from './footerConfig';
 import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube } from '../../icons';
 
-export default function HeaderContent({ isFixed }) {
+export default function HeaderContent({ isFixed, isHeaderVisible = true }) {
   const [mobileOpen, setMobileOpen] = useState(false);
   const drawerRef = useRef(null);
 
@@ -41,11 +41,13 @@ export default function HeaderContent({ isFixed }) {
   ];
 
   return (
-    <div className={`single-header-wrapper ${isFixed ? 'is-fixed-sticky' : ''}`}>
+    <div
+      className={`single-header-wrapper ${isFixed ? 'is-fixed-sticky' : ''} ${isHeaderVisible ? 'is-scroll-visible' : 'is-scroll-hidden'}`}
+    >
       <div className="single-header-container">
         {/* Left: Logo */}
         <div className="single-header-logo">
-          <Link to="/">
+          <Link to="/" className="single-header-logo-link" aria-label="Empire Estates home">
             <img src={logo} alt="Empire Estates" />
           </Link>
         </div>
@@ -113,7 +115,7 @@ export default function HeaderContent({ isFixed }) {
             ))}
           </div>
           <p className="mobile-nav-drawer__phone">
-            <svg viewBox="0 0 24 24" fill="#3b46a2" width="16" height="16">
+            <svg viewBox="0 0 24 24" fill="#302e44" width="16" height="16">
               <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
             </svg>
             88254 71748

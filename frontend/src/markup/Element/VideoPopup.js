@@ -21,7 +21,7 @@ const VideoPopup2 = () => {
   return (
     <React.Fragment>
       <ModalVideo channel='youtube' autoplay isOpen={isOpen} videoId="Dj6CKxQue7U" onClose={() => setOpen(false)} />
-      <button className="popup-youtube slide-play-button border-0" onClick={()=> setOpen(true)} ><FaPlay style={{color:'#a6611c'}} /></button>
+      <button className="popup-youtube slide-play-button border-0" onClick={()=> setOpen(true)} ><FaPlay style={{color:'#a4711e'}} /></button>
     </React.Fragment>
   )
 }

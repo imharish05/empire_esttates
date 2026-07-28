@@ -38,7 +38,7 @@ function findBanner(allBanners, placement, motherMenu) {
   return matched || null;
 }
 
-const PageTitle = ({ motherMenu, activeMenu, placement }) => {
+const PageTitle = ({ motherMenu, activeMenu, placement, className = '' }) => {
   // If cache already available, resolve banner immediately (no loading flash)
   const [banner, setBanner] = useState(() => {
     if (bannersCache) return findBanner(bannersCache, placement, motherMenu);
@@ -97,7 +97,7 @@ const PageTitle = ({ motherMenu, activeMenu, placement }) => {
   } : {};
 
   return (
-    <div className="dlab-bnr-inr" style={{ position: 'relative', ...bgStyle }}>
+    <div className={`dlab-bnr-inr ${className}`.trim()} style={{ position: 'relative', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', ...bgStyle }}>
       {/* Dark overlay */}
       <div style={{
         position: 'absolute',
@@ -105,20 +105,24 @@ const PageTitle = ({ motherMenu, activeMenu, placement }) => {
         background: 'rgba(0, 0, 0, 0.55)',
         zIndex: 1,
       }} />
-      <div className="container" style={{ position: 'relative', zIndex: 2 }}>
-        <div className="dlab-bnr-inr-entry">
-          <h1 style={{ color: '#3b46a2' }}>{banner && banner.title ? banner.title : motherMenu}</h1>
+      <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
+        <div className="dlab-bnr-inr-entry" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: '100%' }}>
+          <h1 style={{ color: '#ffffff', fontSize: '36px', fontWeight: '700', textTransform: 'uppercase', marginBottom: '10px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', textAlign: 'center' }}>
+            {banner && banner.title ? banner.title : motherMenu}
+          </h1>
           {banner && banner.subtitle && (
-            <p style={{ color: '#ffffff', fontSize: '15px', marginTop: '6px', opacity: 0.9, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+            <p style={{ color: '#ffffff', fontSize: '15px', marginTop: '4px', marginBottom: '14px', opacity: 0.9, textShadow: '0 1px 4px rgba(0,0,0,0.8)', textAlign: 'center', width: '100%' }}>
               {banner.subtitle}
             </p>
           )}
-          <nav aria-label="breadcrumb" className="breadcrumb-row">
-            <ul className="breadcrumb">
+          <nav aria-label="breadcrumb" className="breadcrumb-row" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+            <ul className="breadcrumb" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'transparent', padding: 0, margin: 0 }}>
               <li className="breadcrumb-item">
-                <Link to={"/"}><svg style={{ width: '14px', height: '14px', marginRight: '6px', fill: 'currentColor', display: 'inline-block', verticalAlign: '-1px' }} viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home</Link>
+                <Link to={"/"} style={{ color: '#ffffff', textDecoration: 'none', opacity: 0.9, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                  <svg style={{ width: '14px', height: '14px', marginRight: '6px', fill: '#ffffff', display: 'inline-block', verticalAlign: '-1px' }} viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home
+                </Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page">{activeMenu}</li>
+              <li className="breadcrumb-item active" aria-current="page" style={{ color: 'var(--color-secondary, #a4711e)', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{activeMenu}</li>
             </ul>
           </nav>
         </div>

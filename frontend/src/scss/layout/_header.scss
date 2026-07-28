@@ -4,7 +4,7 @@
     float: left;
     vertical-align: middle;
     padding: 0;
-    color: #EFBB20;
+    color: #a4711e;
     margin-top: 0;
     margin-bottom: 0;
     margin-left: 0;
@@ -72,7 +72,7 @@
 	}
 }
 .navbar-toggler {
-    border: 0 solid #efbb20;
+    border: 0 solid #a4711e;
     font-size: 16px;
     line-height: 24px;
     margin: 31px 0 31px 15px;
@@ -614,7 +614,7 @@
 	width: 300px;
 	max-width: 85vw;
 	height: 100vh;
-	background: linear-gradient(160deg, #1a1e2e 0%, #0e1118 100%);
+	background: linear-gradient(160deg, #302e44 0%, #211f30 100%);
 	z-index: 10003;
 	display: flex;
 	flex-direction: column;
@@ -632,8 +632,8 @@
 		align-items: center;
 		justify-content: space-between;
 		padding: 18px 20px;
-		border-bottom: 1px solid rgba(200, 144, 42, 0.25);
-		background: rgba(200, 144, 42, 0.05);
+		border-bottom: 1px solid rgba(164, 113, 30, 0.25);
+		background: rgba(164, 113, 30, 0.05);
 		flex-shrink: 0;
 	}
 
@@ -659,8 +659,8 @@
 		flex-shrink: 0;
 
 		&:hover {
-			background: #c8902a;
-			border-color: #c8902a;
+			background: #a4711e;
+			border-color: #a4711e;
 		}
 	}
 
@@ -674,7 +674,7 @@
 	// Footer (socials & phone)
 	&__footer {
 		padding: 18px 20px 28px;
-		border-top: 1px solid rgba(200, 144, 42, 0.2);
+		border-top: 1px solid rgba(164, 113, 30, 0.2);
 		flex-shrink: 0;
 	}
 
@@ -706,7 +706,7 @@
 		transition: background 0.25s;
 
 		&:hover {
-			background: var(--hover-bg, #c8902a);
+			background: var(--hover-bg, #a4711e);
 		}
 	}
 
@@ -744,8 +744,8 @@
 
 		&:hover,
 		&.active {
-			color: #c8902a;
-			background: rgba(200, 144, 42, 0.08);
+			color: #a4711e;
+			background: rgba(164, 113, 30, 0.08);
 		}
 	}
 
@@ -778,8 +778,8 @@
 
 			&:hover,
 			&.is-open {
-				color: #c8902a;
-				background: rgba(200, 144, 42, 0.08);
+				color: #a4711e;
+				background: rgba(164, 113, 30, 0.08);
 			}
 		}
 	}
@@ -815,14 +815,14 @@
 			font-weight: 400;
 
 			&:hover {
-				color: #c8902a;
-				background: rgba(200, 144, 42, 0.07);
+				color: #a4711e;
+				background: rgba(164, 113, 30, 0.07);
 			}
 
 			&::before {
 				content: '›';
 				margin-right: 8px;
-				color: #c8902a;
+				color: #a4711e;
 				font-size: 18px;
 				line-height: 1;
 				vertical-align: middle;

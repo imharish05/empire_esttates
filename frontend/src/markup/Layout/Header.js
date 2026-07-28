@@ -5,8 +5,12 @@ class Header extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      isFixed: false
+      isFixed: false,
+      isHeaderVisible: true,
+      headerHeight: 0
     };
+    this.lastScrollY = 0;
+    this.scrollTolerance = 6;
   }
 
   componentDidMount() {
@@ -33,30 +37,92 @@ class Header extends Component {
       }, 100);
     }
 
+    this.lastScrollY = window.scrollY;
+    this.measureHeader();
+
     // Sticky header scroll listener
     this.handleScroll = () => {
-      if (window.scrollY > 10) {
-        this.setState({ isFixed: true });
-      } else {
-        this.setState({ isFixed: false });
+      const currentScrollY = Math.max(window.scrollY, 0);
+      const isDesktop = window.innerWidth >= 992;
+
+      // Keep the original header visible while the page is at the beginning.
+      if (currentScrollY <= 10) {
+        this.lastScrollY = currentScrollY;
+        this.setState({ isFixed: false, isHeaderVisible: true });
+        return;
+      }
+
+      // Preserve the existing always-visible sticky behaviour on mobile/tablet.
+      if (!isDesktop) {
+        this.lastScrollY = currentScrollY;
+        this.setState({ isFixed: true, isHeaderVisible: true });
+        return;
+      }
+
+      const scrollDifference = currentScrollY - this.lastScrollY;
+      if (Math.abs(scrollDifference) < this.scrollTolerance) {
+        return;
+      }
+
+      this.lastScrollY = currentScrollY;
+      this.setState({
+        isFixed: true,
+        isHeaderVisible: scrollDifference < 0
+      });
+    };
+
+    this.handleResize = () => {
+      if (!this.state.isFixed) {
+        this.measureHeader();
+      }
+
+      if (window.innerWidth < 992) {
+        this.setState({ isHeaderVisible: true });
       }
     };
-    window.addEventListener('scroll', this.handleScroll);
+
+    window.addEventListener('scroll', this.handleScroll, { passive: true });
+    window.addEventListener('resize', this.handleResize);
+    this.handleScroll();
   }
+
+  measureHeader = () => {
+    if (this.headerElement) {
+      const headerHeight = this.headerElement.offsetHeight;
+      if (headerHeight && headerHeight !== this.state.headerHeight) {
+        this.setState({ headerHeight });
+      }
+    }
+  };
 
   componentWillUnmount() {
     if (this.handleScroll) {
       window.removeEventListener('scroll', this.handleScroll);
+    }
+    if (this.handleResize) {
+      window.removeEventListener('resize', this.handleResize);
     }
   }
 
   render() {
     // defaults to false (solid header) unless explicitly set to true
     const isTransparent = this.props.isTransparent === true;
+    const { isFixed, isHeaderVisible, headerHeight } = this.state;
+    const fixedHeaderSpace = isFixed && headerHeight
+      ? { minHeight: `${headerHeight}px` }
+      : undefined;
+
     return (
       <Fragment>
-        <header className={`site-header ${isTransparent ? 'header-transparent' : ''} ${this.state.isFixed ? 'is-fixed-sticky' : ''}`}>
-          <HeaderContent isFixed={this.state.isFixed} />					
+        <header
+          ref={element => { this.headerElement = element; }}
+          className={`site-header ${isTransparent ? 'header-transparent' : ''} ${isFixed ? 'is-fixed-sticky' : ''}`}
+          style={fixedHeaderSpace}
+        >
+          <HeaderContent
+            isFixed={isFixed}
+            isHeaderVisible={isHeaderVisible}
+          />					
         </header>
       </Fragment>
     );

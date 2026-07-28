@@ -1,0 +1,224 @@
+:root {
+  --color-primary: #302e44;
+  --color-primary-hover: #211f30;
+  --color-primary-soft: rgba(48, 46, 68, 0.1);
+  --color-secondary: #a4711e;
+  --color-secondary-hover: #7a5416;
+  --color-secondary-soft: rgba(164, 113, 30, 0.1);
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.border-primary {
+  border-color: var(--color-primary) !important;
+}
+
+.text-secondary {
+  color: var(--color-secondary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
+
+.border-secondary {
+  border-color: var(--color-secondary) !important;
+}
+
+.btn-primary {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:not(:disabled):not(.disabled):active {
+  background-color: var(--color-primary-hover);
+  border-color: var(--color-primary-hover);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  border-color: var(--color-secondary);
+}
+
+.btn-secondary:hover,
+.btn-secondary:focus,
+.btn-secondary:not(:disabled):not(.disabled):active {
+  background-color: var(--color-secondary-hover);
+  border-color: var(--color-secondary-hover);
+}
+
+/* Global Page Title Inner Banner Styling */
+.dlab-bnr-inr .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.dlab-bnr-inr .dlab-bnr-inr-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding-top: 0;
+  text-align: center;
+}
+
+.dlab-bnr-inr .dlab-bnr-inr-entry h1 {
+  color: #ffffff !important;
+  margin-bottom: 8px;
+  text-align: center !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+.dlab-bnr-inr .dlab-bnr-inr-entry > p {
+  color: #ffffff !important;
+  width: 100%;
+  margin-bottom: 14px;
+  text-align: center;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.dlab-bnr-inr .breadcrumb-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.dlab-bnr-inr .breadcrumb {
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+}
+
+.dlab-bnr-inr .breadcrumb-row .breadcrumb-item,
+.dlab-bnr-inr .breadcrumb-row .breadcrumb-item a {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.dlab-bnr-inr .breadcrumb-row .breadcrumb-item.active {
+  color: var(--color-secondary, #a4711e) !important;
+}
+
+.dlab-bnr-inr .breadcrumb-item + .breadcrumb-item::before {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* About page banner compatibility */
+.about-page-banner .container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.about-page-banner .dlab-bnr-inr-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding-top: 0;
+  text-align: center;
+}
+
+.about-page-banner .dlab-bnr-inr-entry h1 {
+  color: #ffffff !important;
+  margin-bottom: 8px;
+  text-align: center !important;
+  text-shadow: 0 2px 12px rgba(0, 0, 0, 0.75) !important;
+}
+
+.about-page-banner .dlab-bnr-inr-entry > p {
+  width: 100%;
+  margin-bottom: 14px;
+  text-align: center;
+}
+
+.about-page-banner .breadcrumb-row {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.about-page-banner .breadcrumb {
+  justify-content: center;
+  margin: 0;
+  text-align: center;
+}
+
+.about-page-banner .breadcrumb-row .breadcrumb-item,
+.about-page-banner .breadcrumb-row .breadcrumb-item a {
+  color: #ffffff !important;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.about-page-banner .breadcrumb-row .breadcrumb-item.active,
+.about-page-banner .breadcrumb-item + .breadcrumb-item::before {
+  color: var(--color-secondary) !important;
+}
+
+@media only screen and (max-width: 767px) {
+  .about-page-banner .dlab-bnr-inr-entry,
+  .dlab-bnr-inr .dlab-bnr-inr-entry {
+    padding: 24px 16px;
+  }
+}
+
+/* Homepage hero: keep all primary content inside the desktop viewport. */
+@media only screen and (min-width: 992px) {
+  .home-slider-1 .homepage-hero-slide {
+    height: clamp(560px, calc(100vh - 108px), 720px);
+    min-height: 560px;
+    padding-top: 0 !important;
+  }
+
+  .home-slider-1 .homepage-hero-slide > .container {
+    width: 100%;
+  }
+
+  .home-slider-1 .homepage-hero-slide .banner-inner {
+    padding-top: 24px !important;
+    padding-bottom: 24px !important;
+  }
+
+  .home-slider-1 .homepage-hero-copy {
+    margin-top: 0 !important;
+  }
+}
+
+@media only screen and (min-width: 992px) and (max-height: 800px) {
+  .home-slider-1 .homepage-hero-slide {
+    height: max(540px, calc(100vh - 108px));
+    min-height: 540px;
+    max-height: 680px;
+  }
+
+  .home-slider-1 .homepage-hero-slide .banner-content {
+    padding: 42px 48px;
+  }
+
+  .home-slider-1 .homepage-hero-slide .banner-content .title {
+    font-size: 38px !important;
+  }
+
+  .home-slider-1 .homepage-hero-copy > p {
+    margin-top: 18px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .home-slider-1 .homepage-hero-search {
+    padding: 26px 28px !important;
+  }
+}
