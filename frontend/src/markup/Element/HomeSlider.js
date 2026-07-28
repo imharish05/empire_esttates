@@ -1,10 +1,19 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from 'react-router-dom';
 import Carousel from 'react-bootstrap/Carousel';
-import { FaSearch } from 'react-icons/fa';
+import { FaSearch, FaChevronDown } from 'react-icons/fa';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = `${API_BASE}`;
+
+const DEFAULT_SERVICES = [
+  { id: 1, title: 'Premium Individual Homes', category: 'Individual House', slug: 'premium-individual-homes' },
+  { id: 2, title: 'Luxury Villas', category: 'Luxury Villas', slug: 'luxury-villas' },
+  { id: 3, title: 'Modern Flats', category: 'Modern Flats', slug: 'modern-flats' },
+  { id: 4, title: 'Gated Community Plots', category: 'Plot Sales', slug: 'gated-community-plots' },
+  { id: 5, title: 'Commercial Spaces', category: 'Commercial', slug: 'commercial-spaces' },
+  { id: 6, title: 'Construction & Interior', category: 'Construction', slug: 'construction-interior' },
+];
 
 let homeBannersCache = null;
 try {
@@ -33,12 +42,9 @@ export default function HomeSlider() {
     return [];
   });
 
-  // Services list for search input
-  const [servicesList, setServicesList] = useState([]);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [suggestions, setSuggestions] = useState([]);
-  const [showSuggestions, setShowSuggestions] = useState(false);
-  const searchBoxRef = useRef(null);
+  // Services list for dropdown select
+  const [servicesList, setServicesList] = useState(DEFAULT_SERVICES);
+  const [selectedService, setSelectedService] = useState('');
 
   useEffect(() => {
     const fetchBanners = async () => {
@@ -63,7 +69,7 @@ export default function HomeSlider() {
     fetchBanners();
   }, []);
 
-  // Fetch Services from backend for search input
+  // Fetch Services from backend for dropdown
   useEffect(() => {
     fetch(`${API_URL}/services`)
       .then(res => res.ok ? res.json() : [])
@@ -75,63 +81,30 @@ export default function HomeSlider() {
       .catch(err => console.error('Error fetching services for search:', err));
   }, []);
 
-  // Filter suggestions when user types
-  const handleInputChange = (e) => {
-    const query = e.target.value;
-    setSearchQuery(query);
-    if (query.trim().length > 0) {
-      const filtered = servicesList.filter(s => {
-        const title = (s.title || s.service || '').toLowerCase();
-        const cat = (s.category || s.estate || '').toLowerCase();
-        const q = query.toLowerCase();
-        return title.includes(q) || cat.includes(q);
-      });
-      setSuggestions(filtered);
-      setShowSuggestions(true);
-    } else {
-      setSuggestions([]);
-      setShowSuggestions(false);
-    }
-  };
-
-  // Close suggestions on click outside
-  useEffect(() => {
-    function handleClickOutside(event) {
-      if (searchBoxRef.current && !searchBoxRef.current.contains(event.target)) {
-        setShowSuggestions(false);
+  const handleSelectChange = (e) => {
+    const val = e.target.value;
+    setSelectedService(val);
+    if (val) {
+      const matched = servicesList.find(s => s.slug === val || (s.title || s.service) === val);
+      if (matched && matched.slug) {
+        history.push(`/services-details/${matched.slug}`);
+      } else {
+        history.push(`/services-details?search=${encodeURIComponent(val)}`);
       }
-    }
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
-  const handleSelectService = (srv) => {
-    setSearchQuery(srv.title || srv.service);
-    setShowSuggestions(false);
-    if (srv.slug) {
-      history.push(`/services-details/${srv.slug}`);
-    } else {
-      history.push(`/services-details?search=${encodeURIComponent(srv.title || srv.service)}`);
     }
   };
 
   const handleSearchSubmit = (e) => {
     if (e) e.preventDefault();
-    const query = searchQuery.trim();
-    if (!query) {
-      history.push('/services-details');
-      return;
-    }
-    // Match exact service slug if exists
-    const matched = servicesList.find(s => 
-      (s.title || s.service || '').toLowerCase() === query.toLowerCase() ||
-      (s.category || s.estate || '').toLowerCase() === query.toLowerCase() ||
-      (s.slug || '').toLowerCase() === query.toLowerCase()
-    );
-    if (matched && matched.slug) {
-      history.push(`/services-details/${matched.slug}`);
+    if (selectedService) {
+      const matched = servicesList.find(s => s.slug === selectedService || (s.title || s.service) === selectedService);
+      if (matched && matched.slug) {
+        history.push(`/services-details/${matched.slug}`);
+      } else {
+        history.push(`/services-details?search=${encodeURIComponent(selectedService)}`);
+      }
     } else {
-      history.push(`/services-details?search=${encodeURIComponent(query)}`);
+      history.push('/services-details');
     }
   };
 
@@ -208,81 +181,54 @@ export default function HomeSlider() {
 
                       <form onSubmit={handleSearchSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '18px' }}>
                         
-                        {/* Single Search Input with Autocomplete */}
+                        {/* Service Dropdown Select */}
                         <div style={{ position: 'relative' }}>
                           <label style={{ fontSize: '12px', fontWeight: '700', color: '#475569', textTransform: 'uppercase', marginBottom: '8px', display: 'block' }}>
                             Search Services or Categories
                           </label>
                           <div style={{ position: 'relative' }}>
-                            <input
-                              type="text"
-                              value={searchQuery}
-                              onChange={handleInputChange}
-                              placeholder="e.g. Plot Sales, Villa Layouts, Modular Kitchen..."
+                            <select
+                              value={selectedService}
+                              onChange={handleSelectChange}
                               style={{
                                 width: '100%',
-                                padding: '14px 18px 14px 44px',
+                                padding: '14px 40px 14px 44px',
                                 borderRadius: '10px',
                                 border: '1.5px solid #cbd5e1',
                                 background: '#ffffff',
-                                color: '#1e293b',
+                                color: selectedService ? '#1e293b' : '#64748b',
                                 fontSize: '14px',
                                 fontWeight: '500',
                                 outline: 'none',
+                                cursor: 'pointer',
+                                appearance: 'none',
+                                WebkitAppearance: 'none',
+                                MozAppearance: 'none',
                                 transition: 'all 0.2s ease',
                                 boxShadow: '0 2px 6px rgba(0,0,0,0.02)'
                               }}
-                              onFocus={() => { if (searchQuery.trim().length > 0) setShowSuggestions(true); }}
-                            />
-                            <FaSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#302e44', fontSize: '15px' }} />
-                          </div>
-
-                          {/* Autocomplete Dropdown */}
-                          {showSuggestions && suggestions.length > 0 && (
-                            <ul
-                              style={{
-                                position: 'absolute',
-                                top: '100%',
-                                left: 0,
-                                right: 0,
-                                background: '#ffffff',
-                                borderRadius: '10px',
-                                boxShadow: '0 12px 30px rgba(0,0,0,0.15)',
-                                border: '1px solid #e2e8f0',
-                                listStyle: 'none',
-                                padding: '6px 0',
-                                margin: '6px 0 0',
-                                maxHeight: '240px',
-                                overflowY: 'auto',
-                                zIndex: 100
-                              }}
                             >
-                              {suggestions.map((srv, idx) => (
-                                <li
-                                  key={idx}
-                                  onClick={() => handleSelectService(srv)}
-                                  style={{
-                                    padding: '12px 18px',
-                                    fontSize: '14px',
-                                    fontWeight: '500',
-                                    color: '#1e293b',
-                                    cursor: 'pointer',
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    borderBottom: idx < suggestions.length - 1 ? '1px solid #f1f5f9' : 'none'
-                                  }}
-                                  onMouseEnter={(e) => { e.currentTarget.style.background = '#f8fafc'; e.currentTarget.style.color = '#302e44'; }}
-                                  onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#1e293b'; }}
-                                >
-                                  <span>{srv.title || srv.service}</span>
-                                  <span style={{ fontSize: '11px', background: '#e0e7ff', color: '#302e44', padding: '3px 10px', borderRadius: '12px', fontWeight: '600' }}>
-                                    {srv.category || 'Service'}
-                                  </span>
-                                </li>
+                              <option value="">e.g. Plot Sales, Villa Layouts, Modular Kitchen...</option>
+                              {Object.entries(
+                                servicesList.reduce((acc, srv) => {
+                                  const cat = srv.category || srv.estate || 'General Services';
+                                  if (!acc[cat]) acc[cat] = [];
+                                  acc[cat].push(srv);
+                                  return acc;
+                                }, {})
+                              ).map(([category, items]) => (
+                                <optgroup key={category} label={category}>
+                                  {items.map((srv, idx) => (
+                                    <option key={srv.id || idx} value={srv.slug || srv.title || srv.service}>
+                                      {srv.title || srv.service}
+                                    </option>
+                                  ))}
+                                </optgroup>
                               ))}
-                            </ul>
-                          )}
+                            </select>
+                            <FaSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#302e44', fontSize: '15px', pointerEvents: 'none' }} />
+                            <FaChevronDown style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b', fontSize: '12px', pointerEvents: 'none' }} />
+                          </div>
                         </div>
 
                         {/* Search Submit Button */}
