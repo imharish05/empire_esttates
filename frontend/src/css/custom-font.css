@@ -189,12 +189,12 @@ i:not(.blog-content-render *), i::before, i::after,
 
 .single-hdr-nav-ul > li.active > a,
 .single-hdr-nav-ul > li > a:hover {
-  color: #302e44 !important;
+  color: #3b46a2 !important;
 }
 
 .single-hdr-nav-ul > li.active > a::after,
 .single-hdr-nav-ul > li > a:hover::after {
-  background: #302e44 !important;
+  background: #3b46a2 !important;
 }
 
 /* Dropdown Sub-menu */
@@ -203,7 +203,7 @@ i:not(.blog-content-render *), i::before, i::after,
   opacity: 0 !important;
   visibility: hidden !important;
   background: #ffffff !important;
-  border-top: 3px solid #302e44 !important;
+  border-top: 3px solid #3b46a2 !important;
   border-radius: 0 0 8px 8px !important;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12) !important;
   padding: 8px 0 !important;
@@ -233,7 +233,7 @@ i:not(.blog-content-render *), i::before, i::after,
 }
 
 .single-hdr-nav-ul .sub-menu li a:hover {
-  color: #302e44 !important;
+  color: #3b46a2 !important;
   background-color: #f1f5f9 !important;
   padding-left: 24px !important;
 }
@@ -266,12 +266,12 @@ i:not(.blog-content-render *), i::before, i::after,
 /* Banner entry & breadcrumb adjustments */
 .dlab-bnr-inr .dlab-bnr-inr-entry h1 {
   text-align: center !important;
-  color: #302e44 !important;
+  color: #3b46a2 !important;
   text-shadow: 0 2px 12px rgba(0,0,0,0.6) !important;
 }
 
 .dlab-bnr-inr .breadcrumb-item.active {
-  color: #302e44 !important;
+  color: #3b46a2 !important;
 }
 
 .banner-three {

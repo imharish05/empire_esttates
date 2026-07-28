@@ -1,7 +1,7 @@
 :root {
-  --color-primary: #302e44;
-  --color-primary-hover: #211f30;
-  --color-primary-soft: rgba(48, 46, 68, 0.1);
+  --color-primary: #3b46a2;
+  --color-primary-hover: #2a337a;
+  --color-primary-soft: rgba(59, 70, 162, 0.1);
   --color-secondary: #a4711e;
   --color-secondary-hover: #7a5416;
   --color-secondary-soft: rgba(164, 113, 30, 0.1);

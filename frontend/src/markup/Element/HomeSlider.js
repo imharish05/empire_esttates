@@ -147,7 +147,7 @@ export default function HomeSlider() {
                         {banner.subtitle}
                       </p>
                       <div className="m-b0">
-                        <Link to={banner.ctaLink || "/contact-us"} className="btn btn-primary" style={{ backgroundColor: '#302e44', borderColor: '#302e44', padding: '12px 30px', fontWeight: '700', borderRadius: '6px' }}>
+                        <Link to={banner.ctaLink || "/contact-us"} className="btn btn-primary" style={{ backgroundColor: '#3b46a2', borderColor: '#3b46a2', padding: '12px 30px', fontWeight: '700', borderRadius: '6px' }}>
                           {banner.ctaText || "Learn More"}
                         </Link>
                       </div>
@@ -157,7 +157,6 @@ export default function HomeSlider() {
                   {/* Right Side: Hero Banner Single Search Input Box */}
                   <div className="col-lg-6 col-md-12">
                     <div 
-                      ref={searchBoxRef}
                       className="homepage-hero-search"
                       style={{
                         background: 'rgba(255, 255, 255, 0.96)',
@@ -171,7 +170,7 @@ export default function HomeSlider() {
                       }}
                     >
                       <div style={{ marginBottom: '22px' }}>
-                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#302e44', textTransform: 'uppercase', letterSpacing: '1.5px', display: 'block', marginBottom: '4px' }}>
+                        <span style={{ fontSize: '12px', fontWeight: '700', color: '#3b46a2', textTransform: 'uppercase', letterSpacing: '1.5px', display: 'block', marginBottom: '4px' }}>
                           Explore Our Services
                         </span>
                         <h3 style={{ fontSize: '24px', fontWeight: '800', color: '#0f172a', margin: 0 }}>
@@ -226,7 +225,7 @@ export default function HomeSlider() {
                                 </optgroup>
                               ))}
                             </select>
-                            <FaSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#302e44', fontSize: '15px', pointerEvents: 'none' }} />
+                            <FaSearch style={{ position: 'absolute', left: '16px', top: '50%', transform: 'translateY(-50%)', color: '#3b46a2', fontSize: '15px', pointerEvents: 'none' }} />
                             <FaChevronDown style={{ position: 'absolute', right: '16px', top: '50%', transform: 'translateY(-50%)', color: '#64748b', fontSize: '12px', pointerEvents: 'none' }} />
                           </div>
                         </div>
@@ -237,7 +236,7 @@ export default function HomeSlider() {
                           style={{
                             width: '100%',
                             padding: '14px',
-                            background: '#302e44',
+                            background: '#3b46a2',
                             color: '#ffffff',
                             border: 'none',
                             borderRadius: '10px',
@@ -248,11 +247,11 @@ export default function HomeSlider() {
                             alignItems: 'center',
                             justifyContent: 'center',
                             gap: '8px',
-                            boxShadow: '0 4px 14px rgba(48, 46, 68, 0.35)',
+                            boxShadow: '0 4px 14px rgba(59, 70, 162, 0.35)',
                             transition: 'all 0.2s'
                           }}
-                          onMouseEnter={(e) => { e.currentTarget.style.background = '#211f30'; }}
-                          onMouseLeave={(e) => { e.currentTarget.style.background = '#302e44'; }}
+                          onMouseEnter={(e) => { e.currentTarget.style.background = '#2a337a'; }}
+                          onMouseLeave={(e) => { e.currentTarget.style.background = '#3b46a2'; }}
                         >
                           <FaSearch /> Search Services
                         </button>

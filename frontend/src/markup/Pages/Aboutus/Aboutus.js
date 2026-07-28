@@ -79,12 +79,12 @@ class Aboutus extends Component{
 							<div className="row align-items-center">
 								{/* Left Content */}
 								<div className="col-lg-6 col-md-12 m-b30">
-									<p className="font-16 m-b20" style={{ lineHeight: '1.8', fontSize: '18px', color: '#302e44', background: 'linear-gradient(135deg, rgba(164,113,30,0.1), rgba(232,184,75,0.15))', padding: '16px 24px', borderLeft: '5px solid #a4711e', borderRadius: '0 8px 8px 0', width: '100%' }}>
+									<p className="font-16 m-b20" style={{ lineHeight: '1.8', fontSize: '18px', color: '#3b46a2', background: 'linear-gradient(135deg, rgba(164,113,30,0.1), rgba(232,184,75,0.15))', padding: '16px 24px', borderLeft: '5px solid #a4711e', borderRadius: '0 8px 8px 0', width: '100%' }}>
 										<strong style={{ fontSize: '20px', color: '#a4711e', fontWeight: '800', letterSpacing: '0.5px' }}>1000+ Houses Successfully Constructed</strong>
 									</p>
 									<div className="section-head style-1">
-										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Welcome to Empire Estates</span>
-										<h2 className="title font-weight-700 m-b20" style={{ color: '#302e44', fontSize: '36px' }}>Empire Esttates: Civil Engineering & Contracting Excellence.</h2>
+										<span className="text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#000 !important' }}>Welcome to Empire Estates</span>
+										<h2 className="title font-weight-700 m-b20" style={{ color: '#3b46a2', fontSize: '36px' }}>Empire Esttates: Civil Engineering & Contracting Excellence.</h2>
 										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 									</div>
 									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
@@ -111,8 +111,8 @@ class Aboutus extends Component{
 					<section className="content-inner bg-light" style={{ padding: '80px 0' }}>
 						<div className="container">
 							<div className="section-head text-center style-1" style={{ marginBottom: '50px' }}>
-								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Our Strengths</span>
-								<h2 className="title font-weight-700 m-b15" style={{ color: '#302e44', fontSize: '36px' }}>Professional Strengths & Additional Points</h2>
+								<span className=" text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Our Strengths</span>
+								<h2 className="title font-weight-700 m-b15" style={{ color: '#3b46a2', fontSize: '36px' }}>Professional Strengths & Additional Points</h2>
 								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 							</div>
 							
@@ -126,7 +126,7 @@ class Aboutus extends Component{
 											<FaCheckCircle style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Commitment to Quality</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#3b46a2' }}>Commitment to Quality</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Projects adhering to the highest standards of structural integrity, engineering excellence, and safety.</p>
 										</div>
 									</div>
@@ -141,7 +141,7 @@ class Aboutus extends Component{
 											<FaUserFriends style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Client-Centric Approach</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#3b46a2' }}>Client-Centric Approach</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Transparent communication, timely delivery, and solutions meeting specific budget and design requirements.</p>
 										</div>
 									</div>
@@ -156,7 +156,7 @@ class Aboutus extends Component{
 											<FaMapMarkedAlt style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Area Specialization</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#3b46a2' }}>Area Specialization</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>Two decades of deep understanding of local real estate and regulatory landscapes.</p>
 										</div>
 									</div>
@@ -171,7 +171,7 @@ class Aboutus extends Component{
 											<FaAward style={{ color: '#a4711e', fontSize: '24px' }} />
 										</div>
 										<div className="icon-content">
-											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#302e44' }}>Project Portfolio</h4>
+											<h4 className="dlab-tilte m-b10 font-weight-600" style={{ fontSize: '18px', color: '#3b46a2' }}>Project Portfolio</h4>
 											<p className="m-b0" style={{ color: '#666', fontSize: '14px', lineHeight: '1.6' }}>A reliable builder with a track record of completing various residential projects.</p>
 										</div>
 									</div>
@@ -193,18 +193,18 @@ class Aboutus extends Component{
 								{/* Right Content */}
 								<div className="col-lg-6 col-md-12 m-b30">
 									<div className="section-head style-1">
-										<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Quality Design & Execution</span>
-										<h2 className="title font-weight-700 m-b20" style={{ color: '#302e44', fontSize: '36px' }}>Focused. Professional. Statement. Proven Track Record.</h2>
+										<span className="text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Quality Design & Execution</span>
+										<h2 className="title font-weight-700 m-b20" style={{ color: '#3b46a2', fontSize: '36px' }}>Focused. Professional. Statement. Proven Track Record.</h2>
 										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 									</div>
 									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										Our two decades in the industry have resulted in the successful completion of approximately 250 residential units, a balanced mix of apartments and individual houses. This volume of work is a testament to the trust placed in us. We are proud of our established reputation for delivering high-quality construction at a reasonable cost, consistently meeting deadlines.
 									</p>
 									<ul className="list-check primary m-b30 m-t20">
-										<li className="m-b10" style={{ fontSize: '16px', color: '#302e44', fontWeight: '500', textAlign: 'justify' }}>
+										<li className="m-b10" style={{ fontSize: '16px', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Structural Integrity:</strong> All projects feature a consultant-designed framed structure, ensuring long-term safety and engineering precision.
 										</li>
-										<li className="m-b10" style={{ fontSize: '16px', color: '#302e44', fontWeight: '500', textAlign: 'justify' }}>
+										<li className="m-b10" style={{ fontSize: '16px', fontWeight: '500', textAlign: 'justify' }}>
 											<strong>Aesthetic Appeal:</strong> We integrate aesthetic elevations crafted by our own team of architects, ensuring visually distinctive and modern homes.
 										</li>
 									</ul>
@@ -224,7 +224,7 @@ class Aboutus extends Component{
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 												<FaBullseye style={{ color: '#a4711e', fontSize: '45px' }} />
 											</div>
-											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#302e44', whiteSpace: 'nowrap' }}>Our Mission</h3>
+											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#3b46a2', whiteSpace: 'nowrap' }}>Our Mission</h3>
 										</div>
 										<div className="icon-content">
 											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
@@ -246,7 +246,7 @@ class Aboutus extends Component{
 											<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
 												<FaEye style={{ color: '#a4711e', fontSize: '45px' }} />
 											</div>
-											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#302e44', whiteSpace: 'nowrap' }}>Our Vision</h3>
+											<h3 className="title font-weight-700 m-b0" style={{ fontSize: '24px', color: '#3b46a2', whiteSpace: 'nowrap' }}>Our Vision</h3>
 										</div>
 										<div className="icon-content">
 											<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', textAlign: 'justify' }}>
@@ -354,7 +354,7 @@ class Aboutus extends Component{
 						<div className="container">
 							<div className="section-head text-center style-1" style={{ marginBottom: '60px' }}>
 								<span className="text-primary text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '1.5px', color: '#a4711e' }}>Our Journey</span>
-								<h2 className="title font-weight-700 m-b15" style={{ color: '#302e44', fontSize: '36px' }}>Milestones of Success</h2>
+								<h2 className="title font-weight-700 m-b15" style={{ color: '#3b46a2', fontSize: '36px' }}>Milestones of Success</h2>
 								<div className="dlab-separator bg-primary m-b20 mx-auto" style={{ width: '60px', height: '4px', background: 'linear-gradient(90deg, #a4711e, #c9953a)', borderRadius: '2px' }}></div>
 							</div>
 							
@@ -364,7 +364,7 @@ class Aboutus extends Component{
 						return (
 							<div className={`timeline-container ${isLeft ? 'timeline-left' : 'timeline-right'}`} key={idx}>
 								<div className="timeline-content">
-									<h4 className="font-weight-700 m-b10" style={{ color: '#302e44', fontSize: '26px' }}>{item.year}</h4>
+									<h4 className="font-weight-700 m-b10" style={{ color: '#3b46a2', fontSize: '26px' }}>{item.year}</h4>
 									{item.items ? (
 										<ul style={{ margin: 0, paddingLeft: '18px' }}>
 											{item.items.map((t, i) => (
@@ -393,7 +393,7 @@ class Aboutus extends Component{
 										<div className="counter-left archia-counter d-flex align-items-center justify-content-center">
 											<div className="icon-lg pull-left m-r15">{data.icon}</div>
 											<div className="clearfix">
-												<div className="counter m-b5" style={{ fontSize: '32px', fontWeight: '800', color: '#302e44' }}>
+												<div className="counter m-b5" style={{ fontSize: '32px', fontWeight: '800', color: '#3b46a2' }}>
 													<CountUp end={data.num} duration={4}/>{data.num === 100 ? '%' : '+'}
 												</div>
 												<span className="font-16 text-black" style={{ fontSize: '14px', color: '#666' }}>{data.title}</span> 

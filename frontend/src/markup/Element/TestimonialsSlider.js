@@ -244,7 +244,7 @@ class TestimonialsSlider extends Component {
                       ))}
                     </div>
                   </div>
-                  <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#302e44', marginBottom: '12px', lineHeight: '1.4' }}>
+                  <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#3b46a2', marginBottom: '12px', lineHeight: '1.4' }}>
                     "{item.title}"
                   </h4>
                   <p style={{ fontSize: '14px', color: '#666', fontStyle: 'italic', lineHeight: '1.6', margin: 0, marginBottom: '25px' }}>
@@ -255,7 +255,7 @@ class TestimonialsSlider extends Component {
                 <div style={{ display: 'flex', alignItems: 'center', gap: '15px', borderTop: '1px solid #f0f0f0', paddingTop: '20px', marginTop: 'auto' }}>
                   <img src={imgUrl} alt={item.author} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #a4711e' }} />
                   <div>
-                    <h5 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#302e44' }}>{item.author}</h5>
+                    <h5 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#3b46a2' }}>{item.author}</h5>
                     <span style={{ fontSize: '11px', color: '#a4711e', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', display: 'block', marginTop: '2px' }}>
                       {item.tags && item.tags.length > 0 ? item.tags[0] : 'VERIFIED INVESTOR'}
                     </span>
