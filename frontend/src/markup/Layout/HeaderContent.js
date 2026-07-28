@@ -50,9 +50,58 @@ export default function HeaderContent({ isFixed }) {
           </Link>
         </div>
 
-        {/* Center: Desktop Navigation Menu */}
-        <div className="single-header-nav">
-          <MenuLinks />
+        {/* Branch info block — hidden on mobile via inline style */}
+        <div className="studio1-branches" style={isMobile ? { display: 'none' } : undefined}>
+
+          {/* Address */}
+          <div className="studio1-branch-item">
+            <span className="studio1-branch-icon">
+              <svg style={{ width: '18px', height: '18px', fill: '#c8902a' }} viewBox="0 0 24 24">
+                <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/>
+              </svg>
+            </span>
+            <div>
+              <span className="studio1-branch-title">Address:</span>
+              <span>{footerConfig.contact.address}</span>
+            </div>
+          </div>
+
+          {/* Socials */}
+          <div className="studio1-branch-item">
+            <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              {socials.map(({ href, Icon, hover }, i) => (
+                <a
+                  key={i}
+                  href={href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={socialStyle}
+                  onMouseEnter={e => (e.currentTarget.style.background = hover)}
+                  onMouseLeave={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.12)')}
+                >
+                  <Icon style={{ fontSize: '14px' }} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          {/* Phone */}
+          <a
+            href="tel:8825471748"
+            className="studio1-branch-item"
+            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+          >
+            <span className="studio1-branch-icon">
+              <svg style={{ width: '18px', height: '18px', fill: '#c8902a' }} viewBox="0 0 24 24">
+                <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
+              </svg>
+            </span>
+            <div>
+              <span className="studio1-branch-title">Call Us Today:</span>
+              <span>88254 71748</span>
+            </div>
+          </a>
+
         </div>
 
 
@@ -114,12 +163,16 @@ export default function HeaderContent({ isFixed }) {
               </a>
             ))}
           </div>
-          <p className="mobile-nav-drawer__phone">
-            <svg viewBox="0 0 24 24" fill="#3b46a2" width="16" height="16">
+          <a
+            href="tel:8825471748"
+            className="mobile-nav-drawer__phone"
+            style={{ textDecoration: 'none', color: 'rgba(255, 255, 255, 0.75)', display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
+            <svg viewBox="0 0 24 24" fill="#c8902a" width="16" height="16">
               <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
             </svg>
             88254 71748
-          </p>
+          </a>
         </div>
       </nav>
     </div>

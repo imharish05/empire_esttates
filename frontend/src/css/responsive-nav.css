@@ -288,3 +288,270 @@
   line-height: 1;
   vertical-align: middle;
 }
+
+/* ─────────────────────────────────────────────
+   OVERRIDE custom-font.css DESKTOP RULES
+   (These have !important and break mobile layout)
+───────────────────────────────────────────── */
+@media only screen and (max-width: 991px) {
+
+  /* custom-font.css sets margin-left:150px → reset for mobile */
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
+
+  /* custom-font.css sets height:130px → shrink for mobile */
+  .studio1-logo img {
+    height: 40px !important;
+    max-height: 44px !important;
+  }
+
+  /* custom-font.css sets padding:0 45px → mobile-friendly padding */
+  .studio1-top-row {
+    padding: 10px 16px !important;
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    flex-wrap: nowrap !important;
+    margin-bottom: 0 !important;
+  }
+
+  /* Prevent logo from growing and pushing hamburger off row */
+  .studio1-logo {
+    flex-shrink: 0;
+    flex-grow: 0;
+  }
+
+  /* Branches hidden on mobile (address/socials/phone) */
+  .studio1-branches {
+    display: none !important;
+  }
+}
+
+@media only screen and (max-width: 575px) {
+  .studio1-logo img {
+    height: 34px !important;
+    max-height: 38px !important;
+  }
+  .studio1-top-row {
+    padding: 8px 12px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   RESPONSIVE BREAKPOINTS
+───────────────────────────────────────────── */
+
+/* ≤ 1199px — tablet landscape: shrink top row */
+@media only screen and (max-width: 1199px) {
+  .studio1-top-row {
+    padding: 10px 20px;
+  }
+}
+
+/* 992px - 1200px tablet header navigation single-line alignment */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
+
+  .studio1-top-row {
+    padding: 0px 20px !important;
+  }
+
+  .studio1-branches {
+    gap: 15px !important;
+  }
+
+  .studio1-branch-item {
+    padding-left: 12px !important;
+    font-size: 12.5px !important;
+  }
+
+  .studio1-nav-pill-wrapper {
+    padding: 0 10px !important;
+  }
+
+  .studio1-nav-pill {
+    width: 98% !important;
+    max-width: 100% !important;
+    padding: 4px 10px !important;
+  }
+
+  .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a {
+    font-size: 14.5px !important;
+    padding: 14px 10px !important;
+  }
+
+  .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a::after {
+    left: 10px !important;
+    right: 10px !important;
+  }
+
+  .site-header.is-fixed-sticky .studio1-sticky-bar {
+    padding: 8px 20px !important;
+  }
+
+  .studio1-sticky-menu .navbar-nav > li > a {
+    font-size: 14px !important;
+    padding: 10px 10px !important;
+  }
+
+  .studio1-sticky-menu .navbar-nav > li > a::after {
+    left: 10px !important;
+    right: 10px !important;
+  }
+}
+
+/* ≤ 991px — tablet/mobile: show hamburger, hide desktop nav */
+@media only screen and (max-width: 991px) {
+
+  /* Show overlay when active (JS adds it to DOM) */
+  .mobile-nav-overlay {
+    display: block;
+  }
+
+  /* Top row: logo on left + hamburger on right */
+  .studio1-top-row {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 12px 16px !important;
+    flex-wrap: nowrap !important;
+    gap: 10px !important;
+  }
+
+  /* Hide address/socials/phone on mobile — only logo + hamburger */
+  .studio1-top-row .studio1-branches {
+    display: none !important;
+  }
+
+  /* Show top-row hamburger */
+  .mobile-hamburger {
+    display: flex !important;
+  }
+
+  /* Hide desktop pill navbar */
+  .studio1-nav-pill-wrapper {
+    display: none !important;
+  }
+
+  /* ── STICKY BAR: HIDDEN by default on mobile ──
+     Only shown when page is scrolled (.is-fixed-sticky is added to site-header) */
+  .studio1-sticky-bar {
+    display: none !important;
+  }
+
+  /* When sticky is active: hide top-row, show sticky bar with hamburger */
+  .site-header.is-fixed-sticky .studio1-top-row {
+    display: none !important;
+  }
+
+  /* Override desktop padding from custom-font.css (padding: 8px 50px) → mobile-friendly */
+  .site-header.is-fixed-sticky .studio1-sticky-bar {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    padding: 0 16px !important;
+    height: 60px !important;
+  }
+
+  .site-header.is-fixed-sticky .studio1-sticky-menu {
+    display: none !important;
+  }
+
+  .site-header.is-fixed-sticky .mobile-hamburger-sticky-mobile {
+    display: flex !important;
+  }
+
+  /* Logo size on mobile */
+  .studio1-logo img,
+  .studio1-sticky-logo img {
+    height: 40px !important;
+    width: auto !important;
+  }
+}
+
+/* ≤ 575px — small phones: tighten spacing */
+@media only screen and (max-width: 575px) {
+  .studio1-top-row {
+    padding: 10px 12px !important;
+  }
+
+  .studio1-logo img,
+  .studio1-sticky-logo img {
+    height: 34px !important;
+  }
+
+  .mobile-hamburger {
+    width: 32px !important;
+    height: 24px !important;
+  }
+}
+
+/* ─────────────────────────────────────────────
+   FLOATING ACTION BUTTONS (WhatsApp & Scroll to top)
+───────────────────────────────────────────── */
+.floating-action-buttons {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.floating-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none !important;
+  outline: none;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  color: #ffffff !important;
+}
+
+.whatsapp-btn {
+  background-color: #25d366 !important;
+}
+
+.whatsapp-btn:hover {
+  background-color: #20ba5a !important;
+}
+
+.scroll-top-btn {
+  background-color: #c8902a !important; /* Brand Gold */
+}
+
+.scroll-top-btn:hover {
+  background-color: #b37e20 !important;
+}
+
+@media only screen and (max-width: 575px) {
+  .floating-action-buttons {
+    bottom: 16px;
+    right: 16px;
+    gap: 10px;
+  }
+
+  .floating-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+

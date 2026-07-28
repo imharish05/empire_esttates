@@ -54,7 +54,29 @@ i:not(.blog-content-render *), i::before, i::after,
 .single-header-wrapper {
   background: #ffffff !important;
   width: 100%;
-  transition: all 0.3s ease;
+  position: relative;
+  transition: none !important;
+}
+
+.studio1-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px !important;
+  padding: 0px 45px 0px 45px !important;
+  background-color: #2c323f !important;
+}
+
+.studio1-logo {
+  display: flex;
+  align-items: center;
+  margin-left: 100px !important;
+}
+
+@media only screen and (max-width: 1350px) {
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
 }
 
 .single-header-wrapper.is-fixed-sticky {
@@ -91,15 +113,23 @@ i:not(.blog-content-render *), i::before, i::after,
   object-fit: contain;
 }
 
-/* Central Navigation Links */
-.single-header-nav {
+.studio1-nav-pill {
+  background-color: #c8902a !important; /* Brand Gold */
+  background: #c8902a !important;
+  border-radius: 50px !important;
+  padding: 4px 20px !important;
   display: flex;
   align-items: center;
+  justify-content: center;
+  width: 96% !important;
+  max-width: 1200px !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
 
 .single-hdr-nav-ul {
   display: flex !important;
   flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: center !important;
   margin: 0 !important;
   padding: 0 !important;
@@ -110,28 +140,27 @@ i:not(.blog-content-render *), i::before, i::after,
 .single-hdr-nav-ul > li {
   position: relative;
   display: inline-block !important;
+  white-space: nowrap !important;
 }
 
 .single-hdr-nav-ul > li > a {
   color: #1e293b !important;
   font-weight: 600 !important;
-  font-size: 15px !important;
-  padding: 12px 16px !important;
+  font-size: 15.5px !important;
+  padding: 16px 18px !important;
   text-transform: capitalize !important;
   text-decoration: none !important;
-  display: flex;
-  align-items: center;
-  position: relative;
-  transition: color 0.2s ease !important;
+  border-bottom: none !important;
+  white-space: nowrap !important;
 }
 
 /* Active Nav Link Underline Indicator (Image 2 style) */
 .single-hdr-nav-ul > li > a::after {
   content: '';
   position: absolute;
-  bottom: 0px;
-  left: 16px;
-  right: 16px;
+  bottom: 4px;
+  left: 18px;
+  right: 18px;
   height: 3px;
   background: transparent;
   border-radius: 2px;

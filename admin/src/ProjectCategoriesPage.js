@@ -157,7 +157,7 @@ export default function ProjectCategoriesPage() {
   const handleDelete = async (id, catName) => {
     const result = await Swal.fire({
       title: `Delete "${catName}"?`,
-      text: 'This category will be permanently deleted.',
+      text: 'This category and all projects under it will be permanently deleted.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#e74c3c',
@@ -177,7 +177,28 @@ export default function ProjectCategoriesPage() {
     const newList = categories.filter(c => c.id !== id);
     setCategories(newList);
     saveToLocal(newList);
-    Swal.fire({ icon: 'success', title: 'Deleted!', timer: 1000, showConfirmButton: false });
+
+    // Sync local cached projects in localStorage (purge any project under deleted/invalid categories)
+    try {
+      const cached = localStorage.getItem('ee_projects_v3');
+      if (cached) {
+        const parsed = JSON.parse(cached);
+        const validCats = new Set(newList.map(c => c.name.trim().toLowerCase()));
+        validCats.add('ongoing project');
+
+        const filteredProjects = parsed.filter(p => {
+          if (!p.category) return false;
+          const pCat = String(p.category).trim().toLowerCase();
+          return validCats.has(pCat);
+        });
+        localStorage.setItem('ee_projects_v3', JSON.stringify(filteredProjects));
+      }
+    } catch (e) {}
+
+    // Dispatch global event so ProjectsPage & Dashboard immediately update
+    window.dispatchEvent(new Event('ee_projects_updated'));
+
+    Swal.fire({ icon: 'success', title: 'Category & Projects Deleted!', timer: 1200, showConfirmButton: false });
   };
 
   return (
