@@ -105,30 +105,32 @@ function BannerModal({ banner, onClose, onSave, PAGE_OPTIONS }) {
             </select>
           </div>
 
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Text</label>
-              <input
-                type="text"
-                value={form.ctaText}
-                onChange={e => setForm(f => ({ ...f, ctaText: e.target.value }))}
-                placeholder="e.g. View Projects"
-                className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-              />
+          {form.placement === 'Home Page Slider' && (
+            <div className="grid grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Text</label>
+                <input
+                  type="text"
+                  value={form.ctaText}
+                  onChange={e => setForm(f => ({ ...f, ctaText: e.target.value }))}
+                  placeholder="e.g. View Projects"
+                  className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Redirect Link</label>
+                <select
+                  value={form.ctaLink}
+                  onChange={e => setForm(f => ({ ...f, ctaLink: e.target.value }))}
+                  className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left bg-white focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
+                >
+                  {PAGE_OPTIONS.map(opt => (
+                    <option key={opt.link} value={opt.link}>{opt.label} ({opt.link})</option>
+                  ))}
+                </select>
+              </div>
             </div>
-            <div>
-              <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Redirect Link</label>
-              <select
-                value={form.ctaLink}
-                onChange={e => setForm(f => ({ ...f, ctaLink: e.target.value }))}
-                className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left bg-white focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-              >
-                {PAGE_OPTIONS.map(opt => (
-                  <option key={opt.link} value={opt.link}>{opt.label} ({opt.link})</option>
-                ))}
-              </select>
-            </div>
-          </div>
+          )}
 
           <div>
             <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">Image <span className="text-red-500">*</span></label>
@@ -176,18 +178,22 @@ export default function Dashboard({ email, onLogout }) {
     const s = localStorage.getItem('ee_projects_v3');
     try { return s ? JSON.parse(s) : []; } catch { return []; }
   });
+  const fetchDashboardProjects = () => {
+    fetch(`${API_URL}/projects`)
+      .then(r => r.ok && r.json())
+      .then(d => {
+        if (d) {
+          setProjects(d);
+          try { localStorage.setItem('ee_projects_v3', JSON.stringify(d)); } catch (e) {}
+        }
+      })
+      .catch(() => {});
+  };
   useEffect(() => {
-    fetch(`${API_URL}/projects`).then(r => r.ok && r.json()).then(d => d && setProjects(d)).catch(() => {});
+    fetchDashboardProjects();
+    window.addEventListener('ee_projects_updated', fetchDashboardProjects);
+    return () => window.removeEventListener('ee_projects_updated', fetchDashboardProjects);
   }, []);
-  useEffect(() => {
-    if (projects.length > 0) {
-      try {
-        localStorage.setItem('ee_projects_v3', JSON.stringify(projects));
-      } catch (e) {
-        console.warn('Failed to save ee_projects_v3 to localStorage:', e);
-      }
-    }
-  }, [projects]);
 
   // ── Services ──
   const [services, setServices] = useState(() => {
@@ -395,9 +401,18 @@ export default function Dashboard({ email, onLogout }) {
   };
 
   // ── Overview stats ──
-  const totalProjects  = projects.length;
-  const totalServices  = services.length;
-  const totalBanners   = banners.length;
+  const validCatNames = new Set(categories.map(c => (c.name || '').trim().toLowerCase()));
+  validCatNames.add('ongoing project');
+
+  const validProjects = projects.filter(p => {
+    if (!p || !p.category) return false;
+    const pCat = String(p.category).trim().toLowerCase();
+    return validCatNames.size === 1 ? true : validCatNames.has(pCat);
+  });
+
+  const totalProjects   = validProjects.length;
+  const totalServices   = services.length;
+  const totalBanners    = banners.length;
   const totalCategories = categories.length;
 
   const STAT_CARDS = [

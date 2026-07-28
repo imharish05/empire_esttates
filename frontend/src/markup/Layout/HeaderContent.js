@@ -128,7 +128,11 @@ export default function HeaderContent({ isFixed }) {
           </div>
 
           {/* Phone */}
-          <div className="studio1-branch-item">
+          <a
+            href="tel:8825471748"
+            className="studio1-branch-item"
+            style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+          >
             <span className="studio1-branch-icon">
               <svg style={{ width: '18px', height: '18px', fill: '#c8902a' }} viewBox="0 0 24 24">
                 <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
@@ -138,7 +142,7 @@ export default function HeaderContent({ isFixed }) {
               <span className="studio1-branch-title">Call Us Today:</span>
               <span>88254 71748</span>
             </div>
-          </div>
+          </a>
 
         </div>
 
@@ -247,12 +251,16 @@ export default function HeaderContent({ isFixed }) {
               </a>
             ))}
           </div>
-          <p className="mobile-nav-drawer__phone">
+          <a
+            href="tel:8825471748"
+            className="mobile-nav-drawer__phone"
+            style={{ textDecoration: 'none', color: 'rgba(255, 255, 255, 0.75)', display: 'flex', alignItems: 'center', gap: '8px' }}
+          >
             <svg viewBox="0 0 24 24" fill="#c8902a" width="16" height="16">
               <path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/>
             </svg>
             88254 71748
-          </p>
+          </a>
         </div>
       </nav>
     </div>

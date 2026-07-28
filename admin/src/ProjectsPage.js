@@ -28,6 +28,13 @@ export default function ProjectsPage({ filter = 'all' }) {
   useEffect(() => {
     fetchProjects();
     fetchCategories();
+
+    const handleUpdate = () => {
+      fetchProjects();
+      fetchCategories();
+    };
+    window.addEventListener('ee_projects_updated', handleUpdate);
+    return () => window.removeEventListener('ee_projects_updated', handleUpdate);
   }, []);
 
   const fetchCategories = async () => {
@@ -132,7 +139,11 @@ export default function ProjectsPage({ filter = 'all' }) {
         });
         if (!res.ok) throw new Error();
         const updated = await res.json();
-        setProjects((prev) => prev.map((p) => (p.id === editItem.id ? updated : p)));
+        setProjects((prev) => {
+          const next = prev.map((p) => (p.id === editItem.id ? updated : p));
+          try { localStorage.setItem('ee_projects_v3', JSON.stringify(next)); } catch (e) {}
+          return next;
+        });
       } else {
         const res = await fetch(`${API_URL}/projects`, {
           method: 'POST',
@@ -141,17 +152,31 @@ export default function ProjectsPage({ filter = 'all' }) {
         });
         if (!res.ok) throw new Error();
         const created = await res.json();
-        setProjects((prev) => [created, ...prev]);
+        setProjects((prev) => {
+          const next = [created, ...prev];
+          try { localStorage.setItem('ee_projects_v3', JSON.stringify(next)); } catch (e) {}
+          return next;
+        });
       }
+      window.dispatchEvent(new Event('ee_projects_updated'));
       closeModal();
       Swal.fire({ icon: 'success', title: 'Saved', text: 'Project saved successfully.', timer: 1500, showConfirmButton: false });
     } catch {
       const localItem = { id: editItem ? editItem.id : Date.now(), ...payload };
       if (editItem) {
-        setProjects((prev) => prev.map((p) => (p.id === editItem.id ? localItem : p)));
+        setProjects((prev) => {
+          const next = prev.map((p) => (p.id === editItem.id ? localItem : p));
+          try { localStorage.setItem('ee_projects_v3', JSON.stringify(next)); } catch (e) {}
+          return next;
+        });
       } else {
-        setProjects((prev) => [localItem, ...prev]);
+        setProjects((prev) => {
+          const next = [localItem, ...prev];
+          try { localStorage.setItem('ee_projects_v3', JSON.stringify(next)); } catch (e) {}
+          return next;
+        });
       }
+      window.dispatchEvent(new Event('ee_projects_updated'));
       closeModal();
       Swal.fire({ icon: 'success', title: 'Saved (Local)', text: 'Project saved locally.', timer: 1500, showConfirmButton: false });
     } finally {
@@ -172,7 +197,12 @@ export default function ProjectsPage({ filter = 'all' }) {
       try {
         await fetch(`${API_URL}/projects/${id}`, { method: 'DELETE' });
       } catch {}
-      setProjects((prev) => prev.filter((p) => p.id !== id));
+      setProjects((prev) => {
+        const next = prev.filter((p) => p.id !== id);
+        try { localStorage.setItem('ee_projects_v3', JSON.stringify(next)); } catch (e) {}
+        return next;
+      });
+      window.dispatchEvent(new Event('ee_projects_updated'));
       Swal.fire({ icon: 'success', title: 'Deleted', text: 'Project has been deleted.', timer: 1500, showConfirmButton: false });
     }
   };
@@ -212,10 +242,17 @@ export default function ProjectsPage({ filter = 'all' }) {
             {loading ? (
               <tr><td colSpan="4" className="py-12 text-center text-neutral-400">Loading...</td></tr>
             ) : (() => {
+              const validCatNames = new Set(categories.map(c => (c.name || '').trim().toLowerCase()));
               const displayProjects = projects.filter(p => {
-                const isOngoing = (p.category || '').toLowerCase() === 'ongoing project';
+                const pCat = (p.category || '').trim().toLowerCase();
+                const isOngoing = pCat === 'ongoing project';
                 if (filter === 'ongoing') return isOngoing;
-                return !isOngoing; // filter === 'all'
+
+                if (isOngoing) return false;
+                if (validCatNames.size > 0 && pCat && !validCatNames.has(pCat)) {
+                  return false;
+                }
+                return true;
               });
               
               if (displayProjects.length === 0) {

@@ -68,7 +68,13 @@ i:not(.blog-content-render *), i::before, i::after,
 .studio1-logo {
   display: flex;
   align-items: center;
-  margin-left: 150px !important;
+  margin-left: 100px !important;
+}
+
+@media only screen and (max-width: 1350px) {
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
 }
 
 .studio1-logo img {
@@ -128,11 +134,11 @@ i:not(.blog-content-render *), i::before, i::after,
   background-color: #c8902a !important; /* Brand Gold */
   background: #c8902a !important;
   border-radius: 50px !important;
-  padding: 4px 40px !important;
+  padding: 4px 20px !important;
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 94% !important;
+  width: 96% !important;
   max-width: 1200px !important;
   box-shadow: 0 6px 20px rgba(0,0,0,0.25);
 }
@@ -140,6 +146,7 @@ i:not(.blog-content-render *), i::before, i::after,
 .studio1-nav-pill .navbar-nav {
   display: flex !important;
   flex-direction: row !important;
+  flex-wrap: nowrap !important;
   align-items: center !important;
   justify-content: space-evenly !important;
   width: 100% !important;
@@ -152,27 +159,29 @@ i:not(.blog-content-render *), i::before, i::after,
   position: relative;
   float: none !important;
   display: inline-block !important;
+  white-space: nowrap !important;
 }
 
 .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a {
   color: #111111 !important;
   font-weight: 600 !important;
-  font-size: 16.5px !important;
-  padding: 20px 26px !important;
+  font-size: 15.5px !important;
+  padding: 16px 18px !important;
   text-transform: capitalize !important;
   transition: none !important;
   display: block;
   position: relative;
   text-decoration: none !important;
   border-bottom: none !important;
+  white-space: nowrap !important;
 }
 
 .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a::after {
   content: '';
   position: absolute;
   bottom: 4px;
-  left: 26px;
-  right: 26px;
+  left: 18px;
+  right: 18px;
   height: 3px;
   background: transparent;
   border-radius: 2px;

@@ -389,6 +389,60 @@
   }
 }
 
+/* 992px - 1200px tablet header navigation single-line alignment */
+@media only screen and (min-width: 992px) and (max-width: 1200px) {
+  .studio1-logo {
+    margin-left: 0 !important;
+  }
+
+  .studio1-top-row {
+    padding: 0px 20px !important;
+  }
+
+  .studio1-branches {
+    gap: 15px !important;
+  }
+
+  .studio1-branch-item {
+    padding-left: 12px !important;
+    font-size: 12.5px !important;
+  }
+
+  .studio1-nav-pill-wrapper {
+    padding: 0 10px !important;
+  }
+
+  .studio1-nav-pill {
+    width: 98% !important;
+    max-width: 100% !important;
+    padding: 4px 10px !important;
+  }
+
+  .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a {
+    font-size: 14.5px !important;
+    padding: 14px 10px !important;
+  }
+
+  .studio1-nav-pill ul.nav.navbar-nav.navbar > li > a::after {
+    left: 10px !important;
+    right: 10px !important;
+  }
+
+  .site-header.is-fixed-sticky .studio1-sticky-bar {
+    padding: 8px 20px !important;
+  }
+
+  .studio1-sticky-menu .navbar-nav > li > a {
+    font-size: 14px !important;
+    padding: 10px 10px !important;
+  }
+
+  .studio1-sticky-menu .navbar-nav > li > a::after {
+    left: 10px !important;
+    right: 10px !important;
+  }
+}
+
 /* ≤ 991px — tablet/mobile: show hamburger, hide desktop nav */
 @media only screen and (max-width: 991px) {
 
@@ -474,3 +528,69 @@
     height: 24px !important;
   }
 }
+
+/* ─────────────────────────────────────────────
+   FLOATING ACTION BUTTONS (WhatsApp & Scroll to top)
+───────────────────────────────────────────── */
+.floating-action-buttons {
+  position: fixed;
+  bottom: 25px;
+  right: 25px;
+  z-index: 9999 !important;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+}
+
+.floating-btn {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff !important;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+  text-decoration: none !important;
+  outline: none;
+}
+
+.floating-btn:hover {
+  transform: translateY(-3px) scale(1.08);
+  box-shadow: 0 6px 22px rgba(0, 0, 0, 0.45);
+  color: #ffffff !important;
+}
+
+.whatsapp-btn {
+  background-color: #25d366 !important;
+}
+
+.whatsapp-btn:hover {
+  background-color: #20ba5a !important;
+}
+
+.scroll-top-btn {
+  background-color: #c8902a !important; /* Brand Gold */
+}
+
+.scroll-top-btn:hover {
+  background-color: #b37e20 !important;
+}
+
+@media only screen and (max-width: 575px) {
+  .floating-action-buttons {
+    bottom: 16px;
+    right: 16px;
+    gap: 10px;
+  }
+
+  .floating-btn {
+    width: 44px;
+    height: 44px;
+  }
+}
+
