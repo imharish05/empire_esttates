@@ -7,15 +7,7 @@ import { FaFacebookF, FaInstagram, FaWhatsapp, FaYoutube } from '../../icons';
 
 export default function HeaderContent({ isFixed }) {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [isMobile, setIsMobile] = useState(window.innerWidth <= 991);
   const drawerRef = useRef(null);
-
-  // Track mobile breakpoint
-  useEffect(() => {
-    const onResize = () => setIsMobile(window.innerWidth <= 991);
-    window.addEventListener('resize', onResize);
-    return () => window.removeEventListener('resize', onResize);
-  }, []);
 
   // Close drawer on outside click
   useEffect(() => {
@@ -33,7 +25,6 @@ export default function HeaderContent({ isFixed }) {
     return () => document.removeEventListener('mousedown', handleOutside);
   }, [mobileOpen]);
 
-  // Close drawer on route change (link click inside drawer)
   const closeDrawer = () => setMobileOpen(false);
 
   // Lock body scroll when drawer is open
@@ -41,14 +32,6 @@ export default function HeaderContent({ isFixed }) {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [mobileOpen]);
-
-  const socialStyle = {
-    width: '32px', height: '32px', borderRadius: '50%',
-    background: 'rgba(255,255,255,0.12)', display: 'flex',
-    alignItems: 'center', justifyContent: 'center',
-    color: '#fff', textDecoration: 'none', transition: '0.3s',
-    flexShrink: 0,
-  };
 
   const socials = [
     { href: footerConfig.socials.facebook,  Icon: FaFacebookF,  hover: '#3b5998' },
@@ -58,37 +41,12 @@ export default function HeaderContent({ isFixed }) {
   ];
 
   return (
-    <div className={`studio1-header-container${isFixed ? ' is-fixed-sticky' : ''}`}>
-
-      {/* ── TOP ROW ── */}
-      <div
-        className="studio1-top-row"
-        style={isMobile ? {
-          display: 'flex',
-          flexDirection: 'row',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          flexWrap: 'nowrap',
-          padding: '10px 16px',
-          marginBottom: 0,
-          gap: '8px',
-        } : undefined}
-      >
-        {/* Logo */}
-        <div
-          className="studio1-logo"
-          style={isMobile ? {
-            marginLeft: 0,
-            flexShrink: 0,
-            flexGrow: 0,
-          } : undefined}
-        >
+    <div className={`single-header-wrapper ${isFixed ? 'is-fixed-sticky' : ''}`}>
+      <div className="single-header-container">
+        {/* Left: Logo */}
+        <div className="single-header-logo">
           <Link to="/">
-            <img
-              src={logo}
-              alt="Empire Estates"
-              style={isMobile ? { height: '38px', width: 'auto', maxHeight: '42px' } : undefined}
-            />
+            <img src={logo} alt="Empire Estates" />
           </Link>
         </div>
 
@@ -146,9 +104,11 @@ export default function HeaderContent({ isFixed }) {
 
         </div>
 
-        {/* ── HAMBURGER BUTTON (mobile only) ── */}
+
+
+        {/* Mobile Hamburger Button */}
         <button
-          className={`mobile-hamburger${mobileOpen ? ' is-open' : ''}`}
+          className={`mobile-hamburger ${mobileOpen ? 'is-open' : ''}`}
           onClick={() => setMobileOpen(prev => !prev)}
           aria-label="Toggle navigation menu"
         >
@@ -156,45 +116,17 @@ export default function HeaderContent({ isFixed }) {
         </button>
       </div>
 
-      {/* ── DESKTOP PILL NAVBAR — hidden on mobile ── */}
-      <div className="studio1-nav-pill-wrapper" style={isMobile ? { display: 'none' } : undefined}>
-        <div className="studio1-nav-pill">
-          <MenuLinks />
-        </div>
-      </div>
-
-      {/* ── STICKY SCROLL HEADER (desktop only — hamburger removed, shared from top row) ── */}
-      <div className="studio1-sticky-bar">
-        <div className="studio1-sticky-logo">
-          <Link to="/">
-            <img src={logo} alt="Empire Estates" />
-          </Link>
-        </div>
-        <div className="studio1-sticky-menu">
-          <MenuLinks />
-        </div>
-        {/* Mobile-only hamburger inside sticky bar */}
-        <button
-          className={`mobile-hamburger-sticky-mobile${mobileOpen ? ' is-open' : ''}`}
-          onClick={() => setMobileOpen(prev => !prev)}
-          aria-label="Toggle navigation menu"
-        >
-          <span /><span /><span />
-        </button>
-      </div>
-
-      {/* ── MOBILE DRAWER OVERLAY ── */}
+      {/* Mobile Drawer Overlay */}
       {mobileOpen && (
         <div className="mobile-nav-overlay" onClick={closeDrawer} />
       )}
 
-      {/* ── MOBILE DRAWER ── */}
+      {/* Mobile Drawer */}
       <nav
         ref={drawerRef}
-        className={`mobile-nav-drawer${mobileOpen ? ' mobile-nav-drawer--open' : ''}`}
+        className={`mobile-nav-drawer ${mobileOpen ? 'mobile-nav-drawer--open' : ''}`}
         aria-hidden={!mobileOpen}
       >
-        {/* Drawer Header */}
         <div className="mobile-nav-drawer__header">
           <Link to="/" onClick={closeDrawer}>
             <img src={logo} alt="Empire Estates" className="mobile-nav-drawer__logo" />
@@ -202,25 +134,7 @@ export default function HeaderContent({ isFixed }) {
           <button
             onClick={closeDrawer}
             aria-label="Close menu"
-            style={{
-              background: 'rgba(255,255,255,0.12)',
-              border: '1.5px solid rgba(255,255,255,0.3)',
-              color: '#ffffff',
-              width: '36px',
-              height: '36px',
-              borderRadius: '50%',
-              fontSize: '18px',
-              lineHeight: '1',
-              cursor: 'pointer',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              flexShrink: 0,
-              padding: 0,
-              transition: 'background 0.2s, border-color 0.2s',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.background = '#c8902a'; e.currentTarget.style.borderColor = '#c8902a'; }}
-            onMouseLeave={e => { e.currentTarget.style.background = 'rgba(255,255,255,0.12)'; e.currentTarget.style.borderColor = 'rgba(255,255,255,0.3)'; }}
+            className="mobile-nav-drawer__close"
           >
             <svg viewBox="0 0 24 24" fill="none" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" width="18" height="18">
               <line x1="18" y1="6" x2="6" y2="18" />
@@ -229,12 +143,10 @@ export default function HeaderContent({ isFixed }) {
           </button>
         </div>
 
-        {/* Drawer Links */}
         <div className="mobile-nav-drawer__body" onClick={closeDrawer}>
           <MenuLinks mobileMode />
         </div>
 
-        {/* Drawer Footer Socials */}
         <div className="mobile-nav-drawer__footer">
           <p className="mobile-nav-drawer__footer-label">Follow Us</p>
           <div className="mobile-nav-drawer__socials">
