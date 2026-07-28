@@ -28,7 +28,6 @@ export default function Banners({ banners, onNewBanner, onEditBanner, onDeleteBa
             <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-700">
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Banner</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Placement</th>
-              <th className="py-3 px-5 font-bold text-neutral-800 text-sm">CTA</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Status</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm text-center">Action</th>
             </tr>
@@ -61,18 +60,6 @@ export default function Banners({ banners, onNewBanner, onEditBanner, onDeleteBa
                 {/* Placement */}
                 <td className="py-4 px-5 text-neutral-500 font-semibold">
                   {banner.placement || 'General'}
-                </td>
-
-                {/* CTA text */}
-                <td className="py-4 px-5 text-neutral-500">
-                  {banner.ctaText ? (
-                    <span className="inline-flex items-center space-x-1 bg-neutral-50 border border-neutral-200 px-2 py-0.5 rounded text-[10px] font-semibold text-neutral-600">
-                      <span className="material-symbols-outlined text-[11px]">link</span>
-                      <span>{banner.ctaText}</span>
-                    </span>
-                  ) : (
-                    <span className="text-neutral-300">—</span>
-                  )}
                 </td>
 
                 {/* Status toggle */}

@@ -21,8 +21,6 @@ function BannerModal({ banner, onClose, onSave, PAGE_OPTIONS }) {
     title: banner?.title || '',
     subtitle: banner?.subtitle || '',
     placement: banner?.placement || PAGE_OPTIONS[0]?.placement || '',
-    ctaText: banner?.ctaText || '',
-    ctaLink: banner?.ctaLink || PAGE_OPTIONS[0]?.link || '',
     image: banner?.image || '',
   });
   const [preview, setPreview] = useState(banner?.image || null);
@@ -105,32 +103,7 @@ function BannerModal({ banner, onClose, onSave, PAGE_OPTIONS }) {
             </select>
           </div>
 
-          {form.placement === 'Home Page Slider' && (
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Text</label>
-                <input
-                  type="text"
-                  value={form.ctaText}
-                  onChange={e => setForm(f => ({ ...f, ctaText: e.target.value }))}
-                  placeholder="e.g. View Projects"
-                  className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                />
-              </div>
-              <div>
-                <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">CTA Redirect Link</label>
-                <select
-                  value={form.ctaLink}
-                  onChange={e => setForm(f => ({ ...f, ctaLink: e.target.value }))}
-                  className="w-full rounded border border-gray-300 px-3 py-2 text-sm text-left bg-white focus:outline-none focus:ring-1 focus:ring-[#d4af37]"
-                >
-                  {PAGE_OPTIONS.map(opt => (
-                    <option key={opt.link} value={opt.link}>{opt.label} ({opt.link})</option>
-                  ))}
-                </select>
-              </div>
-            </div>
-          )}
+
 
           <div>
             <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">Image <span className="text-red-500">*</span></label>
@@ -275,7 +248,6 @@ export default function Dashboard({ email, onLogout }) {
 
   // ── Banner handlers ──
   const PAGE_OPTIONS = [
-    { label: 'Home Page Slider', link: '/', placement: 'Home Page Slider' },
     { label: 'All Projects Page Banner', link: '/projects', placement: 'Projects Page Banner' },
     { label: 'About Us Banner', link: '/about-us', placement: 'About Us Banner' },
     { label: 'Services Details Banner', link: '/services-details', placement: 'Services Details Banner' },

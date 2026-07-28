@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { FaPhoneAlt, FaEnvelope, FaUser, FaRegCommentAlt, FaTimes, FaPaperPlane } from 'react-icons/fa';
 
-const API_BASE = window.location.hostname === 'localhost'
-  ? 'http://localhost:5000/api'
-  : (process.env.REACT_APP_API_URL || 'https://empireesttatesapi.freshmindz.in/api');
+const API_PRIMARY = process.env.REACT_APP_API_URL || 'https://empireesttatesapi.freshmindz.in/api';
 
 export default function EnquiryModal({ isOpen, onClose }) {
   const [formData, setFormData] = useState({
@@ -63,32 +61,51 @@ export default function EnquiryModal({ isOpen, onClose }) {
     setLoading(true);
     setMessage({ text: '', type: '' });
 
-    try {
-      const response = await fetch(`${API_BASE}/contacts`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(formData)
-      });
+    // Endpoints to attempt sequentially in case of CORS / local dev vs prod differences
+    const endpoints = Array.from(new Set([
+      API_PRIMARY,
+      'https://empireesttatesapi.freshmindz.in/api',
+      'http://localhost:5000/api'
+    ]));
 
-      if (response.ok) {
-        setMessage({ text: 'Thank you! Your enquiry has been sent successfully. Our team will contact you shortly.', type: 'success' });
-        setFormData({ firstName: '', lastName: '', phone: '', email: '', projectIdea: '' });
+    let success = false;
+    let lastResponseMsg = '';
 
-        setTimeout(() => {
-          setMessage({ text: '', type: '' });
-          onClose();
-        }, 2200);
-      } else {
-        setMessage({ text: 'Failed to send enquiry. Please try again later.', type: 'error' });
+    for (const endpoint of endpoints) {
+      try {
+        const response = await fetch(`${endpoint}/contacts`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          success = true;
+          break;
+        } else {
+          lastResponseMsg = `Server error (${response.status})`;
+        }
+      } catch (error) {
+        console.warn(`Attempt failed for endpoint ${endpoint}:`, error);
+        lastResponseMsg = 'Connection issue';
       }
-    } catch (error) {
-      console.error('Enquiry submission error:', error);
-      setMessage({ text: 'An error occurred. Please check your connection and try again.', type: 'error' });
-    } finally {
-      setLoading(false);
     }
+
+    if (success) {
+      setMessage({ text: 'Thank you! Your enquiry has been sent successfully. Our team will contact you shortly.', type: 'success' });
+      setFormData({ firstName: '', lastName: '', phone: '', email: '', projectIdea: '' });
+
+      setTimeout(() => {
+        setMessage({ text: '', type: '' });
+        onClose();
+      }, 2200);
+    } else {
+      setMessage({ text: `Failed to send enquiry (${lastResponseMsg}). Please try again later.`, type: 'error' });
+    }
+
+    setLoading(false);
   };
 
   return (

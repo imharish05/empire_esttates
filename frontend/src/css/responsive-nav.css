@@ -51,7 +51,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.55);
-  z-index: 10002;
+  z-index: 10002 !important;
   backdrop-filter: blur(2px);
   -webkit-backdrop-filter: blur(2px);
   animation: fadeInOverlay 0.2s ease forwards;
@@ -73,7 +73,7 @@
   max-width: 85vw;
   height: 100vh;
   background: linear-gradient(160deg, #0284c7 0%, #2a337a 100%);
-  z-index: 10003;
+  z-index: 10003 !important;
   display: flex;
   flex-direction: column;
   transition: right 0.35s cubic-bezier(0.4, 0, 0.2, 1);
@@ -177,6 +177,12 @@
   color: rgba(255, 255, 255, 0.85);
   font-size: 14px;
   margin: 0;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.mobile-nav-drawer__phone:hover {
+  color: #0284c7;
 }
 
 /* ─────────────────────────────────────────────
@@ -296,7 +302,7 @@
   position: fixed;
   bottom: 25px;
   right: 25px;
-  z-index: 9999 !important;
+  z-index: 999 !important;
   display: flex;
   flex-direction: column;
   gap: 12px;

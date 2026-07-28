@@ -59,8 +59,8 @@ function ProjectCard({ item, index, onClick, isFullSize }) {
   return (
     <li 
       data-category="abstract" 
-      className={`card-container ${!isFullSize ? 'col-lg-3 col-md-4 col-sm-6' : 'col-lg-4 col-md-6 col-sm-12'} abstract`}
-      style={{}}
+      className={`card-container ${!isFullSize ? 'col-lg-3 col-md-4 col-sm-6' : 'col-lg-4 col-md-6 col-12'} abstract`}
+      style={{ listStyle: 'none' }}
     >
       <div 
         onMouseEnter={() => setHovered(true)}
@@ -68,12 +68,14 @@ function ProjectCard({ item, index, onClick, isFullSize }) {
         onClick={onClick}
         style={{ 
           cursor: 'pointer',
-          borderRadius: '8px',
+          borderRadius: '12px',
           overflow: 'hidden',
-          transform: hovered ? 'translateY(-5px)' : 'translateY(0)',
+          transform: hovered ? 'translateY(-4px)' : 'translateY(0)',
           transition: 'all 0.3s ease',
           position: 'relative',
-          background: 'transparent'
+          background: '#ffffff',
+          boxShadow: hovered ? '0 10px 25px rgba(0,0,0,0.1)' : '0 2px 10px rgba(0,0,0,0.04)',
+          border: '1px solid rgba(0,0,0,0.06)'
         }}
       >
         <div style={{ 
@@ -81,7 +83,7 @@ function ProjectCard({ item, index, onClick, isFullSize }) {
           display: 'block', 
           overflow: 'hidden', 
           width: '100%',
-          height: isFullSize ? '400px' : 'unset',
+          height: isFullSize ? 'auto' : 'unset',
           aspectRatio: isFullSize ? 'unset' : '1 / 1',
           background: 'transparent',
         }}>
@@ -93,10 +95,11 @@ function ProjectCard({ item, index, onClick, isFullSize }) {
               top: 0,
               left: 0,
               width: '100%', 
-              height: '100%',
-              objectFit: isFullSize ? 'contain' : 'cover',
+              height: isFullSize ? 'auto' : '100%',
+              display: 'block',
+              objectFit: 'cover',
               transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)',
-              transform: hovered ? 'scale(1.05)' : 'scale(1)'
+              transform: hovered ? 'scale(1.03)' : 'scale(1)'
             }} 
           />
 
@@ -355,13 +358,14 @@ function PortfolioItem() {
         <div className="clearfix">
           {tag === 'Ongoing Projects' ? (
             <ul 
-              className="gallery text-center portfolio-bx p-l0"
+              className="gallery text-center portfolio-bx p-l0 row"
               style={{ 
                 display: 'flex', 
                 flexWrap: 'wrap', 
                 justifyContent: 'center',
-                gap: '30px', 
-                padding: '20px 40px'
+                margin: '0 -12px',
+                padding: '10px 0',
+                listStyle: 'none'
               }}
             >
               {filteredProjects.map((item, index) => (	
