@@ -5,6 +5,7 @@ import Header from './../../Layout/Header';
 import Footer2 from './../../Layout/Footer2';
 import PageTitle from './../../Layout/PageTitle';
 import { applyMetaTags } from '../../../utils/meta';
+import ScrollRevealInit from '../../../utils/ScrollRevealInit';
 
 import gallery1 from './../../../images/gallery/pic1.jpg';
 import gallery2 from './../../../images/gallery/pic2.jpg';
@@ -37,10 +38,11 @@ const TagLi = ({ name, handlesettag, tagActive }) => {
           fontSize: '14px',
           fontWeight: '600',
           transition: 'all 0.3s ease',
-          background: tagActive ? '#a4711e' : '#ffffff',
-          color: tagActive ? '#ffffff' : '#333333',
-          border: tagActive ? '1px solid #a4711e' : '1px solid rgba(0, 0, 0, 0.1)',
-          boxShadow: tagActive ? '0 5px 15px rgba(164, 113, 30, 0.25)' : 'none',
+          background: tagActive ? 'linear-gradient(135deg, #0284c7 0%, #0284c7 100%)' : '#ffffff',
+          color: tagActive ? '#ffffff' : '#475569',
+          border: tagActive ? 'none' : '1px solid #cbd5e1',
+          borderRadius: '8px',
+          boxShadow: tagActive ? '0 6px 20px rgba(2, 132, 199, 0.35)' : '0 2px 6px rgba(0,0,0,0.02)',
           textTransform: 'uppercase',
           letterSpacing: '1px'
         }}
@@ -151,6 +153,7 @@ class Portfolio2 extends Component {
   render() {
     return (
       <Fragment>	
+        <ScrollRevealInit />
         <Header isTransparent={true} />
         <div className="page-content bg-white">
           <PageTitle motherMenu="Project" activeMenu="Project " placement="Projects Page Banner" />
@@ -305,10 +308,10 @@ function PortfolioItem() {
 
       <section id="portfolio-gallery" className="content-inner-2" data-content="PROJECT" style={{ paddingBottom: '30px' }}>										
         <div className="container">
-          <div className="section-head text-center" style={{ marginBottom: '50px' }}>
+          <div className="section-head text-center reveal-up" style={{ marginBottom: '50px' }}>
             <p
               style={{
-                color: '#c8932e',
+                color: '#0284c7',
                 fontSize: '15px',
                 fontWeight: 600,
                 letterSpacing: '3px',
@@ -333,18 +336,10 @@ function PortfolioItem() {
             >
               {tag === 'Ongoing Projects' ? 'Ongoing Projects' : 'Best Designs'}
             </h2>
-            <span
-              style={{
-                display: 'inline-block',
-                width: '60px',
-                height: '3px',
-                background: '#c8932e',
-                borderRadius: '2px',
-              }}
-            />
+            <div className="reveal-line mx-auto" style={{ margin: '0 auto' }}></div>
           </div>
           {tag !== 'Ongoing Projects' && (
-            <div className="row">
+            <div className="row reveal-fade delay-1">
               <div className="col-lg-12 text-center">
                 <div className="site-filters filter-style1 clearfix m-b20">
                   <ul className="filters" data-toggle="buttons">

@@ -5,6 +5,7 @@ import Header from './../Layout/Header';
 import Footer2 from './../Layout/Footer2';
 import PageTitle from './../Layout/PageTitle';
 import { applyMetaTags } from '../../utils/meta';
+import ScrollRevealInit from '../../utils/ScrollRevealInit';
 import dpic1 from './../../images/blog/default/pic1.jpg';
 
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
@@ -91,7 +92,7 @@ export default function ServicesDetails() {
     <Fragment>
       <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#3b46a2', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#0284c7', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       </div>
       <Footer2 />
     </Fragment>
@@ -102,7 +103,7 @@ export default function ServicesDetails() {
       <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
         <p style={{ color: '#c0392b' }}>{error || 'Service not found'}</p>
-        <Link to="/" style={{ color: '#3b46a2', fontWeight: 600 }}>Back to Home</Link>
+        <Link to="/" style={{ color: '#0284c7', fontWeight: 600 }}>Back to Home</Link>
       </div>
       <Footer2 />
     </Fragment>
@@ -113,6 +114,7 @@ export default function ServicesDetails() {
 
   return (
     <Fragment>
+      <ScrollRevealInit />
       <Header isTransparent={false} />
       <PageTitle motherMenu="Services" activeMenu={service.title || service.service} placement="Services Details Banner" />
 
@@ -124,17 +126,17 @@ export default function ServicesDetails() {
             <div className="col-lg-8 mb-5 mb-lg-0">
               
               {/* Main Large Image */}
-              <div style={{ marginBottom: 35, borderRadius: '8px', overflow: 'hidden' }}>
+              <div className="reveal-img img-zoom-wrap" style={{ marginBottom: 35, borderRadius: '8px', overflow: 'hidden' }}>
                  <img src={serviceImages[0]} alt={service.title || service.service} style={{ width: '100%', height: 450, objectFit: 'cover' }} />
               </div>
 
               {/* Service Title */}
-              <h2 style={{ fontSize: 32, fontWeight: 700, color: '#3b46a2', marginBottom: 20 }}>
+              <h2 className="reveal-left" style={{ fontSize: 32, fontWeight: 700, color: '#0284c7', marginBottom: 20 }}>
                 {service.title || service.service}
               </h2>
 
               {/* Description with Drop Cap */}
-              <div style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root', textAlign: 'justify' }}>
+              <div className="reveal-up delay-1" style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root', textAlign: 'justify' }}>
                 {service.description ? (
                   <p style={{ textAlign: 'justify' }}>
                     <span style={{ 
@@ -143,7 +145,7 @@ export default function ServicesDetails() {
                       lineHeight: '70px', 
                       fontWeight: 700, 
                       color: '#fff', 
-                      background: '#3b46a2',
+                      background: '#0284c7',
                       width: '70px',
                       height: '70px',
                       textAlign: 'center',
@@ -211,13 +213,13 @@ export default function ServicesDetails() {
                 if (list.length === 0) return null;
                 
                 return (
-                  <div style={{ marginTop: 50, marginBottom: 50 }}>
-                    <h3 style={{ fontSize: 28, fontWeight: 700, color: '#3b46a2', marginBottom: 25, borderBottom: '2px solid #f0f0f0', paddingBottom: '15px' }}>
-                      <span style={{ color: '#3b46a2' }}>Services</span> Included
+                  <div className="reveal-up delay-2" style={{ marginTop: 50, marginBottom: 50 }}>
+                    <h3 style={{ fontSize: 28, fontWeight: 700, color: '#0284c7', marginBottom: 25, borderBottom: '2px solid #f0f0f0', paddingBottom: '15px' }}>
+                      <span style={{ color: '#0284c7' }}>Services</span> Included
                     </h3>
                     <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', listStyle: 'none', padding: 0 }}>
                       {list.map((item, idx) => (
-                        <li key={idx} style={{ 
+                        <li key={idx} className={`reveal-up delay-${(idx % 4) + 1}`} style={{ 
                           display: 'flex', 
                           alignItems: 'center', 
                           color: '#333', 
@@ -226,16 +228,16 @@ export default function ServicesDetails() {
                           padding: '14px 18px',
                           background: '#fff',
                           border: '1px solid #eee',
-                          borderRadius: '6px',
+                          borderRadius: '8px',
                           boxShadow: '0 2px 8px rgba(0,0,0,0.02)',
                           transition: 'all 0.3s ease',
                           cursor: 'default'
                         }}
                         onMouseEnter={(e) => { 
-                          e.currentTarget.style.borderColor = '#3b46a2';
+                          e.currentTarget.style.borderColor = '#0284c7';
                           e.currentTarget.style.transform = 'translateY(-3px)'; 
-                          e.currentTarget.style.boxShadow = '0 6px 15px rgba(59,70,162,0.15)';
-                          e.currentTarget.style.color = '#3b46a2';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(2,132,199,0.15)';
+                          e.currentTarget.style.color = '#0284c7';
                         }}
                         onMouseLeave={(e) => { 
                           e.currentTarget.style.borderColor = '#eee'; 
@@ -251,8 +253,8 @@ export default function ServicesDetails() {
                             width: '26px', 
                             height: '26px', 
                             borderRadius: '50%', 
-                            background: 'rgba(59,70,162,0.1)',
-                            color: '#3b46a2',
+                            background: 'rgba(56, 189, 248, 0.12)',
+                            color: '#0284c7',
                             marginRight: '12px',
                             flexShrink: 0
                           }}>
@@ -271,7 +273,7 @@ export default function ServicesDetails() {
             </div>
 
             {/* ── RIGHT COLUMN (Sidebar) ── */}
-            <div className="col-lg-4 pl-lg-5">
+            <div className="col-lg-4 reveal-right pl-lg-5">
               
               {/* Services List Menu */}
               <div style={{ marginBottom: 40 }}>
@@ -286,20 +288,21 @@ export default function ServicesDetails() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            background: isActive ? '#3b46a2' : '#f5f6f8',
-                            color: isActive ? '#fff' : '#222',
+                            background: isActive ? 'linear-gradient(135deg, #0284c7 0%, #0284c7 100%)' : '#f8fafc',
+                            color: isActive ? '#fff' : '#1e293b',
                             padding: '18px 25px',
-                            fontWeight: 600,
+                            fontWeight: 700,
                             fontSize: 14,
                             textTransform: 'uppercase',
                             textDecoration: 'none',
                             transition: 'all 0.3s ease',
-                            borderRadius: '6px',
-                            border: 'none'
+                            borderRadius: '10px',
+                            border: isActive ? 'none' : '1px solid #e2e8f0',
+                            boxShadow: isActive ? '0 6px 20px rgba(2, 132, 199, 0.3)' : 'none'
                           }}
                         >
                           {s.title || s.service}
-                          <FaArrowRight style={{ color: isActive ? '#fff' : '#3b46a2', fontSize: 14 }} />
+                          <FaArrowRight style={{ color: isActive ? '#fff' : '#0284c7', fontSize: 14 }} />
                         </Link>
                       </li>
                     );
@@ -326,7 +329,7 @@ export default function ServicesDetails() {
 
       {/* Full-width Primary Blue Banner */}
       <div style={{ 
-        background: '#3b46a2',
+        background: '#0284c7',
         padding: '50px 0', 
       }}>
         <div className="container">
@@ -346,7 +349,7 @@ export default function ServicesDetails() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 background: '#fff',
-                color: '#3b46a2',
+                color: '#0284c7',
                 fontWeight: 700,
                 fontSize: 15,
                 padding: '12px 30px',

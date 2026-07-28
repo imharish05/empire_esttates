@@ -43,7 +43,7 @@ class Header extends Component {
     // Sticky header scroll listener
     this.handleScroll = () => {
       const currentScrollY = Math.max(window.scrollY, 0);
-      const isDesktop = window.innerWidth >= 992;
+      const isDesktop = window.innerWidth >= 1200;
 
       // Keep the original header visible while the page is at the beginning.
       if (currentScrollY <= 10) {
@@ -76,7 +76,7 @@ class Header extends Component {
         this.measureHeader();
       }
 
-      if (window.innerWidth < 992) {
+      if (window.innerWidth < 1200) {
         this.setState({ isHeaderVisible: true });
       }
     };

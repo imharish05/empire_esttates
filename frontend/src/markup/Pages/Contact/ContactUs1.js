@@ -85,30 +85,30 @@ const ContactUs1 = () => {
                 <section className="content-inner-1" data-content="ABOUT US">
                     <div className="container">
                         <div className="row align-items-center">
-                            <div className="col-lg-4 col-md-5 col-sm-12">
+                            <div className="col-lg-4 col-md-5 col-sm-12 reveal-left">
                                 <div className="section-head m-b30">
                                     <h2 className="title">Do You Have Any Question?</h2>
-                                    <div className="dlab-separator bg-primary"></div>
-                                    <h5 className="title-small">CONTACT US</h5>
+                                    <div className="reveal-line" style={{ marginBottom: '14px' }}></div>
+                                    <h5 className="title-small" style={{ color: '#0284c7' }}>CONTACT US</h5>
                                 </div>
                                 <ul className="contact-question">
-                                    <li>
+                                    <li className="reveal-up delay-1">
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaMapMarkerAlt style={{ color: '#a4711e', fontSize: '20px' }} />
+                                            <FaMapMarkerAlt style={{ color: '#0284c7', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Address</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>{footerConfig.contact.address}</p>
                                     </li>
-                                    <li>
+                                    <li className="reveal-up delay-2">
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaRegEnvelope style={{ color: '#a4711e', fontSize: '20px' }} />
+                                            <FaRegEnvelope style={{ color: '#0284c7', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Email</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>
                                             <a
                                                 href={`mailto:${footerConfig.contact.email}`}
                                                 style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.color = '#a4711e'}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#0284c7'}
                                                 onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
                                                 title="Send email"
                                             >
@@ -116,16 +116,16 @@ const ContactUs1 = () => {
                                             </a>
                                         </p>
                                     </li>
-                                    <li>
+                                    <li className="reveal-up delay-3">
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
-                                            <FaPhone style={{ color: '#a4711e', fontSize: '20px' }} />
+                                            <FaPhone style={{ color: '#0284c7', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Phone</h4>
                                         </div>
                                         <p style={{ marginLeft: '30px' }}>
                                             <a
                                                 href={`tel:+91${footerConfig.contact.phone.replace(/\s+/g, '')}`}
                                                 style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
-                                                onMouseEnter={e => e.currentTarget.style.color = '#a4711e'}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#0284c7'}
                                                 onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
                                                 title="Call phone number"
                                             >
@@ -135,7 +135,7 @@ const ContactUs1 = () => {
                                     </li>
                                 </ul>
                             </div>
-                            <div className="col-lg-8 col-md-7 col-sm-12 m-b30">
+                            <div className="col-lg-8 col-md-7 col-sm-12 m-b30 reveal-right">
                                 <form className="contact-box dzForm p-a30 border-1" onSubmit={handleSubmit}>
                                     <h3 className="title-box">Write us a few words about your project and we’ll prepare a proposal for you within 24 hours</h3>
                                     
@@ -182,7 +182,7 @@ const ContactUs1 = () => {
                                             </div>
                                         </div>
                                         <div className="col-lg-12 col-md-12">
-                                            <button type="submit" className="btn btn-primary btn-lg" disabled={loading}>
+                                            <button type="submit" className="btn btn-primary btn-lg" disabled={loading} style={{ background: '#0284c7', border: 'none', borderRadius: '10px', boxShadow: '0 6px 20px rgba(2, 132, 199, 0.35)', fontWeight: '700', padding: '14px 36px' }}>
                                                 {loading ? 'Sending...' : 'Get A Free Quote!'}
                                             </button>
                                         </div>

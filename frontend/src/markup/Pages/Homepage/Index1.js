@@ -73,6 +73,34 @@ class Index1 extends React.Component{
 		
 		const API_BASE = process.env.REACT_APP_API_URL || 'https://empireesttatesapi.freshmindz.in';
 		const API_URL = `${API_BASE}`;
+
+		// ── Scroll Reveal (IntersectionObserver) ──────────────────────────
+		const revealSelectors = [
+			'.reveal-up', '.reveal-left', '.reveal-right',
+			'.reveal-scale', '.reveal-fade', '.reveal-img',
+			'.reveal-badge', '.reveal-line', '.reveal-wipe'
+		].join(',');
+
+		this._revealObserver = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					entry.target.classList.add('is-visible');
+					this._revealObserver.unobserve(entry.target);
+				}
+			});
+		}, { root: null, rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+
+		// Observe all reveal elements that exist now
+		document.querySelectorAll(revealSelectors).forEach(el => this._revealObserver.observe(el));
+
+		// Also observe any that are added dynamically after data loads
+		this._revealMutationObserver = new MutationObserver(() => {
+			document.querySelectorAll(`${revealSelectors}:not(.is-visible)`).forEach(el => {
+				this._revealObserver.observe(el);
+			});
+		});
+		this._revealMutationObserver.observe(document.body, { childList: true, subtree: true });
+		// ─────────────────────────────────────────────────────────────────
 		
 		fetch(`${API_URL}/services`)
 			.then(res => {
@@ -159,6 +187,8 @@ class Index1 extends React.Component{
 
 	componentWillUnmount() {
 		window.removeEventListener('keydown', this.handleKeyDown);
+		if (this._revealObserver) this._revealObserver.disconnect();
+		if (this._revealMutationObserver) this._revealMutationObserver.disconnect();
 	}
 
 	handleKeyDown = (e) => {
@@ -208,32 +238,95 @@ class Index1 extends React.Component{
 					<HomeSlider />
 					{/* <!-- Main Slider End--> */}
 					<style>{`
-					@media only screen and (max-width: 575px) {
-						.home-section-wrap {
-							padding-top: 30px !important;
-							padding-bottom: 30px !important;
+						.about-title-responsive {
+							color: #000;
+							font-size: 42px;
+							font-weight: 800;
+							line-height: 1.2;
+							margin-bottom: 16px;
 						}
-					}
-					@media only screen and (max-width: 480px) {
-						.home-section-wrap {
-							padding-top: 20px !important;
-							padding-bottom: 20px !important;
+						.about-img-responsive {
+							width: 100%;
+							height: 520px;
+							object-fit: cover;
+							display: block;
 						}
-					}
-				`}</style>
+						.about-badge-responsive {
+							position: absolute;
+							bottom: 30px;
+							left: 40px;
+							background: rgba(255,255,255,0.96);
+							backdrop-filter: blur(10px);
+							border-radius: 12px;
+							padding: 14px 20px;
+							box-shadow: 0 15px 40px rgba(2, 132, 199, 0.2);
+							display: flex;
+							align-items: center;
+							gap: 12px;
+							border: 1px solid rgba(56, 189, 248, 0.3);
+						}
+						.section-title-responsive {
+							font-size: 40px;
+							font-weight: 800;
+							color: #0f172a;
+						}
+						@media only screen and (max-width: 991px) {
+							.about-title-responsive {
+								font-size: 32px !important;
+							}
+							.about-img-responsive {
+								height: 380px !important;
+							}
+							.about-badge-responsive {
+								left: 20px !important;
+								bottom: 20px !important;
+							}
+							.section-title-responsive {
+								font-size: 32px !important;
+							}
+							.about-content-col {
+								padding-right: 15px !important;
+							}
+							.about-img-col {
+								padding-left: 15px !important;
+							}
+						}
+						@media only screen and (max-width: 575px) {
+							.home-section-wrap {
+								padding-top: 35px !important;
+								padding-bottom: 35px !important;
+							}
+							.about-title-responsive {
+								font-size: 26px !important;
+							}
+							.about-img-responsive {
+								height: 280px !important;
+							}
+							.about-badge-responsive {
+								position: relative !important;
+								bottom: auto !important;
+								left: auto !important;
+								margin-top: 15px;
+								width: 100%;
+								justify-content: center;
+							}
+						}
+					`}</style>
 
-					
 					{/* Section-3 (About Us - Investment Benefits) */}
-					<section className="content-inner about-box home-section-wrap" data-content="ABOUT US" id="sidenav_aboutUs" style={{background: '#fff', padding: '80px 0', position: 'relative', overflow: 'hidden'}}>
+					<section className="content-inner about-box home-section-wrap" data-content="ABOUT US" id="sidenav_aboutUs" style={{background: 'linear-gradient(135deg, #ffffff 0%, #f0f9ff 100%)', padding: '90px 0', position: 'relative', overflow: 'hidden'}}>
 						<div className="container" style={{position: 'relative', zIndex: 1}}>
 							<div className="row align-items-center">
 								{/* Left Content - Benefits */}
-								<div className="col-md-7 col-lg-7" style={{paddingRight: '40px'}}>
-									<h2 style={{color: '#000', fontSize: '42px', fontWeight: '800', lineHeight: '1.2', marginBottom: '16px'}}>
-										Invest In Land,<br/><span style={{color: '#000'}}>Invest In Your Future</span>
+								<div className="col-md-7 col-lg-7 about-content-col" style={{paddingRight: '40px'}}>
+									<div style={{display: 'inline-block', background: 'rgba(2, 132, 199, 0.1)', color: '#0284c7', padding: '6px 16px', borderRadius: '30px', fontWeight: '700', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '16px'}}>
+										WHY INVEST WITH US
+									</div>
+									<h2 className="about-title-responsive reveal-left">
+										Invest In Land,<br/><span style={{color: '#0284c7'}}>Invest In Your Future</span>
 									</h2>
-									<div style={{width: '60px', height: '4px', background: 'linear-gradient(90deg, #3b46a2, #4c4968)', borderRadius: '2px', marginBottom: '20px'}}></div>
-									<h5 style={{color: '#3b46a2', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '30px', textTransform: 'uppercase', fontSize: '13px'}}>Premium Plots <span style={{margin: '0 8px', color: '#3b46a2'}}>|</span> Trusted Legacy <span style={{margin: '0 8px', color: '#3b46a2'}}>|</span> Brighter Tomorrow</h5>
+									<div className="reveal-line" style={{marginBottom: '20px', background: '#0284c7', height: '4px', width: '70px', borderRadius: '2px'}}></div>
+									<h5 className="reveal-fade delay-2" style={{color: '#0284c7', fontWeight: '700', letterSpacing: '1.5px', marginBottom: '30px', textTransform: 'uppercase', fontSize: '13px'}}>Premium Plots <span style={{margin: '0 8px', color: '#0284c7'}}>|</span> Trusted Legacy <span style={{margin: '0 8px', color: '#0284c7'}}>|</span> Brighter Tomorrow</h5>
 									
 									<div className="row mb-4">
 										{[
@@ -244,37 +337,37 @@ class Index1 extends React.Component{
 											{ icon: <FaFileContract/>, title: 'CLEAR LEGAL DOCUMENTATION', desc: '100% Transparency with clear titles.' },
 											{ icon: <FaUniversity/>, title: 'BANK LOAN ASSISTANCE', desc: 'Easy financing options to make your investment simple.' }
 										].map((item, index) => (
-											<div className="col-md-6 mb-4" key={index} style={{display: 'flex', gap: '15px'}}>
-												<div style={{minWidth: '45px', height: '45px', background: 'rgba(59, 70, 162, 0.1)', borderRadius: '8px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b46a2', fontSize: '20px'}}>
+											<div className={`col-md-6 mb-4 reveal-up delay-${index + 1}`} key={index} style={{display: 'flex', gap: '15px'}}>
+												<div style={{minWidth: '46px', height: '46px', background: '#0284c7', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#fff', fontSize: '18px', flexShrink: 0, boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)', transition: 'transform 0.3s'}}>
 													{item.icon}
 												</div>
 												<div>
-													<h5 style={{color: '#000', fontSize: '14px', fontWeight: '800', marginBottom: '4px'}}>{item.title}</h5>
-													<p style={{color: '#666', fontSize: '13px', lineHeight: '1.5', margin: 0}}>{item.desc}</p>
+													<h5 style={{color: '#0f172a', fontSize: '14px', fontWeight: '800', marginBottom: '4px'}}>{item.title}</h5>
+													<p style={{color: '#64748b', fontSize: '13px', lineHeight: '1.5', margin: 0}}>{item.desc}</p>
 												</div>
 											</div>
 										))}
 									</div>
 
-									<Link to={"/about-us"} style={{display: 'inline-flex', alignItems: 'center', gap: '10px', background: 'linear-gradient(90deg, #3b46a2, #4c4968)', color: '#fff', padding: '14px 32px', borderRadius: '4px', fontWeight: '700', textDecoration: 'none', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase', transition: 'all 0.3s'}}>
+									<Link to={"/about-us"} style={{display: 'inline-flex', alignItems: 'center', gap: '10px', background: '#0284c7', color: '#fff', padding: '14px 34px', borderRadius: '8px', fontWeight: '700', textDecoration: 'none', fontSize: '14px', letterSpacing: '1px', textTransform: 'uppercase', boxShadow: '0 6px 20px rgba(2, 132, 199, 0.35)', transition: 'all 0.3s'}}>
 										Discover More <FaArrowRight />
 									</Link>
 								</div>
 
 								{/* Right Image */}
-								<div className="col-md-5 col-lg-5 mt-5 mt-md-0" style={{position: 'relative', paddingLeft: '20px'}}>
-									<div style={{position: 'relative', borderRadius: '12px', overflow: 'hidden', boxShadow: '0 30px 80px rgba(0,0,0,0.5)'}}>
-										<img src={aboutImg} alt="About Empire Estates" style={{width: '100%', height: '520px', objectFit: 'cover', display: 'block'}} />
-										<div style={{position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(15,52,96,0.6) 0%, transparent 60%)'}}></div>
+								<div className="col-md-5 col-lg-5 mt-5 mt-md-0 about-img-col reveal-right" style={{position: 'relative', paddingLeft: '20px'}}>
+									<div className="img-zoom-wrap" style={{position: 'relative', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(2, 132, 199, 0.2)'}}>
+										<img src={aboutImg} alt="About Empire Estates" className="about-img-responsive" />
+										<div style={{position: 'absolute', inset: 0, background: 'rgba(15,23,42,0.5)'}}></div>
 									</div>
 									{/* Floating Badge */}
-									<div style={{position: 'absolute', bottom: '30px', left: '40px', background: 'rgba(255,255,255,0.95)', borderRadius: '10px', padding: '14px 20px', boxShadow: '0 10px 40px rgba(0,0,0,0.3)', display: 'flex', alignItems: 'center', gap: '12px'}}>
-										<div style={{width: '44px', height: '44px', borderRadius: '50%', background: 'linear-gradient(135deg, #3b46a2, #4c4968)', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+									<div className="about-badge-responsive">
+										<div style={{width: '46px', height: '46px', borderRadius: '50%', background: '#0284c7', display: 'flex', alignItems: 'center', justifyContent: 'center', boxShadow: '0 4px 14px rgba(2, 132, 199, 0.4)', flexShrink: 0}}>
 											<FaShieldAlt style={{color: '#fff', fontSize: '20px'}} />
 										</div>
 										<div>
-											<div style={{fontWeight: '800', fontSize: '16px', color: '#3b46a2'}}>CMDA & RERA APPROVED</div>
-											<div style={{fontSize: '12px', color: '#888'}}>100% Legal & Verified</div>
+											<div style={{fontWeight: '800', fontSize: '15px', color: '#0f172a'}}>CMDA &amp; RERA APPROVED</div>
+											<div style={{fontSize: '12px', color: '#0284c7', fontWeight: '700'}}>100% Legal &amp; Verified Titles</div>
 										</div>
 									</div>
 								</div>
@@ -282,32 +375,33 @@ class Index1 extends React.Component{
 						</div>
 					</section>
 
-
-
-
-					{/* Our Services Section Start */}
-					<section className="content-inner-2 home-section-wrap" data-content="SERVICES" id="sidenav_services" style={{ padding: '80px 0' }}>
-						<div className="container">
+					{/* Our Services Section (Clean Premium Light Theme) */}
+					<section className="content-inner-2 home-section-wrap" data-content="SERVICES" id="sidenav_services" style={{ padding: '90px 0', background: '#ffffff', color: '#0f172a', position: 'relative', overflow: 'hidden' }}>
+						<div className="container" style={{position: 'relative', zIndex: 1}}>
 							<div className="row align-items-center" style={{ marginBottom: '50px' }}>
-								<div className="col-lg-8 col-md-12 mb-4 mb-lg-0 text-left">
-									<p style={{ color: '#3b46a2', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px' }}>WHAT WE DO</p>
-									<h2 className="title" style={{ fontSize: '40px', fontWeight: 700, color: '#1a1a1a' }}>Our Premium Services</h2>
-									<div className="dlab-separator bg-primary" style={{ margin: 0 }}></div>
+								<div className="col-lg-8 col-md-12 mb-4 mb-lg-0 text-left reveal-left">
+									<p style={{ color: '#0284c7', fontSize: '13px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '10px' }}>WHAT WE DO</p>
+									<h2 className="title" style={{ fontSize: '40px', fontWeight: 800, color: '#0f172a' }}>Our Premium Services</h2>
+									<div className="reveal-line" style={{ margin: 0, background: 'linear-gradient(90deg, #0284c7, #0284c7)', height: '4px', width: '70px', borderRadius: '2px' }}></div>
 								</div>
 								{this.state.servicesList && this.state.servicesList.length > 3 && (
 									<div className="col-lg-4 col-md-12 text-lg-right" style={{ textAlign: 'right' }}>
 										<Link to="/services-details" style={{
-											display: 'inline-block',
-											background: '#3b46a2',
+											display: 'inline-flex',
+											alignItems: 'center',
+											gap: '8px',
+											background: 'linear-gradient(135deg, #0284c7 0%, #0284c7 100%)',
 											color: '#fff',
 											padding: '12px 30px',
-											borderRadius: '4px',
+											borderRadius: '8px',
 											fontWeight: 700,
-											fontSize: '16px',
+											fontSize: '14px',
+											letterSpacing: '0.5px',
 											textDecoration: 'none',
-											boxShadow: '0 4px 15px rgba(59, 70, 162, 0.3)'
+											boxShadow: '0 4px 15px rgba(2, 132, 199, 0.3)',
+											transition: 'all 0.3s'
 										}}>
-											View All <FaArrowRight style={{ marginLeft: '8px' }} />
+											View All Services <FaArrowRight />
 										</Link>
 									</div>
 								)}
@@ -327,82 +421,74 @@ class Index1 extends React.Component{
 									const sImage = sImages.length > 0 ? sImages[0] : null;
 
 									return (
-									<div className="col-lg-4 col-md-6 mb-5" key={service.id || index}>
+									<div className={`col-lg-4 col-md-6 mb-4 reveal-up delay-${index + 1}`} key={service.id || index}>
 										<style>{`
 											.service-card-modern:hover .service-img-modern {
-												transform: scale(1.1);
+												transform: scale(1.08);
 											}
 										`}</style>
 										<div className="service-card-modern" style={{
-											background: '#fff',
-											borderRadius: '12px',
-											boxShadow: '0 10px 30px rgba(0,0,0,0.08)',
+											background: '#ffffff',
+											borderRadius: '16px',
+											border: '1px solid #e2e8f0',
 											overflow: 'hidden',
-											transition: 'all 0.4s ease',
+											transition: 'all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1)',
 											height: '100%',
 											display: 'flex',
 											flexDirection: 'column',
-											borderBottom: '4px solid transparent'
+											boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)'
 										}}
 										onMouseEnter={(e) => { 
-											e.currentTarget.style.transform = 'translateY(-10px)';
-											e.currentTarget.style.boxShadow = '0 20px 40px rgba(0,0,0,0.15)';
-											e.currentTarget.style.borderBottom = '4px solid #3b46a2';
+											e.currentTarget.style.transform = 'translateY(-8px)';
+											e.currentTarget.style.borderColor = '#0284c7';
+											e.currentTarget.style.boxShadow = '0 20px 45px rgba(2, 132, 199, 0.18)';
 										}}
 										onMouseLeave={(e) => { 
 											e.currentTarget.style.transform = 'translateY(0)';
-											e.currentTarget.style.boxShadow = '0 10px 30px rgba(0,0,0,0.08)';
-											e.currentTarget.style.borderBottom = '4px solid transparent';
+											e.currentTarget.style.borderColor = '#e2e8f0';
+											e.currentTarget.style.boxShadow = '0 10px 30px rgba(15, 23, 42, 0.08)';
 										}}>
 											<Link to={`/services-details/${service.slug}`} style={{textDecoration: 'none', display: 'flex', flexDirection: 'column', height: '100%'}}>
 												{/* Card Image Header */}
 												<div style={{
-													height: '240px',
+													height: '220px',
 													width: '100%',
 													position: 'relative',
 													overflow: 'hidden',
-													background: sImage ? '#f9f9f9' : 'linear-gradient(135deg, #3b46a2 0%, #403d59 100%)'
+													background: sImage ? '#f8fafc' : 'linear-gradient(135deg, #0284c7 0%, #0284c7 100%)'
 												}}>
 													{sImage ? (
 														<img src={sImage} alt={service.title || service.service} style={{width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)'}} className="service-img-modern" />
 													) : (
 														<div style={{
 															width: '100%', height: '100%',
-															color: '#3b46a2',
+															color: '#0284c7',
 															display: 'flex', alignItems: 'center', justifyContent: 'center',
-															fontSize: '72px',
+															fontSize: '64px',
 															transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)'
 														}} className="service-img-modern">
 															{icon}
 														</div>
 													)}
-													{/* Overlay gradient at bottom of image */}
-													<div style={{
-														position: 'absolute',
-														bottom: 0, left: 0, right: 0,
-														height: '100px',
-														background: 'linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 100%)'
-													}}></div>
 												</div>
 												
 												{/* Card Content */}
-												<div style={{ padding: '30px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+												<div style={{ padding: '28px', flex: 1, display: 'flex', flexDirection: 'column', background: '#ffffff' }}>
 													<h4 style={{ 
-														fontSize: '22px', 
+														fontSize: '20px', 
 														fontWeight: 800, 
-														color: '#3b46a2',
-														marginBottom: '15px',
+														color: '#0f172a',
+														marginBottom: '12px',
 														lineHeight: '1.3'
 													}}>
 														{service.title || service.service}
 													</h4>
 													
 													<p style={{ 
-														color: '#666', 
-														fontSize: '15px', 
+														color: '#475569', 
+														fontSize: '14px', 
 														lineHeight: '1.6', 
 														margin: 0,
-														textAlign: 'justify',
 														display: '-webkit-box',
 														WebkitLineClamp: 3,
 														WebkitBoxOrient: 'vertical',
@@ -413,17 +499,16 @@ class Index1 extends React.Component{
 													</p>
 													
 													<div style={{
-														marginTop: '25px',
+														marginTop: '22px',
 														display: 'flex',
 														alignItems: 'center',
-														color: '#3b46a2',
+														color: '#0284c7',
 														fontWeight: 700,
-														fontSize: '14px',
+														fontSize: '13px',
 														textTransform: 'uppercase',
-														letterSpacing: '1px',
-														transition: 'color 0.3s'
+														letterSpacing: '1px'
 													}}>
-														Read More <FaArrowRight style={{marginLeft: '8px'}} />
+														Read Details <FaArrowRight style={{marginLeft: '8px'}} />
 													</div>
 												</div>
 											</Link>
@@ -433,14 +518,13 @@ class Index1 extends React.Component{
 							</div>
 						</div>
 					</section>
-					{/* Our Services Section End */}
 
-					{/* Custom Highlights Section */}
+					{/* Custom Highlights Section (Warm Champagne & Gold Theme) */}
 					<style>{`
 						.custom-flip-card {
 							background-color: transparent;
 							perspective: 1000px;
-							height: 320px;
+							height: 330px;
 							width: 100%;
 						}
 						.custom-flip-card-inner {
@@ -448,7 +532,7 @@ class Index1 extends React.Component{
 							width: 100%;
 							height: 100%;
 							text-align: center;
-							transition: transform 0.6s;
+							transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 							transform-style: preserve-3d;
 						}
 						.custom-flip-card:hover .custom-flip-card-inner {
@@ -460,9 +544,9 @@ class Index1 extends React.Component{
 							height: 100%;
 							-webkit-backface-visibility: hidden;
 							backface-visibility: hidden;
-							border-radius: 8px;
-							padding: 40px 30px;
-							box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+							border-radius: 16px;
+							padding: 35px 28px;
+							box-shadow: 0 12px 30px rgba(15, 23, 42, 0.08);
 							display: flex;
 							flex-direction: column;
 							justify-content: center;
@@ -474,8 +558,8 @@ class Index1 extends React.Component{
 							content: "";
 							position: absolute;
 							inset: 0;
-							background: rgba(26, 26, 34, 0.7); /* Dark overlay */
-							border-radius: 8px;
+							background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.85) 100%);
+							border-radius: 16px;
 							z-index: 1;
 						}
 						.custom-flip-content {
@@ -484,35 +568,40 @@ class Index1 extends React.Component{
 						}
 						.custom-flip-back {
 							transform: rotateY(180deg);
-							border-bottom: 3px solid #a4711e;
-							background-color: #2c2c39; /* Solid dark color on the back */
+							border-top: 4px solid #a4711e;
+							background: linear-gradient(145deg, #1e293b 0%, #0f172a 100%);
 						}
 					`}</style>
-					<section className="content-inner-2 home-section-wrap" style={{ padding: '80px 0 60px' }}>
+					<section className="content-inner-2 home-section-wrap" style={{ padding: '90px 0 70px', background: '#f8fafc' }}>
 						<div className="container">
 							{/* Header Row */}
 							<div className="row align-items-center" style={{ marginBottom: '50px' }}>
-								<div className="col-lg-8 col-md-12 mb-4 mb-lg-0">
-									<h2 className="title" style={{ fontSize: '36px', fontWeight: 800, color: '#1a1a1a', marginBottom: '10px' }}>
-										Find Your Dream Plot & Build Your Future Today!
+								<div className="col-lg-8 col-md-12 mb-4 mb-lg-0 reveal-left">
+									<div style={{display: 'inline-block', background: 'rgba(2, 132, 199, 0.1)', color: '#0284c7', padding: '6px 16px', borderRadius: '30px', fontWeight: '700', fontSize: '12px', letterSpacing: '2px', textTransform: 'uppercase', marginBottom: '14px'}}>
+										OUR ADVANTAGES
+									</div>
+									<h2 className="title" style={{ fontSize: '38px', fontWeight: 800, color: '#0f172a', marginBottom: '10px' }}>
+										Find Your Dream Plot &amp; Build Your Future
 									</h2>
-									<p style={{ fontSize: '16px', color: '#666', margin: 0 }}>
-										Let us do what we do best — helping you secure the perfect land for your unique vision.
+									<p className="reveal-fade delay-2" style={{ fontSize: '16px', color: '#64748b', margin: 0 }}>
+										Helping you secure high-appreciation land for your unique residential vision.
 									</p>
 								</div>
-								<div className="col-lg-4 col-md-12 text-lg-right" style={{ textAlign: 'right' }}>
+								<div className="col-lg-4 col-md-12 text-lg-right" style={{ textAlign: 'left' }}>
 									<Link to="/projects" style={{
-										display: 'inline-block',
-										background: '#3b46a2',
+										display: 'inline-flex',
+										alignItems: 'center',
+										gap: '8px',
+										background: '#0284c7',
 										color: '#fff',
 										padding: '12px 30px',
-										borderRadius: '4px',
+										borderRadius: '8px',
 										fontWeight: 700,
-										fontSize: '16px',
+										fontSize: '14px',
 										textDecoration: 'none',
-										boxShadow: '0 4px 15px rgba(59, 70, 162, 0.3)'
+										boxShadow: '0 4px 15px rgba(2, 132, 199, 0.3)'
 									}}>
-										Explore <FaArrowRight style={{ marginLeft: '8px' }} />
+										Explore Projects <FaArrowRight />
 									</Link>
 								</div>
 							</div>
@@ -520,21 +609,21 @@ class Index1 extends React.Component{
 							{/* Cards Row */}
 							<div className="row">
 								{/* Card 1 */}
-								<div className="col-lg-4 col-md-6 mb-4">
+								<div className="col-lg-4 col-md-6 mb-4 reveal-scale delay-1">
 									<div className="custom-flip-card">
 										<div className="custom-flip-card-inner">
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services1})` }}>
 												<div className="custom-flip-content">
-													<div style={{ marginBottom: '25px' }}>
-														<FaMapMarkedAlt style={{ fontSize: '60px', color: '#fff' }} />
+													<div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,255,255,0.3)' }}>
+														<FaMapMarkedAlt style={{ fontSize: '32px', color: '#38bdf8' }} />
 													</div>
-													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>Strategic Locations</h4>
+													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 800, margin: 0 }}>Strategic Locations</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Strategic Locations</h4>
-													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>We select the most high-growth areas to ensure maximum appreciation and convenience for your investment.</p>
+													<h4 style={{ color: '#38bdf8', fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>Strategic Locations</h4>
+													<p style={{ color: '#cbd5e1', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>We select high-growth infrastructure corridors to ensure rapid appreciation and maximum ROI.</p>
 												</div>
 											</div>
 										</div>
@@ -542,21 +631,21 @@ class Index1 extends React.Component{
 								</div>
 								
 								{/* Card 2 */}
-								<div className="col-lg-4 col-md-6 mb-4">
+								<div className="col-lg-4 col-md-6 mb-4 reveal-scale delay-2">
 									<div className="custom-flip-card">
 										<div className="custom-flip-card-inner">
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services2})` }}>
 												<div className="custom-flip-content">
-													<div style={{ marginBottom: '25px' }}>
-														<FaShieldAlt style={{ fontSize: '60px',  color: '#fff' }} />
+													<div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,255,255,0.3)' }}>
+														<FaShieldAlt style={{ fontSize: '32px', color: '#c9953a' }} />
 													</div>
-													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>CMDA & RERA APPROVED</h4>
+													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 800, margin: 0 }}>CMDA &amp; RERA Approved</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>CMDA & RERA APPROVED</h4>
-													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>Every plot comes with 100% clear titles, proper legal documentation, and full CMDA & RERA approval for complete peace of mind.</p>
+													<h4 style={{ color: '#c9953a', fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>CMDA &amp; RERA Approved</h4>
+													<p style={{ color: '#cbd5e1', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>100% clear titles, verified legal documentation, and full government approval guarantee complete security.</p>
 												</div>
 											</div>
 										</div>
@@ -564,21 +653,21 @@ class Index1 extends React.Component{
 								</div>
 								
 								{/* Card 3 */}
-								<div className="col-lg-4 col-md-6 mb-4">
+								<div className="col-lg-4 col-md-6 mb-4 reveal-scale delay-3">
 									<div className="custom-flip-card">
 										<div className="custom-flip-card-inner">
 											<div className="custom-flip-front" style={{ backgroundImage: `url(${services3})` }}>
 												<div className="custom-flip-content">
-													<div style={{ marginBottom: '25px' }}>
-														<FaHome style={{ fontSize: '60px',  color: '#fff' }} />
+													<div style={{ width: '70px', height: '70px', borderRadius: '50%', background: 'rgba(255,255,255,0.15)', backdropFilter: 'blur(8px)', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 20px', border: '1px solid rgba(255,255,255,0.3)' }}>
+														<FaHome style={{ fontSize: '32px', color: '#38bdf8' }} />
 													</div>
-													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 700, margin: 0 }}>Ready to Build</h4>
+													<h4 style={{ color: '#fff', fontSize: '22px', fontWeight: 800, margin: 0 }}>Ready to Build</h4>
 												</div>
 											</div>
 											<div className="custom-flip-back">
 												<div className="custom-flip-content">
-													<h4 style={{ color: '#3b46a2', fontSize: '22px', fontWeight: 700, marginBottom: '15px' }}>Ready to Build</h4>
-													<p style={{ color: '#e8e8e8', fontSize: '15px', margin: 0, lineHeight: '1.6' }}>Our layouts feature wide blacktop roads, streetlights, and gated security, making them perfectly ready for immediate villa construction.</p>
+													<h4 style={{ color: '#38bdf8', fontSize: '20px', fontWeight: 800, marginBottom: '14px' }}>Ready to Build</h4>
+													<p style={{ color: '#cbd5e1', fontSize: '14px', margin: 0, lineHeight: '1.6' }}>Blacktop roads, streetlights, and gated security make every layout fully ready for immediate home construction.</p>
 												</div>
 											</div>
 										</div>
@@ -588,12 +677,12 @@ class Index1 extends React.Component{
 						</div>
 					</section>
 
-					{/* Custom Highlights Section End */}
-
-					{/* Projects Section Start */}
-					<section className="content-inner-2" style={{ padding: '0 0 60px' }}>
-						<div className="section-head text-center" style={{marginBottom: '30px'}}>
-							<h2 className="title" style={{fontSize: '40px', fontWeight: 700, color: '#1a1a1a'}}>Our Projects</h2>
+					{/* Projects Section (Clean Modern Portfolio) */}
+					<section className="content-inner-2" style={{ padding: '90px 0 60px', background: '#ffffff' }}>
+						<div className="section-head text-center reveal-up" style={{marginBottom: '40px'}}>
+							<span style={{ color: '#0284c7', fontSize: '13px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '8px' }}>PORTFOLIO</span>
+							<h2 className="title" style={{fontSize: '40px', fontWeight: 800, color: '#0f172a'}}>Featured Land Developments</h2>
+							<div style={{ margin: '15px auto 0', background: 'linear-gradient(90deg, #0284c7, #0284c7)', height: '4px', width: '60px', borderRadius: '2px' }}></div>
 						</div>
 						<div className="container-fluid px-0">
 							<div className="row m-0 g-0" style={{ rowGap: '16px' }}>
@@ -620,16 +709,14 @@ class Index1 extends React.Component{
 															display: 'block',
 															width: '100%', 
 															height: '100%', 
-															objectFit: 'cover',
-															transition: 'transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)',
-															transform: isHovered ? 'scale(1.08)' : 'scale(1)'
-														}} 
+															objectFit: 'cover'
+														}}
 													/>
 													<div
 														style={{
 															position: 'absolute',
 															inset: 0,
-															background: 'rgba(164, 113, 30, 0.7)',
+															background: 'rgba(15, 23, 42, 0.8)',
 															display: 'flex',
 															alignItems: 'center',
 															justifyContent: 'center',
@@ -638,7 +725,7 @@ class Index1 extends React.Component{
 															zIndex: 2
 														}}
 													>
-														<span style={{ color: '#ffffff', fontSize: '64px', fontWeight: '300', userSelect: 'none' }}>+</span>
+														<span style={{ color: '#ffffff', fontSize: '56px', fontWeight: '300', userSelect: 'none' }}>+</span>
 													</div>
 												</div>
 											</div>
@@ -648,15 +735,14 @@ class Index1 extends React.Component{
 							</div>
 						</div>
 					</section>
-					{/* Projects Section End */}
 
-					{/* Section-8 (Latest Blogs) Start */}
-					<section className="content-inner-2 home-section-wrap" data-content="BLOGS" id="sidenav_blogs" style={{padding: '80px 0'}}>
+					{/* Section-8 (Latest Blogs - Slate Blue Carousel Section) */}
+					<section className="content-inner-2 home-section-wrap" data-content="BLOGS" id="sidenav_blogs" style={{padding: '90px 0', background: '#f8fafc'}}>
 						<div className="container">
-							<div className="section-head text-center" style={{marginBottom: '50px'}}>
-								<p style={{color: '#3b46a2', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px'}}>OUR INSIGHTS</p>
-								<h2 className="title" style={{fontSize: '40px', fontWeight: 700, letterSpacing: '0.5px', margin: 0, marginBottom: '24px', color: '#1a1a1a'}}>Latest Blogs & News</h2>
-								<div className="dlab-separator bg-primary" style={{margin: '0 auto'}}></div>
+							<div className="section-head text-center reveal-up" style={{marginBottom: '50px'}}>
+								<span style={{color: '#0284c7', fontSize: '13px', fontWeight: 700, letterSpacing: '2px', textTransform: 'uppercase', display: 'block', marginBottom: '8px'}}>OUR INSIGHTS</span>
+								<h2 className="title" style={{fontSize: '40px', fontWeight: 800, color: '#0f172a', margin: 0}}>Latest Blogs &amp; Market News</h2>
+								<div style={{margin: '15px auto 0', background: '#0284c7', height: '4px', width: '60px', borderRadius: '2px'}}></div>
 							</div>
 							<div className="blog-slider-wrapper">
 								<Slider className="blog-carousel owl-carousel owl-btn-center-lr owl-btn-out" {...blogSliderSettings}>
@@ -665,69 +751,72 @@ class Index1 extends React.Component{
 									return (
 										<div key={blog.id || idx} className="item p-3">
 											<div style={{
-												background: '#fff',
-												borderRadius: '4px',
+												background: '#ffffff',
+												borderRadius: '16px',
 												overflow: 'hidden',
-												boxShadow: '0 2px 16px rgba(0,0,0,0.10)',
+												boxShadow: '0 10px 30px rgba(15, 23, 42, 0.08)',
+												border: '1px solid rgba(226, 232, 240, 0.8)',
 												height: '100%',
 												display: 'flex',
 												flexDirection: 'column',
-												transition: 'transform 0.3s ease, box-shadow 0.3s ease',
-												transform: isHovered ? 'translateY(-5px)' : 'translateY(0)',
+												transition: 'all 0.35s ease',
+												transform: isHovered ? 'translateY(-6px)' : 'translateY(0)',
 											}}
 											onMouseEnter={() => this.setState({ hoveredBlogIndex: idx })}
 											onMouseLeave={() => this.setState({ hoveredBlogIndex: null })}
 											>
-												<div style={{ height: '220px', overflow: 'hidden', background: '#e8e8e8' }}>
+												<div style={{ height: '210px', overflow: 'hidden', background: '#f1f5f9', position: 'relative' }}>
 													{blog.image ? (
-														<img src={blog.image} alt={blog.title || blog.heading} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+														<img src={blog.image} alt={blog.title || blog.heading} style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', transition: 'transform 0.5s ease', transform: isHovered ? 'scale(1.06)' : 'scale(1)' }} />
 													) : (
 														<div style={{
 															width: '100%', height: '100%', display: 'flex',
 															alignItems: 'center', justifyContent: 'center',
-															background: 'linear-gradient(135deg, #2c2c2c 0%, #444 100%)'
+															background: '#0284c7'
 														}}>
-															<i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#3b46a2', opacity: 0.6 }} />
+															<i className="fa fa-newspaper" style={{ fontSize: '48px', color: '#ffffff', opacity: 0.8 }} />
 														</div>
 													)}
 												</div>
-												<div style={{ padding: '22px 24px 28px', flex: 1, display: 'flex', flexDirection: 'column' }}>
+												<div style={{ padding: '24px', flex: 1, display: 'flex', flexDirection: 'column' }}>
 													<h4 style={{
-														fontSize: '18px', fontWeight: 700, color: '#1a1a1a',
-														lineHeight: '1.45', marginBottom: '20px', flex: 1,
+														fontSize: '18px', fontWeight: 800, color: '#0f172a',
+														lineHeight: '1.4', marginBottom: '18px', flex: 1,
 														display: '-webkit-box', WebkitLineClamp: 2,
 														WebkitBoxOrient: 'vertical', overflow: 'hidden',
-														minHeight: '53px'
+														minHeight: '50px'
 													}}>
 														{blog.title || blog.heading}
 													</h4>
 													<Link to={`/blogs/${blog.slug}`} style={{
-														display: 'inline-block',
-														background: '#3b46a2',
+														display: 'inline-flex',
+														alignItems: 'center',
+														justifyContent: 'center',
+														gap: '8px',
+														background: '#0284c7',
 														color: '#fff',
 														border: 'none',
-														borderRadius: '3px',
-														padding: '10px 22px',
+														borderRadius: '8px',
+														padding: '12px 20px',
 														fontWeight: 700,
-														fontSize: '14px',
-														cursor: 'pointer',
+														fontSize: '13px',
 														letterSpacing: '0.5px',
 														textDecoration: 'none',
 														textAlign: 'center',
-														transition: 'background 0.3s'
+														boxShadow: '0 4px 12px rgba(2, 132, 199, 0.25)',
+														transition: 'all 0.3s'
 													}}>
-														READ MORE
+														READ ARTICLE <FaArrowRight />
 													</Link>
 												</div>
 											</div>
 										</div>
-									)
+									);
 								})}
 								</Slider>
 							</div>
 						</div>
 					</section>
-					{/* Section-8 (Latest Blogs) End */}
 
 				</div>
 				<Footer2 />	

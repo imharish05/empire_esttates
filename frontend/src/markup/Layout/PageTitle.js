@@ -97,32 +97,45 @@ const PageTitle = ({ motherMenu, activeMenu, placement, className = '' }) => {
   } : {};
 
   return (
-    <div className={`dlab-bnr-inr ${className}`.trim()} style={{ position: 'relative', minHeight: '280px', display: 'flex', alignItems: 'center', justifyContent: 'center', ...bgStyle }}>
-      {/* Dark overlay */}
+    <div className={`dlab-bnr-inr ${className}`.trim()} style={{ position: 'relative', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', ...bgStyle }}>
+      {/* Dark gradient overlay */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'rgba(0, 0, 0, 0.55)',
+        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.6) 100%)',
         zIndex: 1,
       }} />
       <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>
-        <div className="dlab-bnr-inr-entry" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: '100%' }}>
-          <h1 style={{ color: '#ffffff', fontSize: '36px', fontWeight: '700', textTransform: 'uppercase', marginBottom: '10px', textShadow: '0 2px 10px rgba(0,0,0,0.6)', textAlign: 'center' }}>
+        <div className="dlab-bnr-inr-entry anim-fade-up" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', textAlign: 'center', width: '100%' }}>
+          
+          {/* Light Blue Accent Pill Badge */}
+          <div style={{ display: 'inline-flex', alignItems: 'center', gap: '6px', background: 'rgba(56, 189, 248, 0.15)', border: '1px solid rgba(56, 189, 248, 0.4)', borderRadius: '30px', padding: '5px 14px', marginBottom: '12px' }}>
+            <span style={{ fontSize: '11px', fontWeight: '800', color: '#e0f2fe', letterSpacing: '1.5px', textTransform: 'uppercase' }}>
+              EMPIRE ESTATES
+            </span>
+          </div>
+
+          <h1 style={{ color: '#ffffff', fontSize: '38px', fontWeight: '800', textTransform: 'uppercase', marginBottom: '8px', textShadow: '0 4px 20px rgba(0,0,0,0.6)', textAlign: 'center', letterSpacing: '0.5px' }}>
             {banner && banner.title ? banner.title : motherMenu}
           </h1>
+
+          {/* Gradient Divider */}
+          <div style={{ width: '50px', height: '3px', background: 'linear-gradient(90deg, #38bdf8, #0284c7)', borderRadius: '2px', marginBottom: '14px' }}></div>
+
           {banner && banner.subtitle && (
-            <p style={{ color: '#ffffff', fontSize: '15px', marginTop: '4px', marginBottom: '14px', opacity: 0.9, textShadow: '0 1px 4px rgba(0,0,0,0.8)', textAlign: 'center', width: '100%' }}>
+            <p style={{ color: '#ffffff', fontSize: '15px', marginTop: '0', marginBottom: '16px', opacity: 0.95, textShadow: '0 1px 4px rgba(0,0,0,0.8)', textAlign: 'center', width: '100%', maxWidth: '600px' }}>
               {banner.subtitle}
             </p>
           )}
+
           <nav aria-label="breadcrumb" className="breadcrumb-row" style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-            <ul className="breadcrumb" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'transparent', padding: 0, margin: 0 }}>
+            <ul className="breadcrumb" style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', background: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(4px)', padding: '6px 20px', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.15)', margin: 0 }}>
               <li className="breadcrumb-item">
-                <Link to={"/"} style={{ color: '#ffffff', textDecoration: 'none', opacity: 0.9, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
+                <Link to={"/"} style={{ color: '#ffffff', textDecoration: 'none', opacity: 0.9, textShadow: '0 1px 3px rgba(0,0,0,0.8)', fontWeight: '500' }}>
                   <svg style={{ width: '14px', height: '14px', marginRight: '6px', fill: '#ffffff', display: 'inline-block', verticalAlign: '-1px' }} viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>Home
                 </Link>
               </li>
-              <li className="breadcrumb-item active" aria-current="page" style={{ color: 'var(--color-secondary, #a4711e)', fontWeight: '600', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{activeMenu}</li>
+              <li className="breadcrumb-item active" aria-current="page" style={{ color: '#38bdf8', fontWeight: '700', textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>{activeMenu}</li>
             </ul>
           </nav>
         </div>

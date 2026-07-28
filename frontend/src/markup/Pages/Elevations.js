@@ -40,7 +40,7 @@ const ElevationCard = ({ item }) => {
       >
         <h4 style={{ color: 'white', marginBottom: '10px', textTransform: 'uppercase', letterSpacing: '1px' }}>{item.title}</h4>
         <p style={{ color: '#ffffff', fontSize: '15px', fontWeight: '500', marginBottom: '10px' }}>
-          Location: <span style={{ color: '#d4af37', fontWeight: 'bold' }}>{item.location}</span>
+          Location: <span style={{ color: '#38bdf8', fontWeight: '700' }}>{item.location}</span>
         </p>
         {item.clientName && (
           <p style={{ color: '#ffffff', fontSize: '15px', fontWeight: '500', marginBottom: '10px' }}>
@@ -97,7 +97,7 @@ const Elevations = () => {
                 <div className="row">
                   {elevations.length > 0 ? (
                     elevations.map((item, index) => (
-                      <div key={index} className="col-lg-4 col-md-6 col-sm-6 m-b40">
+                      <div key={index} className={`col-lg-4 col-md-6 col-sm-6 m-b40 reveal-scale delay-${(index % 3) + 1}`}>
                         <ElevationCard item={item} />
                       </div>
                     ))

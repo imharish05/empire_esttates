@@ -1,10 +1,91 @@
 :root {
-  --color-primary: #3b46a2;
+  --color-primary: #0284c7;
   --color-primary-hover: #2a337a;
-  --color-primary-soft: rgba(59, 70, 162, 0.1);
+  --color-primary-soft: rgba(2, 132, 199, 0.1);
+  --color-accent-blue: #0284c7;
+  --color-light-blue: #38bdf8;
+  --color-light-blue-bg: #f0f9ff;
+  --color-light-blue-soft: rgba(56, 189, 248, 0.12);
+  --color-light-blue-border: rgba(56, 189, 248, 0.35);
+  --gradient-primary: linear-gradient(135deg, #0284c7 0%, #0284c7 100%);
+  --gradient-accent-blue: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
   --color-secondary: #a4711e;
   --color-secondary-hover: #7a5416;
   --color-secondary-soft: rgba(164, 113, 30, 0.1);
+}
+
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes textGradientShimmer {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+@keyframes pulseGlowSoft {
+  0%, 100% {
+    opacity: 0.9;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.text-animated-gradient {
+  background: linear-gradient(90deg, #38bdf8 0%, #ffffff 50%, #38bdf8 100%);
+  background-size: 200% auto;
+  color: transparent !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  animation: textGradientShimmer 3.5s linear infinite;
+  display: inline-block;
+}
+
+.text-anim-pulse {
+  animation: pulseGlowSoft 3s ease-in-out infinite;
+}
+
+.anim-fade-up {
+  animation: fadeInSlideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.premium-card-hover {
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.premium-card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(2, 132, 199, 0.18), 0 8px 16px rgba(0, 0, 0, 0.08) !important;
+}
+
+.badge-light-blue {
+  background: var(--color-light-blue-bg);
+  color: var(--color-accent-blue);
+  border: 1px solid var(--color-light-blue-border);
+  border-radius: 30px;
+  padding: 5px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1.2px;
+  text-transform: uppercase;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .text-primary {
@@ -222,3 +303,52 @@
     padding: 26px 28px !important;
   }
 }
+
+/* ── Mobile overrides for redesigned hero (ee-hero-slide) ── */
+@media only screen and (max-width: 991px) {
+  .ee-hero-wrapper .ee-hero-slide {
+    min-height: auto !important;
+    height: auto !important;
+  }
+}
+@media only screen and (max-width: 575px) {
+  .ee-hero-wrapper .ee-hero-slide {
+    padding-top: 20px !important;
+    padding-bottom: 16px !important;
+  }
+}
+
+/* ── Global Button Color Override (#0284c7) ───── */
+
+.btn,
+.btn-primary,
+.btn-secondary,
+.btn-secondry,
+.site-button,
+.header-cta-btn,
+button[type="submit"],
+a.btn,
+.blog-post-1 button {
+  background: #0284c7 !important;
+  background-color: #0284c7 !important;
+  border-color: #0284c7 !important;
+  color: #ffffff !important;
+  transition: all 0.3s ease !important;
+}
+
+.btn:hover,
+.btn-primary:hover,
+.btn-secondary:hover,
+.btn-secondry:hover,
+.site-button:hover,
+.header-cta-btn:hover,
+button[type="submit"]:hover,
+a.btn:hover,
+.blog-post-1 button:hover {
+  background: #0369a1 !important;
+  background-color: #0369a1 !important;
+  border-color: #0369a1 !important;
+  color: #ffffff !important;
+  box-shadow: 0 6px 20px rgba(2, 132, 199, 0.4) !important;
+}
+

@@ -13,12 +13,14 @@ import Elevations from './Pages/Elevations';
 
 //ScrollToTop
 import ScrollToTop from './Element/ScrollToTop';
+import ScrollRevealInit from '../utils/ScrollRevealInit';
 
 class Markup extends Component{
 	render(){
 		return(
 			<BrowserRouter basename="/">
                 <div className="page-wraper">
+                    <ScrollRevealInit />
                     <Switch>
                         <Route path='/' exact component={Index1} />
 						<Route path='/about-us' exact component={Aboutus} />

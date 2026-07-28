@@ -9,9 +9,9 @@ const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const LayoutCard = ({ item, index, openLightbox }) => {
   return (
     <div 
-      className="dlab-box dlab-gallery-box"
+      className="dlab-box dlab-gallery-box premium-card-hover"
       onClick={() => openLightbox(index)}
-      style={{ cursor: 'pointer' }}
+      style={{ cursor: 'pointer', background: '#ffffff', borderRadius: '16px', padding: '20px', border: '1px solid #e2e8f0', boxShadow: '0 10px 30px rgba(0,0,0,0.04)' }}
     >
       <div className="mb-3 text-center">
         <h4 className="dlab-title m-0" style={{ fontSize: '22px', fontWeight: 'bold', color: '#1a1a1a', textTransform: 'uppercase' }}>
@@ -80,14 +80,14 @@ const Layouts = () => {
           <div className="section-full content-inner-2 portfolio text-uppercase bg-gray" id="portfolio">
             <div className="container">
               <div className="site-filters clearfix center m-b40">
-                <div className="section-head text-center" style={{ marginBottom: '50px' }}>
-                  <p style={{ color: '#c8932e', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px' }}>
+                <div className="section-head text-center reveal-up" style={{ marginBottom: '50px' }}>
+                  <p style={{ color: '#0284c7', fontSize: '15px', fontWeight: 600, letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '14px' }}>
                     OUR LANDS
                   </p>
                   <h2 className="title" style={{ fontSize: '40px', fontWeight: 700, letterSpacing: '0.5px', lineHeight: 1.2, margin: 0, marginBottom: '24px', color: '#1a1a1a', textTransform: 'uppercase' }}>
                     EXPLORE LAYOUTS
                   </h2>
-                  <span style={{ display: 'inline-block', width: '60px', height: '3px', background: '#c8932e', borderRadius: '2px' }} />
+                  <div className="reveal-line mx-auto" style={{ margin: '0 auto' }}></div>
                 </div>
               </div>
 
@@ -101,7 +101,7 @@ const Layouts = () => {
                 <div className="row">
                   {layouts.length > 0 ? (
                     layouts.map((item, index) => (
-                      <div key={index} className="col-lg-4 col-md-6 col-sm-6 m-b40">
+                      <div key={index} className={`col-lg-4 col-md-6 col-sm-6 m-b40 reveal-scale delay-${(index % 3) + 1}`}>
                         <LayoutCard 
                           item={item}
                           index={index}

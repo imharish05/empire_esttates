@@ -20,9 +20,9 @@ function BlogListView({ blogs, loading, onSelect }) {
     <section style={{ padding: '70px 0', background: '#fff' }}>
       <div className="container">
         {/* Section Header */}
-        <div style={{ textAlign: 'center', marginBottom: '50px' }}>
+        <div className="reveal-up" style={{ textAlign: 'center', marginBottom: '50px' }}>
           <p style={{
-            color: '#a4711e', fontSize: '13px', fontWeight: 700,
+            color: '#0284c7', fontSize: '13px', fontWeight: 700,
             letterSpacing: '3px', textTransform: 'uppercase', marginBottom: '10px'
           }}>
             OUR BLOG
@@ -30,13 +30,14 @@ function BlogListView({ blogs, loading, onSelect }) {
           <h2 style={{ fontSize: '38px', fontWeight: 700, color: '#1a1a1a', margin: 0 }}>
             Latest News
           </h2>
+          <div className="reveal-line mx-auto" style={{ margin: '14px auto 0' }}></div>
         </div>
 
         {loading ? (
           <div style={{ textAlign: 'center', padding: '60px' }}>
             <div style={{
               width: '44px', height: '44px', border: '4px solid #f0f0f0',
-              borderTop: '4px solid #a4711e', borderRadius: '50%',
+              borderTop: '4px solid #0284c7', borderRadius: '50%',
               animation: 'spin 0.8s linear infinite', margin: '0 auto 16px'
             }} />
             <p style={{ color: '#888' }}>Loading blogs...</p>
@@ -47,8 +48,8 @@ function BlogListView({ blogs, loading, onSelect }) {
               const imgSrc = blog.image || blog.imageUrl || blog.thumbnail || null;
 
               return (
-                <div key={blog.id || idx} className="col-md-6 col-lg-4" style={{ marginBottom: '30px' }}>
-                  <div style={{
+                <div key={blog.id || idx} className={`col-md-6 col-lg-4 reveal-up delay-${(idx % 3) + 1}`} style={{ marginBottom: '30px' }}>
+                  <div className="blog-post-1 premium-card-hover" style={{
                     background: '#fff',
                     borderRadius: '4px',
                     overflow: 'hidden',
@@ -71,7 +72,7 @@ function BlogListView({ blogs, loading, onSelect }) {
                           alignItems: 'center', justifyContent: 'center',
                           background: 'linear-gradient(135deg, #2c2c2c 0%, #444 100%)'
                         }}>
-                          <i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#a4711e', opacity: 0.6 }} />
+                          <i className="fa fa-newspaper" style={{ fontSize: '52px', color: '#0284c7', opacity: 0.6 }} />
                         </div>
                       )}
                     </div>
@@ -93,20 +94,29 @@ function BlogListView({ blogs, loading, onSelect }) {
                         onClick={() => onSelect(blog)}
                         style={{
                           display: 'inline-block',
-                          background: '#a4711e',
-                          color: '#fff',
+                          background: '#0284c7',
+                          color: '#ffffff',
                           border: 'none',
-                          borderRadius: '3px',
-                          padding: '10px 22px',
+                          borderRadius: '8px',
+                          padding: '10px 24px',
                           fontWeight: 700,
                           fontSize: '14px',
                           cursor: 'pointer',
                           letterSpacing: '0.5px',
                           alignSelf: 'flex-start',
-                          transition: 'background 0.2s ease',
+                          boxShadow: '0 4px 15px rgba(2, 132, 199, 0.3)',
+                          transition: 'all 0.3s ease',
                         }}
-                        onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
-                        onMouseLeave={e => { e.currentTarget.style.background = '#a4711e'; }}
+                        onMouseEnter={e => {
+                          e.currentTarget.style.background = '#0369a1';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                          e.currentTarget.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.45)';
+                        }}
+                        onMouseLeave={e => {
+                          e.currentTarget.style.background = '#0284c7';
+                          e.currentTarget.style.transform = 'translateY(0)';
+                          e.currentTarget.style.boxShadow = '0 4px 15px rgba(2, 132, 199, 0.3)';
+                        }}
                       >
                         Read More
                       </button>
@@ -403,13 +413,13 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
           text-align: justify !important;
         }
         .blog-content-render a {
-          color: #a4711e;
+          color: #0284c7;
           text-decoration: underline;
         }
         .blog-content-render blockquote {
-          border-left: 4px solid #a4711e;
+          border-left: 4px solid #0284c7;
           padding: 14px 20px;
-          background: #fff8ee;
+          background: #f0f9ff;
           border-radius: 0 6px 6px 0;
           margin: 24px 0;
           font-style: italic;
@@ -440,7 +450,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
 
             {/* Contained Image with rounded corners */}
             {imgSrc && (
-              <div style={{
+              <div className="reveal-img img-zoom-wrap" style={{
                 width: '100%', borderRadius: '10px', overflow: 'hidden',
                 marginBottom: '32px', boxShadow: '0 4px 20px rgba(0,0,0,0.10)'
               }}>
@@ -453,7 +463,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
             )}
 
             {/* Title */}
-            <h1 style={{
+            <h1 className="reveal-left" style={{
               fontSize: 'clamp(22px, 4vw, 34px)', fontWeight: 700,
               color: '#1a1a1a', lineHeight: 1.35, marginBottom: '24px', textAlign: 'left'
             }}>
@@ -463,7 +473,7 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
             {/* Article Content */}
             {rawContent ? (
               <div
-                className="blog-content-render"
+                className="blog-content-render reveal-up delay-2"
                 dangerouslySetInnerHTML={{ __html: rawContent }}
               />
             ) : (
@@ -476,19 +486,28 @@ function BlogDetailView({ blog, allBlogs, onBack }) {
                 onClick={onBack}
                 style={{
                   display: 'inline-block',
-                  background: '#a4711e',
-                  color: '#fff',
+                  background: '#0284c7',
+                  color: '#ffffff',
                   border: 'none',
-                  borderRadius: '4px',
-                  padding: '11px 26px',
+                  borderRadius: '8px',
+                  padding: '12px 28px',
                   fontWeight: 700,
                   fontSize: '14px',
                   cursor: 'pointer',
                   letterSpacing: '0.5px',
-                  transition: 'background-color 0.2s'
+                  boxShadow: '0 4px 15px rgba(2, 132, 199, 0.3)',
+                  transition: 'all 0.3s ease'
                 }}
-                onMouseEnter={e => { e.currentTarget.style.background = '#a87220'; }}
-                onMouseLeave={e => { e.currentTarget.style.background = '#a4711e'; }}
+                onMouseEnter={e => {
+                  e.currentTarget.style.background = '#0369a1';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 20px rgba(2, 132, 199, 0.45)';
+                }}
+                onMouseLeave={e => {
+                  e.currentTarget.style.background = '#0284c7';
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = '0 4px 15px rgba(2, 132, 199, 0.3)';
+                }}
               >
                 ← Back to All Blogs
               </button>

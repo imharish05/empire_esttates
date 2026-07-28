@@ -204,12 +204,13 @@ export default function ProjectDetail1() {
             <section className="section-full content-inner">
               <div className="container">
                 <div className="row">
-                  <div className="col-lg-5 m-b30">
+                  <div className="col-lg-5 m-b30 reveal-left">
                     <div className="section-head mb-3 text-left">
-                      <p className="text-[#B8860B] font-bold uppercase text-xs tracking-wider">PROJECT DETAILS</p>
+                      <p className="font-bold uppercase text-xs tracking-wider" style={{ color: '#0284c7' }}>PROJECT DETAILS</p>
                       <h4 className="title font-bold text-neutral-900 leading-tight">
                         Authentic Specifications for {project.name}
                       </h4>
+                      <div className="reveal-line" style={{ marginTop: '10px' }}></div>
                     </div>
                     <p className="m-b40 text-left text-neutral-600">
                       This dynamic estate listing features ultra-luxury materials, high-quality finishes, and curated floorplans. Managed and verified by the Empire Estates registry.
@@ -218,13 +219,13 @@ export default function ProjectDetail1() {
                       <a href="https://www.youtube.com/watch?v=Dj6CKxQue7U" className="popup-youtube m-r20 video btn btn-primary btn-video">
                         <FaPlay /><span></span>
                       </a>
-                      <Link to={"/contact-us-1"} className="btn btn-primary">Contact us</Link>
+                      <Link to={"/contact-us"} className="btn btn-primary">Contact us</Link>
                     </div>
                   </div>
 
-                  <div className="col-lg-7">
+                  <div className="col-lg-7 reveal-right">
                     <div className="m-b30 mfp-gallery">
-                      <div className="dlab-box gallery-box-2">
+                      <div className="dlab-box gallery-box-2 img-zoom-wrap">
                         <div className="dlab-media dlab-img-overlay1 dlab-img-effect"> 
                           <img src={img3Fallback} alt="" style={{ height: '400px', width: '100%', objectFit: 'cover' }} /> 
                           <div className="overlay-bx">
@@ -236,7 +237,7 @@ export default function ProjectDetail1() {
                     {/* Specifications Grid */}
                     <div className="row widget widget_getintuch widget_getintuch-pro-details m-lr0 select-none">
                       {detailBlog.map((data, index) => (
-                        <div className="col-xl-4 col-lg-6 col-md-4 col-sm-6 p-lr0" key={index}>
+                        <div className={`col-xl-4 col-lg-6 col-md-4 col-sm-6 p-lr0 reveal-up delay-${(index % 3) + 1}`} key={index}>
                           <div className="pro-details text-left">
                             {data.icon}
                             <strong className="text-neutral-400 font-bold uppercase tracking-wider block text-[10px]">{data.title}</strong> 

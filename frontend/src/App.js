@@ -18,6 +18,7 @@ import './vendor/slick/slick-theme.min.css';
 import 'react-modal-video/css/modal-video.min.css';
 import './css/responsive-nav.css';
 import './css/brand-theme.css';
+import './css/premium-animations.css';
 
 import { withResizeDetector } from "react-resize-detector";
 function App() {

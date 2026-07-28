@@ -1,0 +1,350 @@
+/* =====================================================
+   EMPIRE ESTATES — Premium Animation System
+   ===================================================== */
+
+/* ── 1. Keyframes ───────────────────────────────────── */
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealRight {
+  from {
+    opacity: 0;
+    transform: translateX(32px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes revealScale {
+  from {
+    opacity: 0;
+    transform: scale(0.92);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeSoft {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes lineGrow {
+  from { width: 0; opacity: 0; }
+  to   { width: 60px; opacity: 1; }
+}
+
+@keyframes imgParallaxIn {
+  from {
+    opacity: 0;
+    transform: scale(1.06) translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+@keyframes countBadgePop {
+  0%   { opacity: 0; transform: scale(0.8) translateY(10px); }
+  70%  { transform: scale(1.04) translateY(-2px); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes heroBadgePulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(56, 189, 248, 0.35); }
+  50%       { box-shadow: 0 0 0 8px rgba(56, 189, 248, 0); }
+}
+
+@keyframes shimmerLine {
+  0%   { background-position: -200% center; }
+  100% { background-position: 200% center; }
+}
+
+
+/* ── 2. Base reveal classes — hidden by default ──────── */
+/* JS (IntersectionObserver) adds .is-visible to trigger */
+
+.reveal-up,
+.reveal-left,
+.reveal-right,
+.reveal-scale,
+.reveal-fade,
+.reveal-img,
+.reveal-badge {
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.reveal-up    { transform: translateY(32px); }
+.reveal-left  { transform: translateX(-32px); }
+.reveal-right { transform: translateX(32px); }
+.reveal-scale { transform: scale(0.92); }
+.reveal-img   { transform: scale(1.06) translateY(10px); }
+.reveal-badge { transform: scale(0.8) translateY(10px); }
+
+/* Applied when element enters viewport */
+.reveal-up.is-visible    { animation: revealUp 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-left.is-visible  { animation: revealLeft 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-right.is-visible { animation: revealRight 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-scale.is-visible { animation: revealScale 0.72s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-fade.is-visible  { animation: fadeSoft 0.7s ease forwards; }
+.reveal-img.is-visible   { animation: imgParallaxIn 0.85s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+.reveal-badge.is-visible { animation: countBadgePop 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+
+
+/* ── 3. Stagger delay helpers ───────────────────────── */
+
+.delay-1 { animation-delay: 0.08s !important; }
+.delay-2 { animation-delay: 0.16s !important; }
+.delay-3 { animation-delay: 0.24s !important; }
+.delay-4 { animation-delay: 0.32s !important; }
+.delay-5 { animation-delay: 0.40s !important; }
+.delay-6 { animation-delay: 0.50s !important; }
+
+
+/* ── 4. Gradient separator line reveal ──────────────── */
+
+.reveal-line {
+  display: block;
+  height: 4px;
+  border-radius: 2px;
+  background: linear-gradient(90deg, #0284c7, #0284c7);
+  opacity: 0;
+  width: 0;
+}
+.reveal-line.is-visible {
+  animation: lineGrow 0.6s cubic-bezier(0.16, 1, 0.3, 1) 0.2s forwards;
+}
+
+
+/* ── 5. Hover image zoom (premium) ──────────────────── */
+
+.img-zoom-wrap {
+  overflow: hidden;
+  border-radius: 16px;
+}
+.img-zoom-wrap img {
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), filter 0.4s ease;
+  will-change: transform;
+}
+.img-zoom-wrap:hover img {
+  transform: scale(1.055);
+  filter: brightness(1.04);
+}
+
+
+/* ── 6. Card hover lift ─────────────────────────────── */
+
+.card-lift {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease;
+}
+.card-lift:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 50px rgba(2, 132, 199, 0.16), 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+
+/* ── 7. Section heading accent tag ─────────────────── */
+
+.section-eyebrow {
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #0284c7;
+  margin-bottom: 10px;
+  position: relative;
+}
+.section-eyebrow::after {
+  content: '';
+  display: block;
+  width: 28px;
+  height: 2px;
+  background: linear-gradient(90deg, #38bdf8, #0284c7);
+  border-radius: 1px;
+  margin-top: 6px;
+}
+
+
+/* ── 8. Counter badge pop ───────────────────────────── */
+
+.counter-badge {
+  will-change: transform, opacity;
+}
+
+
+/* ── 9. Floating badge pulse ────────────────────────── */
+
+.badge-float-pulse {
+  animation: heroBadgePulse 2.4s ease-in-out infinite;
+}
+
+
+/* ── 10. Smooth image reveal overlay (wipe) ─────────── */
+
+@keyframes wipeReveal {
+  from { clip-path: inset(0 100% 0 0); }
+  to   { clip-path: inset(0 0% 0 0); }
+}
+
+.reveal-wipe.is-visible {
+  animation: wipeReveal 0.85s cubic-bezier(0.77, 0, 0.18, 1) forwards;
+}
+.reveal-wipe { clip-path: inset(0 100% 0 0); }
+
+
+/* ── 11. Global transition baseline ─────────────────── */
+
+a, button {
+  transition: color 0.2s ease, background 0.2s ease, box-shadow 0.25s ease, transform 0.25s ease, border-color 0.2s ease;
+}
+
+img {
+  transition: transform 0.45s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s ease;
+}
+
+
+/* ── 12. Shimmer loading skeleton (optional) ────────── */
+
+.shimmer-bg {
+  background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+  background-size: 400% 100%;
+  animation: shimmerLine 1.4s ease-in-out infinite;
+}
+
+
+/* ── 13. Mobile: reduce motion if user prefers ──────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-up, .reveal-left, .reveal-right,
+  .reveal-scale, .reveal-fade, .reveal-img,
+  .reveal-badge, .reveal-line, .reveal-wipe {
+    opacity: 1;
+    transform: none;
+    animation: none !important;
+    clip-path: none !important;
+  }
+}
+
+/* ── 14. Global project / blog card image zoom ───── */
+
+.service-card-modern,
+.project-card,
+.blog-post-1 {
+  transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.35s ease !important;
+}
+
+.service-card-modern:hover,
+.project-card:hover,
+.blog-post-1:hover {
+  transform: translateY(-6px) !important;
+  box-shadow: 0 24px 50px rgba(2, 132, 199, 0.16), 0 8px 20px rgba(0,0,0,0.08) !important;
+}
+
+/* ── 15. Blog card image zoom on hover ───────────── */
+
+.blog-post-1 .dlab-post-media img,
+.dlab-post-media img {
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform;
+}
+
+.blog-post-1:hover .dlab-post-media img,
+.dlab-blog-post:hover .dlab-post-media img {
+  transform: scale(1.06) !important;
+}
+
+/* overflow guard for blog media */
+.dlab-post-media {
+  overflow: hidden !important;
+}
+
+/* ── 16. CTA button hover effects ────────────────── */
+
+.btn-primary,
+.btn-secondary,
+a.btn[style*="background"] {
+  transition: transform 0.25s ease, box-shadow 0.25s ease, filter 0.2s ease !important;
+}
+
+.btn-primary:hover,
+.btn-secondary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 10px 25px rgba(2, 132, 199, 0.35) !important;
+  filter: brightness(1.05);
+}
+
+/* ── 17. Page title banner text reveal ───────────── */
+
+.dlab-bnr-inr-entry h1,
+.dlab-bnr-inr-entry p,
+.dlab-bnr-inr-entry .breadcrumb-row {
+  animation: revealUp 0.65s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.dlab-bnr-inr-entry p {
+  animation-delay: 0.15s;
+}
+
+.dlab-bnr-inr-entry .breadcrumb-row {
+  animation-delay: 0.28s;
+}
+
+/* ── 18. Footer links hover micro-lift ───────────── */
+
+footer a {
+  transition: color 0.2s ease, transform 0.2s ease !important;
+  display: inline-block;
+}
+
+footer a:hover {
+  transform: translateX(3px) !important;
+}
+
+/* ── 19. Icon hover spin (services) ─────────────── */
+
+.service-card-modern .service-img-modern {
+  transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+
+/* ── 20. Testimonial card hover ─────────────────── */
+
+.testimonial-7,
+.owl-item .item {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.testimonial-7:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 40px rgba(2, 132, 199, 0.14);
+}
+
