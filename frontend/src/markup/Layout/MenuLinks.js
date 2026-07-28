@@ -93,10 +93,10 @@ export default function MenuLinks({ mobileMode }) {
           </button>
           <ul className={`mobile-nav-links__sub${projectsOpen ? ' is-open' : ''}`}>
             <li>
-              <Link to="/projects?filter=completed">All Projects</Link>
+              <Link to="/projects">All Projects</Link>
             </li>
             <li>
-              <Link to="/projects?filter=ongoing">Ongoing Projects</Link>
+              <Link to="/ongoing-projects">Ongoing Projects</Link>
             </li>
           </ul>
         </li>
@@ -118,7 +118,7 @@ export default function MenuLinks({ mobileMode }) {
 
   // ── Desktop hover-style links ──
   return (
-    <ul className="nav navbar-nav navbar">
+    <ul className="nav navbar-nav navbar single-hdr-nav-ul">
       {/* Home */}
       <li className={isActive('/') ? 'active' : ''}>
         <Link to="/">Home</Link>
@@ -130,7 +130,7 @@ export default function MenuLinks({ mobileMode }) {
       </li>
 
       {/* Services - Dropdown */}
-      <li className={isActive('/services') ? 'active' : ''}>
+      <li className={`has-sub-dropdown ${isActive('/services') ? 'active' : ''}`}>
         <Link to="#">
           Services{' '}
           <svg style={{ width: '12px', height: '12px', marginLeft: '4px', fill: 'currentColor', display: 'inline-block', verticalAlign: 'middle' }} viewBox="0 0 24 24">
@@ -149,7 +149,7 @@ export default function MenuLinks({ mobileMode }) {
       </li>
 
       {/* Projects - Dropdown */}
-      <li className={isActive('/projects') ? 'active' : ''}>
+      <li className={`has-sub-dropdown ${isActive('/projects') ? 'active' : ''}`}>
         <Link to="#">
           Projects{' '}
           <svg style={{ width: '12px', height: '12px', marginLeft: '4px', fill: 'currentColor', display: 'inline-block', verticalAlign: 'middle' }} viewBox="0 0 24 24">
@@ -185,49 +185,6 @@ export default function MenuLinks({ mobileMode }) {
       <li className={isActive('/contact') ? 'active' : ''}>
         <Link to="/contact-us">Contact Us</Link>
       </li>
-      
-      {/* Sub-menu override styles */}
-      <style>{`
-        /* Normal State Dropdown (Grey) */
-        .studio1-nav-pill .sub-menu {
-          background-color: #2c323f !important;
-          border-radius: 4px;
-        }
-        .studio1-nav-pill .sub-menu li a {
-          color: #ffffff !important;
-          font-weight: 500 !important;
-        }
-        .studio1-nav-pill .sub-menu li a::before {
-          background: #ffffff !important;
-        }
-        .studio1-nav-pill .sub-menu li a:hover {
-          color: #c8902a !important;
-          background-color: rgba(255, 255, 255, 0.1) !important;
-        }
-        .studio1-nav-pill .sub-menu li:hover > a::before {
-          background: #c8902a !important;
-        }
-
-        /* Fixed Sticky State Dropdown (Gold) */
-        .studio1-sticky-menu .sub-menu {
-          background-color: #c8902a !important;
-          border-radius: 4px;
-        }
-        .studio1-sticky-menu .sub-menu li a {
-          color: #111111 !important;
-          font-weight: 600 !important;
-        }
-        .studio1-sticky-menu .sub-menu li a::before {
-          background: #111111 !important;
-        }
-        .studio1-sticky-menu .sub-menu li a:hover {
-          color: #ffffff !important;
-          background-color: rgba(0, 0, 0, 0.1) !important;
-        }
-        .studio1-sticky-menu .sub-menu li:hover > a::before {
-          background: #ffffff !important;
-        }
-      `}</style>
     </ul>
   );
 }

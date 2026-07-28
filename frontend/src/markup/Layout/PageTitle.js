@@ -107,7 +107,7 @@ const PageTitle = ({ motherMenu, activeMenu, placement }) => {
       }} />
       <div className="container" style={{ position: 'relative', zIndex: 2 }}>
         <div className="dlab-bnr-inr-entry">
-          <h1 style={{ color: '#c8902a' }}>{banner && banner.title ? banner.title : motherMenu}</h1>
+          <h1 style={{ color: '#3b46a2' }}>{banner && banner.title ? banner.title : motherMenu}</h1>
           {banner && banner.subtitle && (
             <p style={{ color: '#ffffff', fontSize: '15px', marginTop: '6px', opacity: 0.9, textShadow: '0 1px 3px rgba(0,0,0,0.8)' }}>
               {banner.subtitle}

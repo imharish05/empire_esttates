@@ -1,13 +1,13 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Link, useParams, useLocation, useHistory } from 'react-router-dom';
-import { FaArrowRight, FaSearch } from 'react-icons/fa';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { FaArrowRight } from 'react-icons/fa';
 import Header from './../Layout/Header';
 import Footer2 from './../Layout/Footer2';
 import PageTitle from './../Layout/PageTitle';
 import { applyMetaTags } from '../../utils/meta';
 import dpic1 from './../../images/blog/default/pic1.jpg';
 
-const API_BASE = process.env.REACT_APP_API_URL || 'https://empireesttatesapi.freshmindz.in';
+const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = `${API_BASE}`;
 
 const getImagesArray = (v) => {
@@ -23,9 +23,12 @@ const getImagesArray = (v) => {
 
 export default function ServicesDetails() {
   const { slug: pathSlug } = useParams();
-  const querySlug = new URLSearchParams(useLocation().search).get('slug');
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const querySlug = queryParams.get('slug');
+  const searchParam = queryParams.get('search');
+  const categoryParam = queryParams.get('category');
   const slug = pathSlug || querySlug;
-  const history = useHistory();
 
   const [service, setService] = useState(null);
   const [allServices, setAllServices] = useState([]);
@@ -37,7 +40,9 @@ export default function ServicesDetails() {
       try {
         setLoading(true);
         // Fetch all services for the sidebar
-        const all = await fetch(`${API_URL}/services`).then(r => r.json());
+        const res = await fetch(`${API_URL}/services`);
+        if (!res.ok) throw new Error('Failed to fetch services');
+        const all = await res.json();
         setAllServices(all);
         
         if (slug) {
@@ -46,8 +51,25 @@ export default function ServicesDetails() {
              setService(current);
           } else {
              const r = await fetch(`${API_URL}/services/slug/${slug}`);
-             if (!r.ok) throw new Error('Not found');
-             setService(await r.json());
+             if (r.ok) {
+               setService(await r.json());
+             } else if (all[0]) {
+               setService(all[0]);
+             }
+          }
+        } else if (searchParam || categoryParam) {
+          const term = (searchParam || categoryParam || '').toLowerCase();
+          const matched = all.find(s => 
+            (s.title && s.title.toLowerCase().includes(term)) ||
+            (s.service && s.service.toLowerCase().includes(term)) ||
+            (s.category && s.category.toLowerCase().includes(term)) ||
+            (s.estate && s.estate.toLowerCase().includes(term)) ||
+            (s.slug && s.slug.toLowerCase().includes(term))
+          );
+          if (matched) {
+            setService(matched);
+          } else if (all[0]) {
+            setService(all[0]);
           }
         } else {
           if (all[0]) setService(all[0]);
@@ -56,7 +78,7 @@ export default function ServicesDetails() {
       } catch (e) { setError(e.message); }
       finally { setLoading(false); }
     })();
-  }, [slug]);
+  }, [slug, location.search, searchParam, categoryParam]);
 
   useEffect(() => {
     if (service) applyMetaTags(
@@ -67,9 +89,9 @@ export default function ServicesDetails() {
 
   if (loading) return (
     <Fragment>
-      <Header isTransparent={true} />
+      <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#c8902a', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
+        <div style={{ width: 44, height: 44, border: '3px solid #f0ebe1', borderTopColor: '#3b46a2', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }} />
       </div>
       <Footer2 />
     </Fragment>
@@ -77,10 +99,10 @@ export default function ServicesDetails() {
 
   if (error || !service) return (
     <Fragment>
-      <Header isTransparent={true} />
+      <Header isTransparent={false} />
       <div style={{ minHeight: '70vh', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 16 }}>
         <p style={{ color: '#c0392b' }}>{error || 'Service not found'}</p>
-        <Link to="/" style={{ color: '#c8902a', fontWeight: 600 }}>Back to Home</Link>
+        <Link to="/" style={{ color: '#3b46a2', fontWeight: 600 }}>Back to Home</Link>
       </div>
       <Footer2 />
     </Fragment>
@@ -91,7 +113,7 @@ export default function ServicesDetails() {
 
   return (
     <Fragment>
-      <Header isTransparent={true} />
+      <Header isTransparent={false} />
       <PageTitle motherMenu="Services" activeMenu={service.title || service.service} placement="Services Details Banner" />
 
       <div style={{ padding: '80px 0', background: '#fff' }}>
@@ -102,7 +124,7 @@ export default function ServicesDetails() {
             <div className="col-lg-8 mb-5 mb-lg-0">
               
               {/* Main Large Image */}
-              <div style={{ marginBottom: 35, borderRadius: 0, overflow: 'hidden' }}>
+              <div style={{ marginBottom: 35, borderRadius: '8px', overflow: 'hidden' }}>
                  <img src={serviceImages[0]} alt={service.title || service.service} style={{ width: '100%', height: 450, objectFit: 'cover' }} />
               </div>
 
@@ -121,7 +143,7 @@ export default function ServicesDetails() {
                       lineHeight: '70px', 
                       fontWeight: 700, 
                       color: '#fff', 
-                      background: '#c8902a', 
+                      background: '#3b46a2', 
                       width: '70px',
                       height: '70px',
                       textAlign: 'center',
@@ -168,7 +190,6 @@ export default function ServicesDetails() {
                   }
                 }
 
-                // Deeply clean all items to remove any leftover JSON quotes, brackets or escape characters
                 list = list
                   .map(item => {
                     if (!item) return '';
@@ -192,7 +213,7 @@ export default function ServicesDetails() {
                 return (
                   <div style={{ marginTop: 50, marginBottom: 50 }}>
                     <h3 style={{ fontSize: 28, fontWeight: 700, color: '#1a1a2e', marginBottom: 25, borderBottom: '2px solid #f0f0f0', paddingBottom: '15px' }}>
-                      <span style={{ color: '#c8902a' }}>Services</span> Included
+                      <span style={{ color: '#3b46a2' }}>Services</span> Included
                     </h3>
                     <ul style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '15px', listStyle: 'none', padding: 0 }}>
                       {list.map((item, idx) => (
@@ -211,10 +232,10 @@ export default function ServicesDetails() {
                           cursor: 'default'
                         }}
                         onMouseEnter={(e) => { 
-                          e.currentTarget.style.borderColor = '#c8902a'; 
+                          e.currentTarget.style.borderColor = '#3b46a2'; 
                           e.currentTarget.style.transform = 'translateY(-3px)'; 
-                          e.currentTarget.style.boxShadow = '0 6px 15px rgba(200,144,42,0.1)'; 
-                          e.currentTarget.style.color = '#c8902a';
+                          e.currentTarget.style.boxShadow = '0 6px 15px rgba(59,70,162,0.15)'; 
+                          e.currentTarget.style.color = '#3b46a2';
                         }}
                         onMouseLeave={(e) => { 
                           e.currentTarget.style.borderColor = '#eee'; 
@@ -230,8 +251,8 @@ export default function ServicesDetails() {
                             width: '26px', 
                             height: '26px', 
                             borderRadius: '50%', 
-                            background: 'rgba(200,144,42,0.1)', 
-                            color: '#c8902a', 
+                            background: 'rgba(59,70,162,0.1)', 
+                            color: '#3b46a2', 
                             marginRight: '12px',
                             flexShrink: 0
                           }}>
@@ -249,7 +270,6 @@ export default function ServicesDetails() {
 
             </div>
 
-
             {/* ── RIGHT COLUMN (Sidebar) ── */}
             <div className="col-lg-4 pl-lg-5">
               
@@ -266,7 +286,7 @@ export default function ServicesDetails() {
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'space-between',
-                            background: isActive ? '#c8902a' : '#f5f6f8',
+                            background: isActive ? '#3b46a2' : '#f5f6f8',
                             color: isActive ? '#fff' : '#222',
                             padding: '18px 25px',
                             fontWeight: 600,
@@ -274,6 +294,7 @@ export default function ServicesDetails() {
                             textTransform: 'uppercase',
                             textDecoration: 'none',
                             transition: 'all 0.3s ease',
+                            borderRadius: '6px',
                             border: 'none'
                           }}
                         >
@@ -286,8 +307,7 @@ export default function ServicesDetails() {
                 </ul>
               </div>
 
-
-              {/* Sidebar Additional Images (Moved from main column) */}
+              {/* Sidebar Additional Images */}
               {serviceImages.length > 1 && (
                 <div style={{ marginTop: '40px', display: 'flex', flexDirection: 'column', gap: '20px' }}>
                   {serviceImages.slice(1, 3).map((img, idx) => (
@@ -304,9 +324,9 @@ export default function ServicesDetails() {
         </div>
       </div>
 
-      {/* Full-width Gold Banner */}
+      {/* Full-width Primary Blue Banner */}
       <div style={{ 
-        background: '#c8902a', 
+        background: '#3b46a2', 
         padding: '50px 0', 
       }}>
         <div className="container">
@@ -326,8 +346,8 @@ export default function ServicesDetails() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 background: '#fff',
-                color: '#1a1a1a',
-                fontWeight: 600,
+                color: '#3b46a2',
+                fontWeight: 700,
                 fontSize: 15,
                 padding: '12px 30px',
                 textDecoration: 'none',
