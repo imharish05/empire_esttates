@@ -104,14 +104,34 @@ const ContactUs1 = () => {
                                             <FaRegEnvelope style={{ color: '#c8902a', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Email</h4>
                                         </div>
-                                        <p style={{ marginLeft: '30px' }}>{footerConfig.contact.email}</p>
+                                        <p style={{ marginLeft: '30px' }}>
+                                            <a
+                                                href={`mailto:${footerConfig.contact.email}`}
+                                                style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#c8902a'}
+                                                onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
+                                                title="Send email"
+                                            >
+                                                {footerConfig.contact.email}
+                                            </a>
+                                        </p>
                                     </li>
                                     <li>
                                         <div className="d-flex align-items-center mb-2" style={{ gap: '10px' }}>
                                             <FaPhone style={{ color: '#c8902a', fontSize: '20px' }} />
                                             <h4 className="title m-b0">Phone</h4>
                                         </div>
-                                        <p style={{ marginLeft: '30px' }}>+91 {footerConfig.contact.phone}</p>
+                                        <p style={{ marginLeft: '30px' }}>
+                                            <a
+                                                href={`tel:+91${footerConfig.contact.phone.replace(/\s+/g, '')}`}
+                                                style={{ color: 'inherit', textDecoration: 'none', transition: 'color 0.2s' }}
+                                                onMouseEnter={e => e.currentTarget.style.color = '#c8902a'}
+                                                onMouseLeave={e => e.currentTarget.style.color = 'inherit'}
+                                                title="Call phone number"
+                                            >
+                                                +91 {footerConfig.contact.phone}
+                                            </a>
+                                        </p>
                                     </li>
                                 </ul>
                             </div>

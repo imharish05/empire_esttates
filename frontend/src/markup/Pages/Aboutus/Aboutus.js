@@ -85,7 +85,7 @@ class Aboutus extends Component{
 									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
 										We are <strong>Empire Esttates</strong>, a well-established firm of civil engineers and contractors dedicated to residential development in Chennai. Founded in 2001 by T. Karthik Pragass, a civil engineer with extensive experience in the construction industry, our primary objective is to promote and develop high-quality Residential Apartments and Individual Houses.
 									</p>
-									<p className="font-16 text-black m-t20" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px', textAlign: 'justify' }}>
+									<p className="font-16 text-black m-t20" style={{ lineHeight: '1.8', color: '#555', fontSize: '16px' }}>
 										<strong>Key Highlights:</strong><br/>
 										<strong>Expertise:</strong> Civil Engineering, Contracting, and Residential Development<br/>
 										<strong>Core Focus Areas:</strong> Chennai (specifically in and around Poonamallee, Valasaravakkam, Porur, Avadi, & Thiruvallur)
