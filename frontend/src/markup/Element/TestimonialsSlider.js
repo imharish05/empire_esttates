@@ -125,11 +125,26 @@ class TestimonialsSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      testimonials: []
+      testimonials: defaultTestimonials
     };
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+    try {
+      const response = await fetch(`${API_URL}/testimonials?activeOnly=true`);
+      if (response.ok) {
+        const data = await response.json();
+        if (Array.isArray(data) && data.length > 0) {
+          this.setState({ testimonials: data });
+          return;
+        }
+      }
+    } catch (e) {
+      console.warn("Backend API fetch for testimonials failed, loading local/fallback data.", e);
+    }
+
+    // Fallback logic
     let list = [];
     try {
       const saved = localStorage.getItem('ee_testimonials_v2');
@@ -144,28 +159,7 @@ class TestimonialsSlider extends Component {
       list = defaultTestimonials;
     }
 
-    let pub = {};
-    try {
-      const savedPub = localStorage.getItem('ee_testimonials_pub_v2');
-      if (savedPub) {
-        pub = JSON.parse(savedPub);
-      } else {
-        pub = {
-          1: true,
-          2: false,
-          3: true,
-          4: true,
-          5: true,
-          6: true,
-          7: true
-        };
-      }
-    } catch (e) {
-      console.error("Failed to parse published states", e);
-    }
-
-    const published = list.filter(item => pub[item.id] !== false);
-    this.setState({ testimonials: published });
+    this.setState({ testimonials: list });
   }
 
   render() {
@@ -213,20 +207,17 @@ class TestimonialsSlider extends Component {
     return (
       <Slider className="blog-carousel owl-carousel owl-btn-center-lr owl-btn-out " {...settings}>
         {testimonials.map((item, index) => {
-          const fallbackImages = [grid1, grid2, grid3];
-          const imgUrl = item.avatar || item.image || fallbackImages[index % fallbackImages.length];
-
           return (
             <div className="item p-3" key={item.id || index}>
               <div 
                 style={{ 
                   background: '#ffffff',
                   borderRadius: '16px',
-                  padding: '35px 30px',
+                  padding: '32px 28px',
                   boxShadow: '0 12px 35px rgba(0, 0, 0, 0.04)',
-                  border: '1px solid rgba(0, 0, 0, 0.05)',
+                  border: '1px solid rgba(2, 132, 199, 0.12)',
                   height: '100%',
-                  minHeight: '340px',
+                  minHeight: '260px',
                   display: 'flex',
                   flexDirection: 'column',
                   justifyContent: 'space-between',
@@ -236,30 +227,28 @@ class TestimonialsSlider extends Component {
                 className="testimonial-card-premium"
               >
                 <div>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                    <FaQuoteLeft style={{ fontSize: '32px', color: '#a4711e', opacity: '0.4' }} />
-                    <div>
-                      {Array(item.rating || 5).fill(0).map((_, i) => (
-                        <i key={i} className="fa fa-star" style={{ color: '#c9953a', marginRight: '3px', fontSize: '15px' }}></i>
-                      ))}
-                    </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+                    <FaQuoteLeft style={{ fontSize: '28px', color: '#0284c7', opacity: '0.3' }} />
                   </div>
-                  <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#0284c7', marginBottom: '12px', lineHeight: '1.4' }}>
-                    "{item.title}"
-                  </h4>
-                  <p style={{ fontSize: '14px', color: '#666', fontStyle: 'italic', lineHeight: '1.6', margin: 0, marginBottom: '25px' }}>
+                  {item.title && (
+                    <h4 style={{ fontSize: '16px', fontWeight: '700', color: '#0f172a', marginBottom: '10px', lineHeight: '1.4' }}>
+                      "{item.title}"
+                    </h4>
+                  )}
+                  <p style={{ fontSize: '14px', color: '#475569', fontStyle: 'italic', lineHeight: '1.6', margin: 0, marginBottom: '20px' }}>
                     {item.content}
                   </p>
                 </div>
                 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '15px', borderTop: '1px solid #f0f0f0', paddingTop: '20px', marginTop: 'auto' }}>
-                  <img src={imgUrl} alt={item.author} style={{ width: '50px', height: '50px', borderRadius: '50%', objectFit: 'cover', border: '2px solid #a4711e' }} />
-                  <div>
-                    <h5 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#0284c7' }}>{item.author}</h5>
-                    <span style={{ fontSize: '11px', color: '#a4711e', textTransform: 'uppercase', letterSpacing: '1px', fontWeight: '600', display: 'block', marginTop: '2px' }}>
-                      {item.tags && item.tags.length > 0 ? item.tags[0] : 'VERIFIED INVESTOR'}
-                    </span>
-                  </div>
+                <div style={{ borderTop: '1px solid #f1f5f9', paddingTop: '16px', marginTop: 'auto' }}>
+                  <h5 style={{ margin: 0, fontSize: '15px', fontWeight: '700', color: '#0f172a' }}>{item.author}</h5>
+                  <span style={{ fontSize: '12px', color: '#0284c7', textTransform: 'uppercase', letterSpacing: '0.5px', fontWeight: '600', display: 'block', marginTop: '3px' }}>
+                    {item.designation || (Array.isArray(item.tags) && item.tags.length > 0
+                      ? item.tags[0]
+                      : typeof item.tags === 'string' && item.tags.trim()
+                      ? item.tags.split(',')[0].trim()
+                      : 'VERIFIED CLIENT')}
+                  </span>
                 </div>
               </div>
             </div>

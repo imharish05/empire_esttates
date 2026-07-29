@@ -13,6 +13,9 @@ const authRoutes = require('./routes/AuthRoutes');
 const layoutRoutes = require('./routes/layout.routes');
 const elevationRoutes = require('./routes/elevation.routes');
 const contactRoutes = require('./routes/contactRoutes');
+const faqRoutes = require('./routes/faqRoutes');
+const testimonialRoutes = require('./routes/testimonialRoutes');
+const statRoutes = require('./routes/statRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -36,6 +39,10 @@ app.use('/api/auth', authRoutes);
 app.use('/api/layouts', layoutRoutes);
 app.use('/api/elevations', elevationRoutes);
 app.use('/api/contacts', contactRoutes);
+app.use('/api/faqs', faqRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+app.use('/api/stats', statRoutes);
+
 
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'OK', message: 'Backend server is running.' });

@@ -12,6 +12,9 @@ import { applyMetaTags } from '../../../utils/meta';
 
 import Specifications from './Specifications';
 import HomeSlider from './../../Element/HomeSlider';
+import FaqSection from './../../Element/FaqSection';
+import TestimonialsSection from './TestimonialsSection';
+
 import aboutImg from './../../../images/about/about.png';
 import spec1 from './../../../images/specifications/pic6.jpg';
 import spec2 from './../../../images/specifications/pic5.jpg';
@@ -818,8 +821,15 @@ class Index1 extends React.Component{
 						</div>
 					</section>
 
+					{/* Section-8.5 (Testimonials Section) */}
+					<TestimonialsSection />
+
+					{/* Section-9 (FAQ Section) */}
+					<FaqSection limit={5} showHeader={true} />
+
 				</div>
 				<Footer2 />	
+
 
 				{/* Lightbox Modal */}
 				{this.state.lightboxIndex !== null && this.state.projectsList[this.state.lightboxIndex] && (

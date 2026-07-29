@@ -8,8 +8,9 @@ const NAV_ITEMS = [
   { key: 'projectcategories',   icon: 'category',         label: 'Project Categories' },
   { key: 'galleryprojects',     icon: 'photo_library',    label: 'Projects', 
     subItems: [
-      { key: 'galleryprojects', label: 'All Projects' },
-      { key: 'ongoingprojects', label: 'Ongoing Projects' },
+      { key: 'pastprojects',    label: 'Past Projects' },
+      { key: 'ongoingprojects', label: 'On Going Projects' },
+      { key: 'upcomingprojects', label: 'Upcoming Projects' },
     ]
   },
   { key: 'layouts',             icon: 'map',              label: 'Layouts' },
@@ -17,11 +18,15 @@ const NAV_ITEMS = [
   { key: 'blogs',               icon: 'format_quote',     label: 'Blogs' },
   { key: 'metatags',            icon: 'manage_search',    label: 'Meta Tag' },
   { key: 'contacts',            icon: 'contact_mail',     label: 'Contact Inquiries' },
-  
+  { key: 'faqs',                icon: 'quiz',             label: 'FAQs' },
+  { key: 'testimonials',        icon: 'rate_review',       label: 'Client Testimonials' },
+  { key: 'stats',               icon: 'equalizer',        label: 'Stat Counters' },
 ];
 
+
 export default function Sidebar({ activeTab, onTabChange, onLogout }) {
-  const [projectsOpen, setProjectsOpen] = React.useState(activeTab === 'galleryprojects' || activeTab === 'ongoingprojects');
+  const isProjectTab = (tab) => tab === 'galleryprojects' || tab === 'pastprojects' || tab === 'ongoingprojects' || tab === 'upcomingprojects';
+  const [projectsOpen, setProjectsOpen] = React.useState(isProjectTab(activeTab));
 
   return (
     <aside
@@ -40,7 +45,7 @@ export default function Sidebar({ activeTab, onTabChange, onLogout }) {
           {NAV_ITEMS.map((item) => {
             const isProjects = item.key === 'galleryprojects';
             const isActive = isProjects 
-              ? (activeTab === 'galleryprojects' || activeTab === 'ongoingprojects')
+              ? isProjectTab(activeTab)
               : activeTab === item.key;
 
             return (

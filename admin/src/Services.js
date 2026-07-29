@@ -5,6 +5,9 @@ const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = `${API_BASE}`;
 
 const EMPTY_FORM = {
+  category: '',
+  title: '',
+  location: '',
   images: [],
   description: '',
   servicesIncluded: '',
@@ -124,6 +127,7 @@ export default function Services() {
     setForm({
       category: srv.category || '',
       title: srv.title || srv.service || '',
+      location: srv.location || '',
       images: srvImages,
       description: srv.description || '',
       servicesIncluded: getServicesIncludedString(srv.servicesIncluded),
@@ -304,6 +308,7 @@ export default function Services() {
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">S.No</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Category</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Title</th>
+              <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Location</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm">Description</th>
               <th className="py-3 px-5 font-bold text-neutral-800 text-sm text-center">Action</th>
             </tr>
@@ -311,7 +316,7 @@ export default function Services() {
           <tbody className="divide-y divide-gray-100">
             {services.length === 0 && (
               <tr>
-                <td colSpan="5" className="py-12 text-center text-gray-400 text-sm">
+                <td colSpan="6" className="py-12 text-center text-gray-400 text-sm">
                   No services added yet.
                 </td>
               </tr>
@@ -321,6 +326,7 @@ export default function Services() {
                 <td className="py-4 px-5 text-gray-600">{idx + 1}</td>
                 <td className="py-4 px-5 font-medium text-gray-800">{srv.category || '—'}</td>
                 <td className="py-4 px-5 text-gray-700">{srv.title || srv.service || '—'}</td>
+                <td className="py-4 px-5 text-gray-700">{srv.location || '—'}</td>
                 <td className="py-4 px-5 text-gray-500 max-w-xs">
                   <span className="line-clamp-2">
                     {srv.description
@@ -365,8 +371,8 @@ export default function Services() {
 
             <div className="px-6 py-5 space-y-5">
 
-              {/* Category + Title */}
-              <div className="grid grid-cols-2 gap-4">
+              {/* Category + Title + Location */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">
                     Category <span className="text-red-500">*</span>
@@ -375,7 +381,7 @@ export default function Services() {
                     type="text"
                     value={form.category}
                     onChange={e => handleChange('category', e.target.value)}
-                    placeholder="e.g. Modular Kitchen"
+                    placeholder="e.g. Plot Sales"
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40 text-gray-900 placeholder-gray-400"
                   />
                 </div>
@@ -387,7 +393,19 @@ export default function Services() {
                     type="text"
                     value={form.title}
                     onChange={e => handleChange('title', e.target.value)}
-                    placeholder="e.g. Designing Homes That Reflect You"
+                    placeholder="e.g. Gated Community Plots"
+                    className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40 text-gray-900 placeholder-gray-400"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">
+                    Location
+                  </label>
+                  <input
+                    type="text"
+                    value={form.location}
+                    onChange={e => handleChange('location', e.target.value)}
+                    placeholder="e.g. Kannapalayam, Chennai"
                     className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#d4af37]/40 text-gray-900 placeholder-gray-400"
                   />
                 </div>

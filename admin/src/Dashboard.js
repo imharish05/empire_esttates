@@ -12,6 +12,10 @@ import ProjectCategoriesPage from './ProjectCategoriesPage';
 import LayoutsPage from './LayoutsPage';
 import ElevationsPage from './ElevationsPage';
 import ContactsPage from './ContactsPage';
+import FaqsPage from './FaqsPage';
+import TestimonialsPage from './TestimonialsPage';
+import StatsPage from './StatsPage';
+
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -248,7 +252,7 @@ export default function Dashboard({ email, onLogout }) {
 
   // ── Banner handlers ──
   const PAGE_OPTIONS = [
-    { label: 'All Projects Page Banner', link: '/projects', placement: 'Projects Page Banner' },
+    { label: 'Past Projects Page Banner', link: '/projects', placement: 'Projects Page Banner' },
     { label: 'About Us Banner', link: '/about-us', placement: 'About Us Banner' },
     { label: 'Services Details Banner', link: '/services-details', placement: 'Services Details Banner' },
     { label: 'Contact Us Banner', link: '/contact-us', placement: 'Contact Us Banner' },
@@ -375,6 +379,8 @@ export default function Dashboard({ email, onLogout }) {
   // ── Overview stats ──
   const validCatNames = new Set(categories.map(c => (c.name || '').trim().toLowerCase()));
   validCatNames.add('ongoing project');
+  validCatNames.add('on going project');
+  validCatNames.add('upcoming project');
 
   const validProjects = projects.filter(p => {
     if (!p || !p.category) return false;
@@ -498,8 +504,9 @@ export default function Dashboard({ email, onLogout }) {
 
           {activeTab === 'projectcategories' && <ProjectCategoriesPage />}
 
-          {activeTab === 'galleryprojects' && <ProjectsPage filter="all" />}
+          {(activeTab === 'galleryprojects' || activeTab === 'pastprojects') && <ProjectsPage filter="past" />}
           {activeTab === 'ongoingprojects' && <ProjectsPage filter="ongoing" />}
+          {activeTab === 'upcomingprojects' && <ProjectsPage filter="upcoming" />}
 
           {activeTab === 'metatags' && <MetaTags />}
 
@@ -542,6 +549,10 @@ export default function Dashboard({ email, onLogout }) {
           {activeTab === 'layouts' && <LayoutsPage />}
           {activeTab === 'elevations' && <ElevationsPage />}
           {activeTab === 'contacts' && <ContactsPage />}
+          {activeTab === 'faqs' && <FaqsPage />}
+          {activeTab === 'testimonials' && <TestimonialsPage />}
+          {activeTab === 'stats' && <StatsPage />}
+
 
         </main>
 

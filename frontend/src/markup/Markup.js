@@ -10,6 +10,7 @@ import ContactUs1 from './Pages/Contact/ContactUs1';
 import BlogsPage from './Pages/Blogs/BlogsPage';
 import Layouts from './Pages/Layouts';
 import Elevations from './Pages/Elevations';
+import FaqPage from './Pages/FaqPage';
 
 //ScrollToTop
 import ScrollToTop from './Element/ScrollToTop';
@@ -27,7 +28,9 @@ class Markup extends Component{
 						<Route path='/about us' exact component={Aboutus} />
 						<Route path='/about%20us' exact component={Aboutus} />
 						<Route path='/projects' exact component={Portfolio2} />
+						<Route path='/past-projects' exact component={Portfolio2} />
 						<Route path='/ongoing-projects' exact component={Portfolio2} />
+						<Route path='/upcoming-projects' exact component={Portfolio2} />
 						<Route path='/project-detail-1' exact component={ProjectDetail1} />
 						<Route path='/services' exact component={ServicesDetails} />
 						<Route path='/services-details' exact component={ServicesDetails} />
@@ -37,7 +40,10 @@ class Markup extends Component{
 						<Route path='/blogs/:slug' exact component={BlogsPage} />
 						<Route path='/layouts' exact component={Layouts} />
 						<Route path='/elevation' exact component={Elevations} />
+						<Route path='/faqs' exact component={FaqPage} />
+						<Route path='/faq' exact component={FaqPage} />
 					</Switch>
+
                 </div>
 				<ScrollToTop />
             </BrowserRouter>	

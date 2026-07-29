@@ -185,8 +185,14 @@ function PortfolioItem() {
         const el = document.getElementById('portfolio-gallery');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
       }, 300);
-    } else if (location.pathname === '/projects' || params.get('filter') === 'completed') {
-      setTag('All');
+    } else if (location.pathname === '/upcoming-projects' || params.get('filter') === 'upcoming') {
+      setTag('Upcoming Projects');
+      setTimeout(() => {
+        const el = document.getElementById('portfolio-gallery');
+        if (el) el.scrollIntoView({ behavior: 'smooth' });
+      }, 300);
+    } else {
+      setTag('Past Projects');
       setTimeout(() => {
         const el = document.getElementById('portfolio-gallery');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -238,7 +244,6 @@ function PortfolioItem() {
         }
       }
 
-      // Fallback removed to strictly use backend data
       if (!loadedProjects) {
         loadedProjects = [];
       }
@@ -249,21 +254,35 @@ function PortfolioItem() {
     loadProjectsData();
   }, []);
 
-  // Filter by category for completed projects gallery
+  const isOngoingCat = (cat) => {
+    const c = (cat || '').toLowerCase().trim();
+    return c === 'ongoing project' || c === 'on going project' || c === 'ongoing projects' || c === 'on going projects';
+  };
+  const isUpcomingCat = (cat) => {
+    const c = (cat || '').toLowerCase().trim();
+    return c === 'upcoming project' || c === 'upcoming projects';
+  };
+
+  // Filter projects by active tab / category
   useEffect(() => {
-    if (tag === 'All') {
-      setFilteredProjects(projects.filter(p => (p.category || '').toLowerCase() !== 'ongoing project'));
+    if (tag === 'Past Projects' || tag === 'All') {
+      setFilteredProjects(projects.filter(p => !isOngoingCat(p.category) && !isUpcomingCat(p.category)));
     } else if (tag === 'Ongoing Projects') {
-      setFilteredProjects(projects.filter(p => (p.category || '').toLowerCase() === 'ongoing project'));
+      setFilteredProjects(projects.filter(p => isOngoingCat(p.category)));
+    } else if (tag === 'Upcoming Projects') {
+      setFilteredProjects(projects.filter(p => isUpcomingCat(p.category)));
     } else {
       setFilteredProjects(projects.filter(p => 
-        (p.category || 'Living Room').toLowerCase() === tag.toLowerCase() && (p.category || '').toLowerCase() !== 'ongoing project'
+        (p.category || '').toLowerCase() === tag.toLowerCase() &&
+        !isOngoingCat(p.category) &&
+        !isUpcomingCat(p.category)
       ));
     }
   }, [tag, projects]);
 
-  // Build unique category list from loaded projects
-  const availableCategories = ['All', ...new Set(projects.filter(p => (p.category || '').toLowerCase() !== 'ongoing project').map(p => p.category || 'Living Room'))];
+  // Build unique category list for Past Projects sub-filters
+  const pastProjectsList = projects.filter(p => !isOngoingCat(p.category) && !isUpcomingCat(p.category));
+  const availableCategories = ['Past Projects', ...new Set(pastProjectsList.map(p => p.category || 'General'))];
 
   return (
     <>
@@ -337,11 +356,11 @@ function PortfolioItem() {
                 textTransform: 'uppercase'
               }}
             >
-              {tag === 'Ongoing Projects' ? 'Ongoing Projects' : 'Best Designs'}
+              {tag === 'Ongoing Projects' ? 'On Going Projects' : tag === 'Upcoming Projects' ? 'Upcoming Projects' : 'Past Projects'}
             </h2>
             <div className="reveal-line mx-auto" style={{ margin: '0 auto' }}></div>
           </div>
-          {tag !== 'Ongoing Projects' && (
+          {tag !== 'Ongoing Projects' && tag !== 'Upcoming Projects' && (
             <div className="row reveal-fade delay-1">
               <div className="col-lg-12 text-center">
                 <div className="site-filters filter-style1 clearfix m-b20">
@@ -356,7 +375,7 @@ function PortfolioItem() {
           )}	
         </div>
         <div className="clearfix">
-          {tag === 'Ongoing Projects' ? (
+          {(tag === 'Ongoing Projects' || tag === 'Upcoming Projects') ? (
             <ul 
               className="gallery text-center portfolio-bx p-l0 row"
               style={{ 

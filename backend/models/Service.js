@@ -25,6 +25,9 @@ const Service = sequelize.define('Service', {
     type: DataTypes.STRING,
     unique: true,
   },
+  location: {
+    type: DataTypes.STRING,
+  },
   images: {
     type: DataTypes.JSON,
     defaultValue: [],

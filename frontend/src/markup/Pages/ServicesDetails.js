@@ -29,6 +29,7 @@ export default function ServicesDetails() {
   const querySlug = queryParams.get('slug');
   const searchParam = queryParams.get('search');
   const categoryParam = queryParams.get('category');
+  const locationParam = queryParams.get('location');
   const slug = pathSlug || querySlug;
 
   const [service, setService] = useState(null);
@@ -58,19 +59,31 @@ export default function ServicesDetails() {
                setService(all[0]);
              }
           }
-        } else if (searchParam || categoryParam) {
+        } else if (searchParam || categoryParam || locationParam) {
           const term = (searchParam || categoryParam || '').toLowerCase();
-          const matched = all.find(s => 
-            (s.title && s.title.toLowerCase().includes(term)) ||
-            (s.service && s.service.toLowerCase().includes(term)) ||
-            (s.category && s.category.toLowerCase().includes(term)) ||
-            (s.estate && s.estate.toLowerCase().includes(term)) ||
-            (s.slug && s.slug.toLowerCase().includes(term))
-          );
+          const locTerm = (locationParam || '').toLowerCase();
+          const matched = all.find(s => {
+            const matchesText = !term || (
+              (s.title && s.title.toLowerCase().includes(term)) ||
+              (s.service && s.service.toLowerCase().includes(term)) ||
+              (s.category && s.category.toLowerCase().includes(term)) ||
+              (s.estate && s.estate.toLowerCase().includes(term)) ||
+              (s.slug && s.slug.toLowerCase().includes(term))
+            );
+            const matchesLoc = !locTerm || (
+              s.location && s.location.toLowerCase().includes(locTerm)
+            );
+            return matchesText && matchesLoc;
+          });
           if (matched) {
             setService(matched);
-          } else if (all[0]) {
-            setService(all[0]);
+          } else {
+            const fallbackLocMatched = locTerm ? all.find(s => s.location && s.location.toLowerCase().includes(locTerm)) : null;
+            if (fallbackLocMatched) {
+              setService(fallbackLocMatched);
+            } else if (all[0]) {
+              setService(all[0]);
+            }
           }
         } else {
           if (all[0]) setService(all[0]);
@@ -79,7 +92,7 @@ export default function ServicesDetails() {
       } catch (e) { setError(e.message); }
       finally { setLoading(false); }
     })();
-  }, [slug, location.search, searchParam, categoryParam]);
+  }, [slug, location.search, searchParam, categoryParam, locationParam]);
 
   useEffect(() => {
     if (service) applyMetaTags(
@@ -130,10 +143,17 @@ export default function ServicesDetails() {
                  <img src={serviceImages[0]} alt={service.title || service.service} style={{ width: '100%', height: 450, objectFit: 'cover' }} />
               </div>
 
-              {/* Service Title */}
-              <h2 className="reveal-left" style={{ fontSize: 32, fontWeight: 700, color: '#0284c7', marginBottom: 20 }}>
-                {service.title || service.service}
-              </h2>
+              {/* Service Title & Location */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '10px', marginBottom: 20 }}>
+                <h2 className="reveal-left" style={{ fontSize: 32, fontWeight: 700, color: '#0284c7', margin: 0 }}>
+                  {service.title || service.service}
+                </h2>
+                {service.location && (
+                  <span style={{ background: '#f0f9ff', border: '1px solid rgba(56, 189, 248, 0.4)', color: '#0284c7', padding: '6px 14px', borderRadius: '20px', fontSize: '13px', fontWeight: '700', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                    📍 {service.location}
+                  </span>
+                )}
+              </div>
 
               {/* Description with Drop Cap */}
               <div className="reveal-up delay-1" style={{ color: '#666', fontSize: 16, lineHeight: 1.8, marginBottom: 30, display: 'flow-root', textAlign: 'justify' }}>

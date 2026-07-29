@@ -1,5 +1,23 @@
 const { Service } = require('../models');
 
+// Helper to generate a unique slug for a service
+const generateUniqueSlug = async (title, currentId = null) => {
+  let baseSlug = (title || 'service').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+  if (!baseSlug) baseSlug = 'service';
+  
+  let slug = baseSlug;
+  let count = 1;
+
+  while (true) {
+    const existing = await Service.findOne({ where: { slug } });
+    if (!existing || (currentId && Number(existing.id) === Number(currentId))) {
+      return slug;
+    }
+    slug = `${baseSlug}-${count}`;
+    count++;
+  }
+};
+
 // GET all services
 exports.getAll = async (req, res) => {
   try {
@@ -39,10 +57,9 @@ exports.getBySlug = async (req, res) => {
 exports.create = async (req, res) => {
   try {
     const body = req.body;
-    // Auto-generate slug if not provided
-    if (!body.slug && body.title) {
-      body.slug = body.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    }
+    // Always generate unique slug
+    body.slug = await generateUniqueSlug(body.title || body.service || body.slug);
+
     // Sync legacy fields
     if (!body.service) body.service = body.title;
     if (!body.estate)   body.estate  = body.category;
@@ -65,8 +82,7 @@ exports.update = async (req, res) => {
     // Sync legacy fields
     if (body.title) {
       body.service = body.title;
-      // Regenerate slug if title changes
-      body.slug = body.title.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+      body.slug = await generateUniqueSlug(body.title, req.params.id);
     }
     if (body.category) body.estate  = body.category;
 

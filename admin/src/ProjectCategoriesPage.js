@@ -185,6 +185,8 @@ export default function ProjectCategoriesPage() {
         const parsed = JSON.parse(cached);
         const validCats = new Set(newList.map(c => c.name.trim().toLowerCase()));
         validCats.add('ongoing project');
+        validCats.add('on going project');
+        validCats.add('upcoming project');
 
         const filteredProjects = parsed.filter(p => {
           if (!p.category) return false;

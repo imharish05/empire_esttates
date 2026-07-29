@@ -96,19 +96,15 @@ export default function HomeSlider() {
     ? servicesList.filter(s => {
         const title = (s.title || s.service || '').toLowerCase();
         const cat = (s.category || s.estate || '').toLowerCase();
-        const q = searchQuery.toLowerCase();
-        return title.includes(q) || cat.includes(q);
+        const loc = (s.location || '').toLowerCase();
+        const q = searchQuery.trim().toLowerCase();
+        return title.includes(q) || cat.includes(q) || loc.includes(q);
       })
     : servicesList;
 
   const handleSelectSuggestion = (srv) => {
     setSearchQuery(srv.title || srv.service);
     setShowSuggestions(false);
-    if (srv.slug) {
-      history.push(`/services-details/${srv.slug}`);
-    } else {
-      history.push(`/services-details?search=${encodeURIComponent(srv.title || srv.service)}`);
-    }
   };
 
   const handleSearchSubmit = (e) => {
@@ -118,10 +114,14 @@ export default function HomeSlider() {
       history.push('/services-details');
       return;
     }
+
     const matched = servicesList.find(s =>
       (s.title || s.service || '').toLowerCase() === q.toLowerCase() ||
+      (s.category || s.estate || '').toLowerCase() === q.toLowerCase() ||
+      (s.location || '').toLowerCase() === q.toLowerCase() ||
       (s.slug || '').toLowerCase() === q.toLowerCase()
     );
+
     if (matched && matched.slug) {
       history.push(`/services-details/${matched.slug}`);
     } else {
@@ -139,8 +139,13 @@ export default function HomeSlider() {
   };
 
   return (
-    <div className="homepage-hero-static" style={{ position: 'relative', overflow: 'hidden' }}>
+    <div className="homepage-hero-static" style={{ position: 'relative', overflow: 'hidden', width: '100%', maxWidth: '100%' }}>
       <style>{`
+        .homepage-hero-static, .homepage-hero-slide {
+          overflow-x: hidden !important;
+          width: 100% !important;
+          max-width: 100% !important;
+        }
         .homepage-hero-slide {
           min-height: 620px;
         }
@@ -179,6 +184,17 @@ export default function HomeSlider() {
           border: 1.5px solid rgba(56, 189, 248, 0.3);
           position: relative;
           z-index: 10;
+        }
+        .homepage-hero-search-row {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 14px;
+        }
+        @media only screen and (max-width: 767px) {
+          .homepage-hero-search-row {
+            grid-template-columns: 1fr !important;
+            gap: 10px !important;
+          }
         }
         @media only screen and (max-width: 991px) {
           .homepage-hero-slide {
@@ -304,7 +320,8 @@ export default function HomeSlider() {
           backgroundSize: "cover",
           backgroundPosition: "center",
           display: 'flex',
-          alignItems: 'center'
+          alignItems: 'center',
+          overflow: 'hidden'
         }}
       >
         <div className="container">
@@ -389,8 +406,8 @@ export default function HomeSlider() {
 
                 <form className="homepage-hero-search-form" onSubmit={handleSearchSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
                   
+                  {/* Service Search Input */}
                   <div style={{ position: 'relative' }}>
-                    
                     <div style={{ position: 'relative' }}>
                       <input
                         type="text"
@@ -457,7 +474,16 @@ export default function HomeSlider() {
                             onMouseEnter={(e) => { e.currentTarget.style.background = '#f0f9ff'; e.currentTarget.style.color = '#0284c7'; }}
                             onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#1e293b'; }}
                           >
-                            <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginRight: '8px' }}>{srv.title || srv.service}</span>
+                            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', marginRight: '8px' }}>
+                              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                {srv.title || srv.service}
+                              </span>
+                              {srv.location && (
+                                <span style={{ fontSize: '11px', color: '#0284c7', fontWeight: '600', marginTop: '2px' }}>
+                                  📍 {srv.location}
+                                </span>
+                              )}
+                            </div>
                             <span style={{ fontSize: '10.5px', background: 'rgba(56, 189, 248, 0.12)', color: '#0284c7', padding: '3px 8px', borderRadius: '12px', fontWeight: '700', flexShrink: 0 }}>
                               {srv.category || 'Service'}
                             </span>

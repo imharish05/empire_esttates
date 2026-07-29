@@ -24,8 +24,9 @@ const formatSiteUrl = (urlOrPath) => {
 const PAGE_OPTIONS = [
   { label: 'Home',              path: '/' },
   { label: 'About Us',          path: '/about-us' },
-  { label: 'All Projects',      path: '/projects' },
-  { label: 'Ongoing Projects',  path: '/ongoing-projects' },
+  { label: 'Past Projects',     path: '/projects' },
+  { label: 'On Going Projects', path: '/ongoing-projects' },
+  { label: 'Upcoming Projects', path: '/upcoming-projects' },
   { label: 'Layouts',           path: '/layouts' },
   { label: 'Elevation',         path: '/elevation' },
   { label: 'Blogs',             path: '/blogs' },

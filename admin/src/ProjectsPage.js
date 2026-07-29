@@ -72,7 +72,7 @@ export default function ProjectsPage({ filter = 'all' }) {
   const openAdd = () => {
     setEditItem(null);
     setForm({
-      category: filter === 'ongoing' ? 'Ongoing Project' : '',
+      category: filter === 'ongoing' ? 'Ongoing Project' : filter === 'upcoming' ? 'Upcoming Project' : '',
       image: '',
       imagePreview: '',
     });
@@ -213,7 +213,9 @@ export default function ProjectsPage({ filter = 'all' }) {
       <div className="flex items-center gap-2 text-sm text-neutral-500 mb-5">
         <span className="material-symbols-outlined text-[16px]">home</span>
         <span className="material-symbols-outlined text-[14px]">chevron_right</span>
-        <span className="font-semibold text-neutral-800">Projects</span>
+        <span className="font-semibold text-neutral-800">
+          Projects ({filter === 'ongoing' ? 'On Going Projects' : filter === 'upcoming' ? 'Upcoming Projects' : 'Past Projects'})
+        </span>
       </div>
 
       {/* Add Button */}
@@ -233,7 +235,7 @@ export default function ProjectsPage({ filter = 'all' }) {
           <thead>
             <tr className="bg-neutral-50 border-b border-neutral-200 text-neutral-700">
               <th className="py-3 px-4 font-bold text-neutral-800 text-sm w-16">S.No.</th>
-              {filter !== 'ongoing' && <th className="py-3 px-4 font-bold text-neutral-800 text-sm w-48">Category</th>}
+              {filter !== 'ongoing' && filter !== 'upcoming' && <th className="py-3 px-4 font-bold text-neutral-800 text-sm w-48">Category</th>}
               <th className="py-3 px-4 font-bold text-neutral-800 text-sm w-40">Image</th>
               <th className="py-3 px-4 font-bold text-neutral-800 text-sm w-28">Action</th>
             </tr>
@@ -245,24 +247,28 @@ export default function ProjectsPage({ filter = 'all' }) {
               const validCatNames = new Set(categories.map(c => (c.name || '').trim().toLowerCase()));
               const displayProjects = projects.filter(p => {
                 const pCat = (p.category || '').trim().toLowerCase();
-                const isOngoing = pCat === 'ongoing project';
-                if (filter === 'ongoing') return isOngoing;
+                const isOngoing = pCat === 'ongoing project' || pCat === 'on going project';
+                const isUpcoming = pCat === 'upcoming project';
 
-                if (isOngoing) return false;
+                if (filter === 'ongoing') return isOngoing;
+                if (filter === 'upcoming') return isUpcoming;
+
+                if (isOngoing || isUpcoming) return false;
                 if (validCatNames.size > 0 && pCat && !validCatNames.has(pCat)) {
                   return false;
                 }
                 return true;
               });
               
+              const filterLabel = filter === 'ongoing' ? 'ongoing ' : filter === 'upcoming' ? 'upcoming ' : filter === 'past' ? 'past ' : '';
               if (displayProjects.length === 0) {
-                return <tr><td colSpan="4" className="py-12 text-center text-neutral-400">No {filter === 'ongoing' ? 'ongoing ' : ''}projects found.</td></tr>;
+                return <tr><td colSpan="4" className="py-12 text-center text-neutral-400">No {filterLabel}projects found.</td></tr>;
               }
               
               return displayProjects.map((proj, idx) => (
                 <tr key={proj.id} className="hover:bg-neutral-50 transition-colors align-middle">
                 <td className="py-4 px-4 text-neutral-600 align-middle">{idx + 1}</td>
-                {filter !== 'ongoing' && (
+                {filter !== 'ongoing' && filter !== 'upcoming' && (
                   <td className="py-4 px-4 align-middle">
                     <div className="font-medium text-neutral-800">{proj.category || '—'}</div>
                   </td>
@@ -324,7 +330,7 @@ export default function ProjectsPage({ filter = 'all' }) {
                 )}
 
                 <div className="grid grid-cols-2 gap-4">
-                  {filter !== 'ongoing' && (
+                  {filter !== 'ongoing' && filter !== 'upcoming' && (
                     <div>
                       <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">Category <span className="text-red-500">*</span></label>
                       <select
@@ -333,14 +339,16 @@ export default function ProjectsPage({ filter = 'all' }) {
                         className="w-full border border-neutral-300 rounded px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-1 focus:ring-[#d4af37] bg-white"
                       >
                         <option value="" className="text-neutral-900 bg-white">-- Select Category --</option>
-                        <option value="Ongoing Project" className="text-neutral-900 bg-white font-semibold text-[#c8902a]">Ongoing Project</option>
+                        <option value="Past Project" className="text-neutral-900 bg-white font-semibold text-[#0284c7]">Past Project</option>
+                        <option value="Ongoing Project" className="text-neutral-900 bg-white font-semibold text-[#c8902a]">On Going Project</option>
+                        <option value="Upcoming Project" className="text-neutral-900 bg-white font-semibold text-[#10b981]">Upcoming Project</option>
                         {categories.map((cat) => (
                           <option key={cat.id} value={cat.name} className="text-neutral-900 bg-white">{cat.name}</option>
                         ))}
                       </select>
                     </div>
                   )}
-                  <div className={filter === 'ongoing' ? 'col-span-2' : ''}>
+                  <div className={(filter === 'ongoing' || filter === 'upcoming') ? 'col-span-2' : ''}>
                     <label className="block text-xs font-bold uppercase text-neutral-600 mb-1">Image <span className="text-red-500">*</span></label>
                     <input
                       type="file"

@@ -75,6 +75,8 @@ exports.deleteCategory = async (req, res) => {
     const remainingCategories = await ProjectCategory.findAll();
     const validCategorySet = new Set(remainingCategories.map(c => c.name.trim().toLowerCase()));
     validCategorySet.add('ongoing project');
+    validCategorySet.add('on going project');
+    validCategorySet.add('upcoming project');
 
     // Fetch all projects and purge any project belonging to the deleted category or orphaned category
     const allProjects = await Project.findAll();

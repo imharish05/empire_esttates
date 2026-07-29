@@ -11,14 +11,39 @@ import ScrollRevealInit from '../../../utils/ScrollRevealInit';
 import about1 from './../../../images/about/about1.png';
 import about2 from './../../../images/about/about2.png';
 import about3 from './../../../images/about/about3.png';
-import { FaAward, FaMapMarkedAlt, FaUserFriends, FaShieldAlt, FaBullseye, FaEye, FaFileContract, FaCheckCircle, FaHandHoldingUsd, FaRoad } from '../../../icons';
+import founderImg from './../../../images/about/founder.jpg';
+import signImg from './../../../images/sign.png';
+import logo from './../../../images/logo.png';
+import { FaPhoneAlt, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaAward, FaMapMarkedAlt, FaUserFriends, FaShieldAlt, FaBullseye, FaEye, FaFileContract, FaCheckCircle, FaHandHoldingUsd, FaRoad, FaQuoteLeft, FaArrowRight } from '../../../icons';
 
-const counterBlog = [
-	{icon: <FaAward style={{ fontSize: '40px', color: '#0284c7' }} />, num: 23,  title: 'Years of Excellence',},
-	{icon: <FaMapMarkedAlt style={{ fontSize: '40px', color: '#0284c7' }} />, num: 15,    title: 'High-Growth Locations',},
-	{icon: <FaUserFriends style={{ fontSize: '40px', color: '#0284c7' }} />, num: 250,   title: 'Units Completed',},
-	{icon: <FaShieldAlt style={{ fontSize: '40px', color: '#0284c7' }} />, num: 100, title: 'Clear Legal Titles %',},
-];
+const renderStatIcon = (iconName) => {
+	const iconStyle = { fontSize: '24px', color: '#0284c7' };
+	switch (iconName) {
+		case 'FaAward':
+			return <FaAward style={iconStyle} />;
+		case 'FaMapMarkedAlt':
+			return <FaMapMarkedAlt style={iconStyle} />;
+		case 'FaUserFriends':
+			return <FaUserFriends style={iconStyle} />;
+		case 'FaShieldAlt':
+			return <FaShieldAlt style={iconStyle} />;
+		case 'FaBullseye':
+			return <FaBullseye style={iconStyle} />;
+		case 'FaEye':
+			return <FaEye style={iconStyle} />;
+		case 'FaFileContract':
+			return <FaFileContract style={iconStyle} />;
+		case 'FaCheckCircle':
+			return <FaCheckCircle style={iconStyle} />;
+		case 'FaRoad':
+			return <FaRoad style={iconStyle} />;
+		case 'FaHandHoldingUsd':
+			return <FaHandHoldingUsd style={iconStyle} />;
+		default:
+			return <FaAward style={iconStyle} />;
+	}
+};
 
 const timelineItems = [
 	{ year: '2001', text: 'THIRUVERKADU, POONAMALLEE', tag: '' },
@@ -59,9 +84,34 @@ const timelineItems = [
 ];
 
 class Aboutus extends Component{
+	state = {
+		stats: [
+			{ icon: 'FaAward', count: 20, suffix: '+', title: 'Years of Excellence' },
+			{ icon: 'FaMapMarkedAlt', count: 13, suffix: '+', title: 'High-Growth Locations' },
+			{ icon: 'FaUserFriends', count: 221, suffix: '+', title: 'Units Completed' },
+			{ icon: 'FaShieldAlt', count: 88, suffix: '%', title: 'Clear Legal Titles %' },
+		]
+	};
+
 	componentDidMount() {
 		applyMetaTags("About Us | Empire Estates", "Learn about Empire Estates, our legacy, our mission, and our vision.");
+		this.fetchStats();
 	}
+
+	fetchStats = async () => {
+		try {
+			const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+			const res = await fetch(`${API_URL}/stats?activeOnly=true`);
+			if (res.ok) {
+				const data = await res.json();
+				if (Array.isArray(data) && data.length > 0) {
+					this.setState({ stats: data });
+				}
+			}
+		} catch (e) {
+			console.log('Error fetching stats:', e);
+		}
+	};
 	render(){
 		return(
 			<Fragment>
@@ -109,8 +159,159 @@ class Aboutus extends Component{
 						</div>
 					</section>
 
+					{/* Section-Founder: Founder Introduction */}
+					<section className="content-inner bg-light overflow-hidden" style={{ padding: '50px 0 20px 0', background: 'linear-gradient(135deg, #f8fafc 0%, #f0f9ff 100%)', borderTop: '1px solid rgba(2, 132, 199, 0.1)', borderBottom: '1px solid rgba(2, 132, 199, 0.1)' }}>
+						<div className="container">
+							<div className="row align-items-center">
+								{/* Founder / Managing Partner Card Column */}
+								<div className="col-lg-5 col-md-12 m-b20 reveal-left">
+									<div className="founder-img-wrapper" style={{ position: 'relative', margin: '0 auto', maxWidth: '440px' }}>
+										{/* Ambient Backdrop Glow */}
+										<div style={{ position: 'absolute', top: '-15px', left: '-15px', right: '-15px', bottom: '-15px', background: 'linear-gradient(135deg, #0284c7 0%, #38bdf8 100%)', borderRadius: '24px', opacity: 0.15, filter: 'blur(20px)', zIndex: 0 }}></div>
+										
+										{/* Brand Executive Card */}
+										<div className="founder-card" style={{ position: 'relative', zIndex: 1, borderRadius: '24px', overflow: 'hidden', border: '1.5px solid rgba(56, 189, 248, 0.3)', boxShadow: '0 25px 50px -12px rgba(2, 132, 199, 0.2)', background: 'linear-gradient(180deg, #0f172a 0%, #1e293b 100%)', padding: '36px 28px', color: '#ffffff' }}>
+											
+											{/* Logo Container */}
+											<div style={{ background: '#ffffff', borderRadius: '16px', padding: '18px 24px', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: '100%', marginBottom: '24px', boxShadow: '0 10px 25px rgba(0,0,0,0.2)' }}>
+												<img src={logo} alt="Empire Esttates" style={{ maxHeight: '65px', width: 'auto', objectFit: 'contain' }} />
+											</div>
+
+											{/* Name & Qualifications */}
+											<div style={{ textAlign: 'center', marginBottom: '20px' }}>
+												<h3 style={{ color: '#ffffff', fontWeight: '800', margin: '0 0 6px 0', fontSize: '24px' }}>T. Karthik Prakash</h3>
+												<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', marginBottom: '8px' }}>
+													<span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', padding: '2px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', letterSpacing: '0.5px' }}>D.C.E.</span>
+													<span style={{ background: 'rgba(56, 189, 248, 0.2)', color: '#38bdf8', border: '1px solid rgba(56, 189, 248, 0.4)', padding: '2px 10px', borderRadius: '12px', fontSize: '11px', fontWeight: '700', letterSpacing: '0.5px' }}>M.B.A.</span>
+												</div>
+												<span style={{ color: '#38bdf8', fontWeight: '700', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '1.5px', display: 'block' }}>Managing Partner</span>
+											</div>
+
+											<div style={{ height: '1px', background: 'linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.15) 50%, transparent 100%)', marginBottom: '20px' }}></div>
+
+											{/* Contact Information Box */}
+											<div style={{ display: 'flex', flexDirection: 'column', gap: '14px', fontSize: '13.5px' }}>
+												<a href="tel:+919841225401" style={{ color: '#e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color='#38bdf8'} onMouseLeave={e => e.currentTarget.style.color='#e2e8f0'}>
+													<div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', flexShrink: 0 }}>
+														<FaPhoneAlt style={{ fontSize: '13px' }} />
+													</div>
+													<span>98412 25401 / 88254 71748</span>
+												</a>
+
+												<a href="mailto:empireesttates@gmail.com" style={{ color: '#e2e8f0', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '12px', transition: 'color 0.2s' }} onMouseEnter={e => e.currentTarget.style.color='#38bdf8'} onMouseLeave={e => e.currentTarget.style.color='#e2e8f0'}>
+													<div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', flexShrink: 0 }}>
+														<FaEnvelope style={{ fontSize: '13px' }} />
+													</div>
+													<span>empireesttates@gmail.com</span>
+												</a>
+
+												<div style={{ color: '#cbd5e1', display: 'flex', alignItems: 'flex-start', gap: '12px', lineHeight: '1.5' }}>
+													<div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'rgba(56, 189, 248, 0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#38bdf8', flexShrink: 0, marginTop: '2px' }}>
+														<FaMapMarkerAlt style={{ fontSize: '13px' }} />
+													</div>
+													<span>Plot No. 12 Audco Nagar 3rd Main Road, Kattupakkam, Poonamallee, Chennai - 600056</span>
+												</div>
+											</div>
+
+										</div>
+
+										{/* Floating Leadership Badge */}
+										<div style={{ position: 'absolute', top: '-15px', right: '-10px', zIndex: 3, background: '#0284c7', color: '#ffffff', padding: '10px 18px', borderRadius: '50px', boxShadow: '0 10px 25px rgba(2, 132, 199, 0.4)', display: 'flex', alignItems: 'center', gap: '8px', border: '2px solid #ffffff' }}>
+											<FaAward style={{ fontSize: '20px', color: '#ffffff' }} />
+											<div>
+												<span style={{ fontSize: '15px', fontWeight: '800', display: 'block', lineHeight: 1 }}>23+ Years</span>
+												<span style={{ fontSize: '9.5px', textTransform: 'uppercase', opacity: 0.9, letterSpacing: '0.5px' }}>Excellence</span>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								{/* Founder Content Column */}
+								<div className="col-lg-7 col-md-12 m-b20 reveal-right" style={{ paddingLeft: '30px' }}>
+									<div className="section-head style-1 m-b20">
+										<span className="text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '2px', color: '#0284c7', fontSize: '13px' }}>MEET OUR MANAGING PARTNER</span>
+										<h2 className="title font-weight-700 m-b10" style={{ color: '#0f172a', fontSize: '34px' }}>T. Karthik Prakash <span style={{ fontSize: '18px', color: '#64748b', fontWeight: '600' }}>D.C.E., M.B.A.</span></h2>
+										<p style={{ color: '#0284c7', fontWeight: '700', fontSize: '16px', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: '15px' }}>Managing Partner | Civil Engineer</p>
+										<div className="dlab-separator bg-primary m-b20" style={{ width: '60px', height: '4px', background: '#0284c7', borderRadius: '2px' }}></div>
+									</div>
+
+									{/* Quote Banner */}
+									<div className="m-b25" style={{ background: '#ffffff', padding: '20px 24px', borderLeft: '4px solid #0284c7', borderRadius: '0 12px 12px 0', boxShadow: '0 4px 20px rgba(2, 132, 199, 0.08)' }}>
+										<div style={{ display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+											<FaQuoteLeft style={{ color: '#0284c7', fontSize: '24px', flexShrink: 0, marginTop: '2px' }} />
+											<p style={{ fontStyle: 'italic', color: '#1e293b', fontSize: '16px', lineHeight: '1.7', margin: 0, fontWeight: '500' }}>
+												"Building a home is far more than an engineering project; it is about building trust, creating lasting family legacies, and giving every buyer absolute peace of mind with 100% legal title clarity and structural perfection."
+											</p>
+										</div>
+									</div>
+
+									{/* Detailed Bio Paragraphs */}
+									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#475569', fontSize: '15px', textAlign: 'justify', marginBottom: '15px' }}>
+										Established in <strong>2001</strong> by <strong>T. Karthik Prakash (D.C.E., M.B.A.)</strong>, a seasoned civil engineer and business leader with extensive hands-on expertise in Chennai’s real estate and construction sectors, <strong>Empire Esttates</strong> was built on a foundation of structural integrity, engineering innovation, and customer-first ethics.
+									</p>
+									<p className="font-16 text-black" style={{ lineHeight: '1.8', color: '#475569', fontSize: '15px', textAlign: 'justify', marginBottom: '25px' }}>
+										Under his visionary stewardship as Managing Partner over the past <strong>23+ years</strong>, Empire Esttates has successfully delivered over <strong>1000+ residential houses</strong> and <strong>250+ housing units</strong> across prime growth hubs including Kattupakkam, Poonamallee, Valasaravakkam, Porur, Avadi, and Thiruvallur. Mr. Karthik Prakash personally ensures that every layout, foundation, and structural slab adheres strictly to civil engineering benchmarks and DTCP/CMDA approvals.
+									</p>
+
+									{/* Core Leadership Highlights Grid */}
+									<div className="row m-b10">
+										<div className="col-sm-6 m-b15">
+											<div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+												<div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7', flexShrink: 0 }}>
+													<FaCheckCircle style={{ fontSize: '18px' }} />
+												</div>
+												<div>
+													<h6 style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>D.C.E., M.B.A.</h6>
+													<span style={{ fontSize: '12px', color: '#64748b' }}>Civil Engineering &amp; Management</span>
+												</div>
+											</div>
+										</div>
+
+										<div className="col-sm-6 m-b15">
+											<div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+												<div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7', flexShrink: 0 }}>
+													<FaShieldAlt style={{ fontSize: '18px' }} />
+												</div>
+												<div>
+													<h6 style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>100% Legal Transparency</h6>
+													<span style={{ fontSize: '12px', color: '#64748b' }}>Clear Titles &amp; CMDA Approvals</span>
+												</div>
+											</div>
+										</div>
+
+										<div className="col-sm-6 m-b15">
+											<div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+												<div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7', flexShrink: 0 }}>
+													<FaAward style={{ fontSize: '18px' }} />
+												</div>
+												<div>
+													<h6 style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>1000+ Homes Built</h6>
+													<span style={{ fontSize: '12px', color: '#64748b' }}>Proven Track Record</span>
+												</div>
+											</div>
+										</div>
+
+										<div className="col-sm-6 m-b15">
+											<div style={{ display: 'flex', alignItems: 'center', gap: '12px', background: '#ffffff', padding: '12px 16px', borderRadius: '10px', border: '1px solid #e2e8f0', boxShadow: '0 2px 8px rgba(0,0,0,0.03)' }}>
+												<div style={{ width: '38px', height: '38px', borderRadius: '50%', background: 'rgba(2, 132, 199, 0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#0284c7', flexShrink: 0 }}>
+													<FaUserFriends style={{ fontSize: '18px' }} />
+												</div>
+												<div>
+													<h6 style={{ margin: 0, fontSize: '14px', fontWeight: '700', color: '#0f172a' }}>Customer First</h6>
+													<span style={{ fontSize: '12px', color: '#64748b' }}>On-Time &amp; Transparent</span>
+												</div>
+											</div>
+										</div>
+									</div>
+
+
+								</div>
+							</div>
+						</div>
+					</section>
+
 					{/* Section-1: Professional Strengths */}
-					<section className="content-inner bg-light" style={{ padding: '80px 0' }}>
+					<section className="content-inner bg-light" style={{ padding: '40px 0 60px 0' }}>
 						<div className="container">
 							<div className="section-head text-center style-1 reveal-up" style={{ marginBottom: '50px' }}>
 								<span className=" text-uppercase font-weight-600 m-b10 d-block" style={{ letterSpacing: '2px', color: '#0284c7' }}>OUR STRENGTHS</span>
@@ -505,22 +706,67 @@ class Aboutus extends Component{
 					</section>
 
 					{/* Section-5: Stats Counter */}
-					<section className="bg-white content-inner" style={{ padding: '40px 0 80px 0' }}>
+					<section className="bg-white content-inner" style={{ padding: '50px 0 70px 0' }}>
 						<div className="container">
-							<div className="row">
-								{counterBlog.map((data,index)=>(
-									<div className="col-lg-3 col-md-6 col-sm-6 col-6 m-b30" key={index}>
-										<div className="counter-left archia-counter d-flex align-items-center justify-content-center">
-											<div className="icon-lg pull-left m-r15">{data.icon}</div>
-											<div className="clearfix">
-												<div className="counter m-b5" style={{ fontSize: '32px', fontWeight: '800', color: '#0284c7' }}>
-													<CountUp end={data.num} duration={4}/>{data.num === 100 ? '%' : '+'}
+							<div className="row justify-content-center align-items-stretch">
+								{this.state.stats.map((data, index) => {
+									const total = this.state.stats.length;
+									const colClass = total === 1 
+										? 'col-lg-6 col-md-8 col-12 mb-4' 
+										: total === 2 
+										? 'col-lg-5 col-md-6 col-sm-6 col-12 mb-4' 
+										: total === 3 
+										? 'col-lg-4 col-md-4 col-sm-6 col-12 mb-4' 
+										: 'col-lg-3 col-md-6 col-sm-6 col-12 mb-4';
+
+									return (
+										<div className={colClass} key={data.id || index}>
+											<div 
+												style={{
+													height: '100%',
+													maxWidth: '280px',
+													margin: '0 auto',
+													padding: '26px 20px',
+													borderRadius: '16px',
+													background: '#ffffff',
+													border: '1.5px solid #e2e8f0',
+													boxShadow: '0 4px 20px rgba(2, 132, 199, 0.06)',
+													display: 'flex',
+													flexDirection: 'column',
+													alignItems: 'center',
+													justifyContent: 'center',
+													textAlign: 'center',
+													transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)'
+												}}
+												onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.borderColor = '#38bdf8'; e.currentTarget.style.boxShadow = '0 12px 30px rgba(2, 132, 199, 0.15)'; }}
+												onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.borderColor = '#e2e8f0'; e.currentTarget.style.boxShadow = '0 4px 20px rgba(2, 132, 199, 0.06)'; }}
+											>
+												<div 
+													style={{ 
+														width: '56px', 
+														height: '56px', 
+														borderRadius: '50%', 
+														background: 'rgba(2, 132, 199, 0.1)', 
+														display: 'flex', 
+														alignItems: 'center', 
+														justifyContent: 'center',
+														marginBottom: '14px',
+														flexShrink: 0
+													}}
+												>
+													{renderStatIcon(data.icon)}
 												</div>
-												<span className="font-16 text-black" style={{ fontSize: '14px', color: '#666' }}>{data.title}</span> 
+												<div style={{ fontSize: '34px', fontWeight: '800', color: '#0284c7', lineHeight: '1.2', marginBottom: '6px' }}>
+													<CountUp end={data.count !== undefined ? data.count : (data.num || 0)} duration={4}/>
+													{data.suffix !== undefined ? data.suffix : (data.num === 100 ? '%' : '+')}
+												</div>
+												<span style={{ fontSize: '13px', fontWeight: '700', color: '#334155', textTransform: 'uppercase', letterSpacing: '0.5px', textAlign: 'center' }}>
+													{data.title}
+												</span>
 											</div>
 										</div>
-									</div>
-								))}
+									);
+								})}
 							</div>
 						</div>
 					</section>
@@ -534,8 +780,41 @@ class Aboutus extends Component{
 									<p style={{ color: '#fff', fontSize: '16px', opacity: 0.9, marginBottom: 0 }}>Get in touch with our experts today to schedule a site visit and secure your dream home.</p>
 								</div>
 								<div className="col-lg-3 col-md-12 text-center text-lg-right">
-									<Link to="/contact-us" className="btn btn-white radius-md" style={{ background: '#fff', color: '#0284c7', fontWeight: '700', padding: '12px 30px', borderRadius: '4px', textTransform: 'uppercase', textDecoration: 'none', transition: 'all 0.3s' }}>
-										Contact Us
+									<Link 
+										to="/contact-us" 
+										style={{ 
+											display: 'inline-flex',
+											alignItems: 'center',
+											justifyContent: 'center',
+											gap: '10px',
+											backgroundColor: '#ffffff', 
+											color: '#0284c7', 
+											fontWeight: '800', 
+											fontSize: '14px',
+											padding: '14px 28px', 
+											borderRadius: '50px', 
+											textTransform: 'uppercase', 
+											letterSpacing: '0.5px',
+											textDecoration: 'none', 
+											border: '2px solid #ffffff',
+											boxShadow: '0 8px 25px rgba(0, 0, 0, 0.18)',
+											transition: 'all 0.3s ease' 
+										}}
+										onMouseEnter={e => {
+											e.currentTarget.style.backgroundColor = 'transparent';
+											e.currentTarget.style.color = '#ffffff';
+											e.currentTarget.style.borderColor = '#ffffff';
+											e.currentTarget.style.transform = 'translateY(-2px)';
+										}}
+										onMouseLeave={e => {
+											e.currentTarget.style.backgroundColor = '#ffffff';
+											e.currentTarget.style.color = '#0284c7';
+											e.currentTarget.style.borderColor = '#ffffff';
+											e.currentTarget.style.transform = 'translateY(0)';
+										}}
+									>
+										<span style={{ color: 'inherit' }}>Contact Us</span>
+										<FaArrowRight style={{ fontSize: '13px', color: 'inherit' }} />
 									</Link>
 								</div>
 							</div>

@@ -93,10 +93,13 @@ export default function MenuLinks({ mobileMode }) {
           </button>
           <ul className={`mobile-nav-links__sub${projectsOpen ? ' is-open' : ''}`}>
             <li>
-              <Link to="/projects">All Projects</Link>
+              <Link to="/projects">Past Projects</Link>
             </li>
             <li>
-              <Link to="/ongoing-projects">Ongoing Projects</Link>
+              <Link to="/ongoing-projects">On Going Projects</Link>
+            </li>
+            <li>
+              <Link to="/upcoming-projects">Upcoming Projects</Link>
             </li>
           </ul>
         </li>
@@ -108,6 +111,9 @@ export default function MenuLinks({ mobileMode }) {
         </li>
         <li>
           <Link to="/blogs" className={isActive('/blogs') ? 'active' : ''}>Blogs</Link>
+        </li>
+        <li>
+          <Link to="/faqs" className={isActive('/faq') ? 'active' : ''}>FAQ</Link>
         </li>
         <li>
           <Link to="/contact-us" className={isActive('/contact') ? 'active' : ''}>Contact Us</Link>
@@ -149,7 +155,7 @@ export default function MenuLinks({ mobileMode }) {
       </li>
 
       {/* Projects - Dropdown */}
-      <li className={`has-sub-dropdown ${isActive('/projects') ? 'active' : ''}`}>
+      <li className={`has-sub-dropdown ${isActive('/projects') || isActive('/past-projects') || isActive('/ongoing-projects') || isActive('/upcoming-projects') ? 'active' : ''}`}>
         <Link to="#">
           Projects{' '}
           <svg style={{ width: '12px', height: '12px', marginLeft: '4px', fill: 'currentColor', display: 'inline-block', verticalAlign: 'middle' }} viewBox="0 0 24 24">
@@ -158,10 +164,13 @@ export default function MenuLinks({ mobileMode }) {
         </Link>
         <ul className="sub-menu">
           <li>
-            <Link to="/projects">All Projects</Link>
+            <Link to="/projects">Past Projects</Link>
           </li>
           <li>
-            <Link to="/ongoing-projects">Ongoing Projects</Link>
+            <Link to="/ongoing-projects">On Going Projects</Link>
+          </li>
+          <li>
+            <Link to="/upcoming-projects">Upcoming Projects</Link>
           </li>
         </ul>
       </li>
@@ -181,6 +190,11 @@ export default function MenuLinks({ mobileMode }) {
         <Link to="/blogs">Blogs</Link>
       </li>
 
+      {/* FAQ */}
+      <li className={isActive('/faq') ? 'active' : ''}>
+        <Link to="/faqs">FAQ</Link>
+      </li>
+
       {/* Contact Us */}
       <li className={isActive('/contact') ? 'active' : ''}>
         <Link to="/contact-us">Contact Us</Link>
@@ -188,3 +202,4 @@ export default function MenuLinks({ mobileMode }) {
     </ul>
   );
 }
+
