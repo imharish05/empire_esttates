@@ -16,7 +16,7 @@
 
 /* ── Prevent Horizontal Overflow (X Scrollbar) ──────── */
 html, body, .App, .page-wraper, .page-content {
-  overflow-x: hidden !important;
+  overflow-x: clip !important;
   max-width: 100% !important;
 }
 

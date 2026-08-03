@@ -145,10 +145,12 @@ export default function HomeSlider() {
   };
 
   return (
-    <div className="homepage-hero-static" style={{ position: 'relative', overflow: 'hidden', width: '100%', maxWidth: '100%' }}>
+    <div className="homepage-hero-static" style={{ position: 'relative', overflow: 'visible', width: '100%', maxWidth: '100%' }}>
       <style>{`
         .homepage-hero-static, .homepage-hero-slide {
-          overflow-x: hidden !important;
+          overflow: visible !important;
+          overflow-x: clip !important;
+          overflow-y: visible !important;
           width: 100% !important;
           max-width: 100% !important;
         }
@@ -211,7 +213,28 @@ export default function HomeSlider() {
           box-shadow: 0 25px 60px rgba(2, 132, 199, 0.15), 0 10px 35px rgba(0, 0, 0, 0.25);
           border: 1.5px solid rgba(56, 189, 248, 0.3);
           position: relative;
-          z-index: 10;
+          z-index: 50;
+        }
+        .homepage-hero-search-suggestions {
+          max-height: 95px !important;
+          overflow-y: scroll !important;
+          scrollbar-width: thin;
+          scrollbar-color: #0284c7 #f1f5f9;
+        }
+        .homepage-hero-search-suggestions::-webkit-scrollbar {
+          width: 7px !important;
+          display: block !important;
+        }
+        .homepage-hero-search-suggestions::-webkit-scrollbar-track {
+          background: #f1f5f9 !important;
+          border-radius: 8px !important;
+        }
+        .homepage-hero-search-suggestions::-webkit-scrollbar-thumb {
+          background: #0284c7 !important;
+          border-radius: 8px !important;
+        }
+        .homepage-hero-search-suggestions::-webkit-scrollbar-thumb:hover {
+          background: #0369a1 !important;
         }
         .homepage-hero-search-row {
           display: grid;
@@ -455,24 +478,25 @@ export default function HomeSlider() {
 
                     {showSuggestions && (
                       <ul
+                        className="homepage-hero-search-suggestions"
                         style={{
                           position: 'absolute',
                           top: '100%',
                           left: 0,
                           right: 0,
                           background: '#ffffff',
-                          borderRadius: '12px',
-                          boxShadow: '0 15px 40px rgba(0, 0, 0, 0.18)',
-                          border: '1px solid rgba(56, 189, 248, 0.3)',
+                          borderRadius: '14px',
+                          boxShadow: '0 20px 50px rgba(0, 0, 0, 0.22), 0 6px 16px rgba(2, 132, 199, 0.15)',
+                          border: '1.5px solid rgba(56, 189, 248, 0.4)',
                           listStyle: 'none',
-                          padding: '6px 0',
-                          margin: '8px 0 0',
-                          maxHeight: 'min(240px, 45vh)',
-                          overflowY: 'auto',
+                          // padding: '6px 0',
+                          // margin: '8px 0 0',
+                          maxHeight: '205px',
+                          overflowY: 'scroll',
                           WebkitOverflowScrolling: 'touch',
                           overscrollBehavior: 'contain',
                           touchAction: 'pan-y',
-                          zIndex: 1000
+                          zIndex: 9999
                         }}
                       >
                         {filteredSuggestions.length > 0 ? (
