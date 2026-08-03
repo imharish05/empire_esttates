@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Link } from 'react-router-dom';
+import defaultFaqBanner from '../../images/banner/faq_banner.jpg';
 
 const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 
@@ -24,6 +25,7 @@ function findBanner(allBanners, placement, motherMenu) {
 
     if (pReq && bPlace === pReq) return true;
     if (mReq && bPlace === mReq) return true;
+    if (pReq && (pReq.includes('faq') || pReq.includes('faqs')) && (bPlace.includes('faq') || bPlace.includes('faqs'))) return true;
     if (pReq && pReq.includes('project') && bPlace.includes('project')) return true;
     if (pReq && pReq.includes('about') && bPlace.includes('about')) return true;
     if (pReq && pReq.includes('service') && bPlace.includes('service')) return true;
@@ -89,8 +91,18 @@ const PageTitle = ({ motherMenu, activeMenu, placement, className = '' }) => {
     return img.startsWith('/') ? `${API_URL}${img}` : `${API_URL}/${img}`;
   };
 
-  const bgStyle = banner && banner.image ? {
-    backgroundImage: `url(${getBannerUrl(banner.image)})`,
+  let bgImageUrl = '';
+  if (banner && banner.image) {
+    bgImageUrl = getBannerUrl(banner.image);
+  } else if (
+    (placement && (placement.toLowerCase().includes('faq') || placement.toLowerCase().includes('faqs'))) ||
+    (motherMenu && (motherMenu.toLowerCase().includes('faq') || motherMenu.toLowerCase().includes('faqs')))
+  ) {
+    bgImageUrl = defaultFaqBanner;
+  }
+
+  const bgStyle = bgImageUrl ? {
+    backgroundImage: `url(${bgImageUrl})`,
     backgroundSize: 'cover',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
@@ -98,11 +110,11 @@ const PageTitle = ({ motherMenu, activeMenu, placement, className = '' }) => {
 
   return (
     <div className={`dlab-bnr-inr ${className}`.trim()} style={{ position: 'relative', minHeight: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center', ...bgStyle }}>
-      {/* Dark gradient overlay */}
+      {/* Light subtle gradient overlay for maximum image brightness */}
       <div style={{
         position: 'absolute',
         inset: 0,
-        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.75) 0%, rgba(15, 23, 42, 0.6) 100%)',
+        background: 'linear-gradient(180deg, rgba(15, 23, 42, 0.28) 0%, rgba(15, 23, 42, 0.15) 100%)',
         zIndex: 1,
       }} />
       <div className="container" style={{ position: 'relative', zIndex: 2, textAlign: 'center' }}>

@@ -119,16 +119,19 @@ export default function HomeSlider() {
     }
 
     const matched = servicesList.find(s =>
-      (s.title || s.service || '').toLowerCase() === q.toLowerCase() ||
-      (s.category || s.estate || '').toLowerCase() === q.toLowerCase() ||
-      (s.location || '').toLowerCase() === q.toLowerCase() ||
-      (s.slug || '').toLowerCase() === q.toLowerCase()
+      (s.title || s.service || '').toLowerCase().includes(q.toLowerCase()) ||
+      (s.category || s.estate || '').toLowerCase().includes(q.toLowerCase()) ||
+      (s.location || '').toLowerCase().includes(q.toLowerCase()) ||
+      (s.slug || '').toLowerCase().includes(q.toLowerCase())
     );
 
     if (matched && matched.slug) {
       history.push(`/services-details/${matched.slug}`);
+    } else if (matched) {
+      history.push('/services-details');
     } else {
-      history.push(`/services-details?search=${encodeURIComponent(q)}`);
+      // No service found! Do NOT redirect. Keep dropdown open showing "No services found".
+      setShowSuggestions(true);
     }
   };
 
@@ -168,7 +171,7 @@ export default function HomeSlider() {
           content: '';
           position: absolute;
           inset: 0;
-          background: linear-gradient(135deg, rgba(15,23,42,0.78) 0%, rgba(30,41,59,0.62) 100%);
+          background: linear-gradient(135deg, rgba(15,23,42,0.60) 0%, rgba(0,0,0,0.1) 100%);
         }
         .homepage-hero-slide > .container {
           position: relative;
@@ -345,7 +348,7 @@ export default function HomeSlider() {
         }
       `}</style>
       <div
-        className="banner-three overlay-black-middle homepage-hero-slide"
+        className="banner-three homepage-hero-slide"
         style={{
           display: 'flex',
           alignItems: 'center'
@@ -450,7 +453,7 @@ export default function HomeSlider() {
                       <FaSearch style={{ position: 'absolute', left: '14px', top: '50%', transform: 'translateY(-50%)', color: '#0284c7', fontSize: '15px', pointerEvents: 'none' }} />
                     </div>
 
-                    {showSuggestions && filteredSuggestions.length > 0 && (
+                    {showSuggestions && (
                       <ul
                         style={{
                           position: 'absolute',
@@ -464,48 +467,68 @@ export default function HomeSlider() {
                           listStyle: 'none',
                           padding: '6px 0',
                           margin: '8px 0 0',
-                          maxHeight: 'min(240px, 40vh)',
+                          maxHeight: 'min(240px, 45vh)',
                           overflowY: 'auto',
                           WebkitOverflowScrolling: 'touch',
                           overscrollBehavior: 'contain',
                           touchAction: 'pan-y',
-                          zIndex: 100
+                          zIndex: 1000
                         }}
                       >
-                        {filteredSuggestions.map((srv, idx) => (
+                        {filteredSuggestions.length > 0 ? (
+                          filteredSuggestions.map((srv, idx) => (
+                            <li
+                              key={srv.id || idx}
+                              onClick={() => handleSelectSuggestion(srv)}
+                              style={{
+                                padding: '10px 16px',
+                                fontSize: '13.5px',
+                                fontWeight: '600',
+                                color: '#1e293b',
+                                cursor: 'pointer',
+                                display: 'flex',
+                                alignItems: 'center',
+                                justifyContent: 'space-between',
+                                borderBottom: idx < filteredSuggestions.length - 1 ? '1px solid #f1f5f9' : 'none',
+                                transition: 'background 0.2s, color 0.2s'
+                              }}
+                              onMouseEnter={(e) => { e.currentTarget.style.background = '#f0f9ff'; e.currentTarget.style.color = '#0284c7'; }}
+                              onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#1e293b'; }}
+                            >
+                              <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', marginRight: '8px' }}>
+                                <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                                  {srv.title || srv.service}
+                                </span>
+                                {srv.location && (
+                                  <span style={{ fontSize: '11px', color: '#0284c7', fontWeight: '600', marginTop: '2px' }}>
+                                    📍 {srv.location}
+                                  </span>
+                                )}
+                              </div>
+                              <span style={{ fontSize: '10.5px', background: 'rgba(56, 189, 248, 0.12)', color: '#0284c7', padding: '3px 8px', borderRadius: '12px', fontWeight: '700', flexShrink: 0 }}>
+                                {srv.category || 'Service'}
+                              </span>
+                            </li>
+                          ))
+                        ) : (
                           <li
-                            key={srv.id || idx}
-                            onClick={() => handleSelectSuggestion(srv)}
                             style={{
-                              padding: '10px 16px',
+                              padding: '14px 16px',
                               fontSize: '13.5px',
                               fontWeight: '600',
-                              color: '#1e293b',
-                              cursor: 'pointer',
+                              color: '#ef4444',
+                              textAlign: 'center',
                               display: 'flex',
                               alignItems: 'center',
-                              justifyContent: 'space-between',
-                              borderBottom: idx < filteredSuggestions.length - 1 ? '1px solid #f1f5f9' : 'none',
-                              transition: 'background 0.2s, color 0.2s'
+                              justifyContent: 'center',
+                              gap: '8px',
+                              userSelect: 'none'
                             }}
-                            onMouseEnter={(e) => { e.currentTarget.style.background = '#f0f9ff'; e.currentTarget.style.color = '#0284c7'; }}
-                            onMouseLeave={(e) => { e.currentTarget.style.background = '#ffffff'; e.currentTarget.style.color = '#1e293b'; }}
                           >
-                            <div style={{ display: 'flex', flexDirection: 'column', overflow: 'hidden', marginRight: '8px' }}>
-                              <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                                {srv.title || srv.service}
-                              </span>
-                              {srv.location && (
-                                <span style={{ fontSize: '11px', color: '#0284c7', fontWeight: '600', marginTop: '2px' }}>
-                                  📍 {srv.location}
-                                </span>
-                              )}
-                            </div>
-                            <span style={{ fontSize: '10.5px', background: 'rgba(56, 189, 248, 0.12)', color: '#0284c7', padding: '3px 8px', borderRadius: '12px', fontWeight: '700', flexShrink: 0 }}>
-                              {srv.category || 'Service'}
-                            </span>
+                            <span>⚠️</span>
+                            <span>No services found</span>
                           </li>
-                        ))}
+                        )}
                       </ul>
                     )}
                   </div>

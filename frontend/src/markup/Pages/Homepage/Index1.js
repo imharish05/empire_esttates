@@ -361,7 +361,6 @@ class Index1 extends React.Component{
 								<div className="col-md-5 col-lg-5 mt-5 mt-md-0 about-img-col reveal-right" style={{position: 'relative', paddingLeft: '20px'}}>
 									<div className="img-zoom-wrap" style={{position: 'relative', borderRadius: '20px', overflow: 'hidden', boxShadow: '0 25px 60px rgba(2, 132, 199, 0.2)'}}>
 										<img src={aboutImg} alt="About Empire Estates" className="about-img-responsive" />
-										<div style={{position: 'absolute', inset: 0, background: 'rgba(15,23,42,0.5)'}}></div>
 									</div>
 									{/* Floating Badge */}
 									<div className="about-badge-responsive">
@@ -561,7 +560,7 @@ class Index1 extends React.Component{
 							content: "";
 							position: absolute;
 							inset: 0;
-							background: linear-gradient(180deg, rgba(15, 23, 42, 0.55) 0%, rgba(15, 23, 42, 0.85) 100%);
+							background: linear-gradient(180deg, rgba(15, 23, 42, 0.40) 0%, rgba(15, 23, 42, 0.85) 100%);
 							border-radius: 16px;
 							z-index: 1;
 						}

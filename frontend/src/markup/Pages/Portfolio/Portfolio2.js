@@ -171,7 +171,7 @@ class Portfolio2 extends Component {
 
 
 function PortfolioItem() {
-  const [tag, setTag] = useState('All');
+  const [tag, setTag] = useState('All Projects');
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [lightboxIndex, setLightboxIndex] = useState(null);
@@ -192,7 +192,7 @@ function PortfolioItem() {
         if (el) el.scrollIntoView({ behavior: 'smooth' });
       }, 300);
     } else {
-      setTag('Past Projects');
+      setTag('All Projects');
       setTimeout(() => {
         const el = document.getElementById('portfolio-gallery');
         if (el) el.scrollIntoView({ behavior: 'smooth' });
@@ -265,7 +265,7 @@ function PortfolioItem() {
 
   // Filter projects by active tab / category
   useEffect(() => {
-    if (tag === 'Past Projects' || tag === 'All') {
+    if (tag === 'Past Projects' || tag === 'All Projects' || tag === 'All') {
       setFilteredProjects(projects.filter(p => !isOngoingCat(p.category) && !isUpcomingCat(p.category)));
     } else if (tag === 'Ongoing Projects') {
       setFilteredProjects(projects.filter(p => isOngoingCat(p.category)));
@@ -282,7 +282,7 @@ function PortfolioItem() {
 
   // Build unique category list for Past Projects sub-filters
   const pastProjectsList = projects.filter(p => !isOngoingCat(p.category) && !isUpcomingCat(p.category));
-  const availableCategories = ['Past Projects', ...new Set(pastProjectsList.map(p => p.category || 'General'))];
+  const availableCategories = ['All Projects', ...new Set(pastProjectsList.map(p => p.category || 'General'))];
 
   return (
     <>

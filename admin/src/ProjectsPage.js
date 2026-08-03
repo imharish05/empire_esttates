@@ -339,9 +339,6 @@ export default function ProjectsPage({ filter = 'all' }) {
                         className="w-full border border-neutral-300 rounded px-3 py-2 text-sm text-neutral-900 focus:outline-none focus:ring-1 focus:ring-[#d4af37] bg-white"
                       >
                         <option value="" className="text-neutral-900 bg-white">-- Select Category --</option>
-                        <option value="Past Project" className="text-neutral-900 bg-white font-semibold text-[#0284c7]">Past Project</option>
-                        <option value="Ongoing Project" className="text-neutral-900 bg-white font-semibold text-[#c8902a]">On Going Project</option>
-                        <option value="Upcoming Project" className="text-neutral-900 bg-white font-semibold text-[#10b981]">Upcoming Project</option>
                         {categories.map((cat) => (
                           <option key={cat.id} value={cat.name} className="text-neutral-900 bg-white">{cat.name}</option>
                         ))}
