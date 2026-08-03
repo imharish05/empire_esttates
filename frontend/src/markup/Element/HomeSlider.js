@@ -5,6 +5,9 @@ import { FaSearch } from 'react-icons/fa';
 const API_BASE = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
 const API_URL = `${API_BASE}`;
 
+// Static fallback background image (used when no banner.image comes from API)
+const HERO_BG_IMAGE = '/images/hero-bg.jpg'; // place your image in public/images/
+
 const DEFAULT_SERVICES = [
   { id: 1, title: 'Premium Individual Homes', category: 'Individual House', slug: 'premium-individual-homes' },
   { id: 2, title: 'Luxury Villas', category: 'Luxury Villas', slug: 'luxury-villas' },
@@ -148,6 +151,28 @@ export default function HomeSlider() {
         }
         .homepage-hero-slide {
           min-height: 620px;
+          position: relative;
+        }
+        .homepage-hero-bg {
+          position: absolute;
+          inset: 0;
+          background-image: url(${HERO_BG_IMAGE});
+          background-size: cover;
+          background-position: center;
+          background-repeat: no-repeat;
+          background-color: #0f172a;
+          z-index: 0;
+          transition: background-image 0.3s ease;
+        }
+        .homepage-hero-bg::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(135deg, rgba(15,23,42,0.78) 0%, rgba(30,41,59,0.62) 100%);
+        }
+        .homepage-hero-slide > .container {
+          position: relative;
+          z-index: 1;
         }
         .homepage-hero-copy {
           margin: 0 !important;
@@ -208,6 +233,9 @@ export default function HomeSlider() {
             padding-top: 0 !important;
             padding-bottom: 0 !important;
           }
+          .homepage-hero-bg {
+            background-position: center top;
+          }
           .homepage-hero-copy {
             margin: 0 !important;
             padding: 0 !important;
@@ -267,6 +295,9 @@ export default function HomeSlider() {
             padding-top: 80px !important;
             padding-bottom: 40px !important;
           }
+          .homepage-hero-bg {
+            background-position: 65% center;
+          }
           .homepage-hero-title {
             font-size: 22px !important;
             line-height: 1.25 !important;
@@ -316,14 +347,16 @@ export default function HomeSlider() {
       <div
         className="banner-three overlay-black-middle homepage-hero-slide"
         style={{
-          backgroundImage: heroBanner.image ? `url(${heroBanner.image})` : 'linear-gradient(135deg, #0f172a 0%, #1e293b 100%)',
-          backgroundSize: "cover",
-          backgroundPosition: "center",
           display: 'flex',
-          alignItems: 'center',
-          overflow: 'hidden'
+          alignItems: 'center'
         }}
       >
+        {/* Background layer: API banner image wins if present, else static fallback image set in CSS */}
+        <div
+          className="homepage-hero-bg"
+          style={heroBanner.image ? { backgroundImage: `url(${heroBanner.image})` } : {}}
+        ></div>
+
         <div className="container">
           <div className="row align-items-center banner-inner" style={{ paddingTop: '20px', paddingBottom: '40px' }}>
             <div className="col-lg-6 col-md-12 mb-4 mb-lg-0">
@@ -364,25 +397,6 @@ export default function HomeSlider() {
                   >
                     {heroBanner.ctaText || "Explore Projects"}
                   </Link>
-
-                  {/* <Link 
-                    to="/contact-us" 
-                    className="btn" 
-                    style={{ 
-                      background: 'rgba(255, 255, 255, 0.12)', 
-                      color: '#ffffff',
-                      backdropFilter: 'blur(8px)',
-                      border: '1px solid rgba(255, 255, 255, 0.35)',
-                      padding: '14px 28px', 
-                      fontWeight: '600', 
-                      borderRadius: '8px',
-                      transition: 'all 0.3s'
-                    }}
-                    onMouseEnter={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.25)'; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.background = 'rgba(255, 255, 255, 0.12)'; }}
-                  >
-                    Contact Us
-                  </Link> */}
                 </div>
               </div>
             </div>
@@ -450,8 +464,11 @@ export default function HomeSlider() {
                           listStyle: 'none',
                           padding: '6px 0',
                           margin: '8px 0 0',
-                          maxHeight: '240px',
+                          maxHeight: 'min(240px, 40vh)',
                           overflowY: 'auto',
+                          WebkitOverflowScrolling: 'touch',
+                          overscrollBehavior: 'contain',
+                          touchAction: 'pan-y',
                           zIndex: 100
                         }}
                       >
